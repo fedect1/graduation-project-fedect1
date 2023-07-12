@@ -44,3 +44,5 @@ batmanPost.addPost(
 
 console.log(batman.getInfo())
 console.log(batmanPost.getPosts())
+
+console.log('Testing if Slack channel is working')
