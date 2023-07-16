@@ -10,3 +10,17 @@ fede.deletePost(1)
 fede.password = 'Fede123asdasd'
 
 console.log(fede.info)
+
+//User 2
+const julio = new User('julio', 'julioce', 'julito@gmail.com', 'val555aR')
+
+julio.post('06/07/2023', '08:30', 'Sometimes I win, sometimes I dont')
+julio.post(
+  '07/07/2023',
+  '00:30',
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi condimentum venenatis massa non gravida. Ut in fermentum lacus. Nam quam eros, tincidunt in ante a, sollicitudin auctor lectus. Sed fermentum purus nec dui rhoncus, ac suscipit erat eleifend. Praesent tempor consectetur justo sit amet iaculis. Quisque commodo bibendum consequat. Vivamus pellentesque tempor enim, nec suscipit erat ultricies non. Etiam vel metus tincidunt mauris malesuada efficitur.'
+)
+julio.deletePost(1)
+julio.password = 'Fede123asdasd'
+
+console.log(julio.info)
