@@ -37,6 +37,8 @@ class User {
   deletePost(indexPost) {
     if (indexPost >= 0 && indexPost < this.collectionPost.length) {
       this.collectionPost.splice(indexPost, 1)
+    } else {
+      throw new Error('The index you entered does not correspond to the length of the array.')
     }
   }
 
