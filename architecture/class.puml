@@ -1,6 +1,6 @@
-@startuml Person 
-class Person {
-  name: string
-  age: number
-}
+@startuml Person
+  class Person {
+    name: string
+    age: number
+  }
 @enduml
