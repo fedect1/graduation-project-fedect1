@@ -1,6 +1,52 @@
-@startuml Person
-  class Person {
-    name: string
-    age: number
+@startuml DW Messenger
+  class User {
+  id: int
+  email: string
+  password: string
+  registration_date: date
+  login_attempts: int
+  lockout_until: date
+  register(email, password): void
+  login(email, password): boolean
+  resetPassword(new_password): void
   }
+  class UserProfile {
+    user_id: int
+    nickname: string
+    description: string
+    profile_picture: string
+    createProfile(nickname, description, profile_picture): void
+  }
+  class Relationship{
+    follower_id: int
+    followed_user_id: int
+    follow(): void
+    unfollow(): void
+  }
+  class Post{
+    id: int
+    user_id: int
+    content: string
+    image: string
+    post_date: date
+    expiration_date: date
+    location: string
+    lifetime_extension: int
+    addPost(content, image, location): void
+    increaseLifetime(extension_minutes): void
+  }
+  class Comment{
+    id: int
+    user_id: int
+    post_id: int
+    content: string
+    comment_date: date
+    addComment(content): void
+  }
+
+
+  User <|--|> UserProfile
+  User --o Post
+  User --o Relationship
+  Post --o Comment
 @enduml
