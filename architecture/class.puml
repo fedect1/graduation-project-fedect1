@@ -1,52 +1,43 @@
 @startuml DW Messenger
   class User {
-  id: int
   email: string
-  password: string
-  registration_date: date
-  login_attempts: int
-  lockout_until: date
-  register(email, password): void
-  login(email, password): boolean
-  resetPassword(new_password): void
+  posts: array
+  followerEmail: string
+  followedUserEmail: string
+  set UserProfile(name, nickname, description, profilePicture)
+  createPost(message)
+  deletePost(message)
   }
   class UserProfile {
-    user_id: int
+    name: string
     nickname: string
     description: string
-    profile_picture: string
-    createProfile(nickname, description, profile_picture): void
+    profilePicture: string
+    createProfile(nickname, description, profilePicture)
   }
-  class Relationship{
-    follower_id: int
-    followed_user_id: int
-    follow(): void
-    unfollow(): void
-  }
+
   class Post{
-    id: int
-    user_id: int
     content: string
     image: string
-    post_date: date
-    expiration_date: date
-    location: string
-    lifetime_extension: int
-    addPost(content, image, location): void
-    increaseLifetime(extension_minutes): void
+    postDate: date
+    expirationPate: date
+    lifetimeExtension: int
   }
   class Comment{
-    id: int
-    user_id: int
-    post_id: int
+    userEmail: int
     content: string
-    comment_date: date
+    commentDate: date
     addComment(content): void
   }
 
 
-  User <|--|> UserProfile
-  User --o Post
-  User --o Relationship
-  Post --o Comment
+  User <--> UserProfile
+  User --* Post
+  Post --* Comment
 @enduml
+
+
+' User ↔ UserProfile (Association) - User has one UserProfile, and UserProfile belongs to one User
+' User --o Relationship (Composition) - Users can have multiple relationships (follows/followers).
+' User --o Post (Composition) - User can create multiple posts expressing emotions.
+' Post --o Comment (Composition) - A post can have multiple comments.
