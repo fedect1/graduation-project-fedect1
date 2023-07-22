@@ -65,6 +65,22 @@ class User {
     if (daysPassed) return `${Math.floor(daysPassed / 7)} weeks ago`
   }
 
+  dateExpirationFormat(dateExpPost) {
+    const calcTime = dateExpPost => {
+      const currentDate = new Date()
+      const timeDifferenceInSeconds = Math.abs(dateExpPost - currentDate) / 1000
+
+      const hours = Math.floor(timeDifferenceInSeconds / 3600)
+      const minutes = Math.floor((timeDifferenceInSeconds % 3600) / 60)
+      const seconds = Math.floor(timeDifferenceInSeconds % 60)
+
+      return `Time left: ${hours}:${minutes}:${seconds}`
+    }
+
+    const expirationTime = calcTime(dateExpPost)
+    return expirationTime
+  }
+
   get profileInfo() {
     return `\n --- PROFILE INFO ---\n Username: ${this.profile.userName}\n Email: ${this.email}\n Description: ${this.profile.description}\n Profile picture URL: ${this.profile.profilePictureURL}`
   }
@@ -86,9 +102,9 @@ class User {
         : this.posts
             .map(
               (el, i) =>
-                `${this.datePostFormat(el.date)} Status: ${el.status ? 'Visible' : 'Expired'} Post: ${el.message}\n ${
-                  el.allComments
-                }\n ${el.allLikes}`
+                `Posted: ${this.datePostFormat(el.date)}\n Status: ${el.status ? 'Visible' : 'Expired'}\n ${
+                  el.status ? this.dateExpirationFormat(el.expirationDate) : ''
+                }\nPost: ${el.message}\n ${el.allComments}\n ${el.allLikes}`
             )
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
