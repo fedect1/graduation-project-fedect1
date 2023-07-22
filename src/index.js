@@ -2,26 +2,32 @@
 const User = require('./user')
 const Tests = require('./test')
 
-//User 1
-const fede = new User('Federico', 'fedect1', 'fede@gmail.com', 'validPASS123')
+//Users
+const fede = new User('fede@gmail.com', 'fedect1')
+const julio = new User('julio@gmail.com', 'julio')
+const maria = new User('maria@gmail.com', 'maria')
+const pepita = new User('pepita@gmail.com', 'pepita')
+const rambo = new User('rambo@gmail.com', 'rambo')
 
-fede.post('08/07/2023', '22:30', 'This is my first message')
-fede.post('09/07/2023', '03:30', 'Checking if it is working')
-fede.deletePost(1)
+//User: fede
+fede.profileDescription = 'Hi! I am Fede! Alles gut?'
+fede.profilePictureURL = 'hereGoesAnUrl.jpg'
+fede.addPost('This is my first message')
+fede.addPost('Checking if it is working')
+fede.addPost('Hey you')
+fede.posts[0].addComment(julio, 'It is working')
+fede.posts[0].addComment(maria, 'Arrivederci')
+fede.posts[0].addComment(pepita, 'Well done')
+fede.posts[0].addLike(rambo)
+fede.posts[0].addLike(maria)
 
-console.log(fede.info)
+fede.follow(julio)
+fede.follow(maria)
+fede.follow(pepita)
+fede.follow(rambo)
+fede.unfollow(pepita)
+fede.deletePost(2)
 
-//User 2
-const julio = new User('Julio', 'julioce', 'julito@gmail.com', 'val555aR')
-
-julio.post('06/07/2023', '08:30', 'Sometimes I win, sometimes I dont')
-julio.post(
-  '07/07/2023',
-  '00:30',
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi condimentum venenatis massa non gravida. Ut in fermentum lacus. Nam quam eros, tincidunt in ante a, sollicitudin auctor lectus. Sed fermentum purus nec dui rhoncus, ac suscipit erat eleifend. Praesent tempor consectetur justo sit amet iaculis. Quisque commodo bibendum consequat. Vivamus pellentesque tempor enim, nec suscipit erat ultricies non. Etiam vel metus tincidunt mauris malesuada efficitur.'
-)
-
-julio.password = 'Fede123asdasd'
-
-const tests = new Tests(fede, julio)
-tests.run()
+console.log(fede.profileInfo)
+console.log(fede.interactionInfo)
+console.log(fede.postsInfo)

@@ -53,7 +53,7 @@ class User {
 
   datePostFormat(datePost) {
     const calcDaysPassed = datePost => {
-      const currentDate = new Date(2023, 6, 22) //new Date()
+      const currentDate = new Date()
       const daysPassed = Math.round(Math.abs(currentDate - datePost) / (1000 * 60 * 60 * 24))
       return daysPassed
     }
@@ -86,10 +86,12 @@ class User {
         : this.posts
             .map(
               (el, i) =>
-                `${this.datePostFormat(el.date)} Status: ${el.status ? 'Visible' : 'Expired'} Post: ${el.message}`
+                `${this.datePostFormat(el.date)} Status: ${el.status ? 'Visible' : 'Expired'} Post: ${el.message}\n ${
+                  el.allComments
+                }\n ${el.allLikes}`
             )
             .join('\n')
-    return `\n --- POSTS ---\n ${postByString}`
+    return `--- POSTS ---\n ${postByString}`
   }
 }
 

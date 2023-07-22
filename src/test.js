@@ -17,8 +17,7 @@ class Test {
 
     console.log('')
     console.log('--- Tests for Password post ---')
-    //console.log(`Federico's password should be validPASS123 --> ${this.fede.#password === 'validPASS123'}`)
-    //console.log(`Julio's password should be Fede123asdasd --> ${this.fede.#password === 'Fede123asdasd'}`)
+    console.log(`Federico's password should be validPASS123 --> ${this.fede.validateEncryptedPassword('validPASS123')}`)
     console.log()
   }
 }
