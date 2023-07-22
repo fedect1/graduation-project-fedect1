@@ -2,26 +2,41 @@ class Post {
   comments = []
   likes = []
   date = new Date()
+  expirationDate = new Date()
   timeOut = 10 // 10800seg are 3 hours
   status = true
+
+
   constructor(message) {
     this.message = message
   }
-  get expired() {
-    const countDown = () => {
-      const min = `${Math.floor(this.timeOut / 60)}`.padStart(2, 0)
-      const sec = `${this.timeOut % 60}`.padStart(2, 0)
-      console.log(`${min}:${sec}`)
-      if (this.timeOut === 0) {
-        clearInterval(timer)
-        this.status = false
-      }
-      this.timeOut--
+
+
+  countDown() {
+    if (this.timeOut <= 0) {
+      this.status = false
+      return this.status // Devolver false cuando el tiempo expira
     }
-    countDown()
-    const timer = setInterval(countDown, 1000)
-    return timer
+
+    const min = `${Math.floor(this.timeOut / 60)}`.padStart(2, '0')
+    const sec = `${this.timeOut % 60}`.padStart(2, '0')
+    console.log(`${min}:${sec}`)
+    this.timeOut--
+
+    setTimeout(() => {
+      this.countDown()
+    }, 1000)
+
+    return this.status
   }
+
+
+
+  get expired() {
+    return this.countDown()
+  }
+
+
 
   get dateFeedFormat() {
     const calcDaysPassed = () => {
