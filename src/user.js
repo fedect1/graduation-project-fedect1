@@ -36,6 +36,7 @@ class User {
 
   //Iteraction functionalities
   follow(userToFollow) {
+    //Rename userToFollow ->user
     if (userToFollow) {
       this.interaction.following.push(userToFollow.profile.userName)
       userToFollow.interaction.followedBy.push(this.profile.userName)
@@ -43,6 +44,7 @@ class User {
   }
 
   unfollow(userToUnfollow) {
+    //Rename userToFollow ->user
     if (userToUnfollow) {
       const indexOfUser = this.interaction.following.indexOf(userToUnfollow.profile.userName)
       this.interaction.following.splice(indexOfUser, 1)
@@ -50,7 +52,7 @@ class User {
       userToUnfollow.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
     }
   }
-
+  // Date formating
   datePostFormat(datePost) {
     const calcDaysPassed = datePost => {
       const currentDate = new Date()
@@ -81,6 +83,7 @@ class User {
     return expirationTime
   }
 
+  // Show info getters
   get profileInfo() {
     return `\n --- PROFILE INFO ---\n Username: ${this.profile.userName}\n Email: ${this.email}\n Description: ${this.profile.description}\n Profile picture URL: ${this.profile.profilePictureURL}`
   }
@@ -88,7 +91,7 @@ class User {
     const followedByString =
       this.interaction.followedBy.length === 0
         ? 'There are no followers'
-        : this.interaction.followedBy.map((el, i) => `${i + 1}- ${el}`).join('\n')
+        : this.interaction.followedBy.map((el, i) => `${i + 1}- ${el}`).join('\n') //rename //Wrap into a function
     const followingString =
       this.interaction.following.length === 0
         ? 'Does not follow anyone'
@@ -101,10 +104,16 @@ class User {
         ? 'Has not published post'
         : this.posts
             .map(
-              (el, i) =>
-                `Posted: ${this.datePostFormat(el.date)}\n Status: ${el.status ? 'Visible' : 'Expired'}\n ${
-                  el.status ? this.dateExpirationFormat(el.expirationDate) : ''
-                }\nPost: ${el.message}\n ${el.allComments}\n ${el.allLikes}`
+              (
+                el,
+                i //rename
+              ) =>
+                `Posted: ${this.datePostFormat(el.date)}\n
+                Status: ${el.status ? 'Visible' : 'Expired'}\n
+                ${el.status ? this.dateExpirationFormat(el.expirationDate) : ''}\n
+                Post: ${el.message}\n
+                ${el.allComments}\n
+                ${el.allLikes}`
             )
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
