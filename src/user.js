@@ -1,62 +1,113 @@
 const Post = require('./post')
-const passwordValidator = require('password-validator')
-let userPassword = new passwordValidator()
-userPassword
-  .is()
-  .min(8) // Minimum length 8
-  .is()
-  .max(100) // Maximum length 100
-  .has()
-  .uppercase() // Must have uppercase letters
-  .has()
-  .lowercase() // Must have lowercase letters
-  .has()
-  .digits(2) // Must have at least 2 digits
-  .has()
-  .not()
-  .spaces() // Should not have spaces
+const Profile = require('./profile')
+
 class User {
-  #password
+  posts = []
+  interaction = { following: [], followedBy: [] }
 
-  constructor(name, username, email, password) {
-    this.name = name
-    this.username = username
+  constructor(email, userName) {
     this.email = email
-    if (!userPassword.validate(password)) {
-      throw new Error('The password does not meet the minimum requirements.')
-    }
-    this.#password = password
-    this.collectionPost = []
+    this.profile = new Profile(userName)
   }
 
-  post(date, hour, message) {
-    const newPost = new Post(date, hour, message)
-    this.collectionPost.push(newPost)
+  // Profile setters
+  set profileUsername(userName) {
+    return (this.profile.userName = userName)
+  }
+  set profileDescription(description) {
+    return (this.profile.description = description)
+  }
+  set profilePictureURL(profilePictureURL) {
+    return (this.profile.profilePictureURL = profilePictureURL)
   }
 
+  //Post functionalities
+  addPost(message) {
+    const newPost = new Post(message)
+    this.posts.push(newPost)
+  }
   deletePost(indexPost) {
-    if (indexPost >= 0 && indexPost < this.collectionPost.length) {
-      this.collectionPost.splice(indexPost, 1)
+    if (indexPost >= 0 && indexPost <= this.posts.length) {
+      this.posts.splice(indexPost, 1)
     } else {
       throw new Error('The index you entered does not correspond to the length of the array.')
     }
   }
 
-  set password(newPassword) {
-    if (!userPassword.validate(newPassword)) {
-      throw new Error('The password does not meet the minimum requirements.')
+  //Iteraction functionalities
+  follow(userToFollow) {
+    if (userToFollow) {
+      this.interaction.following.push(userToFollow.profile.userName)
+      userToFollow.interaction.followedBy.push(this.profile.userName)
     }
-    this.#password = newPassword
   }
 
-  get info() {
-    return `\n${this.name} is registered with the following data\n- email: ${this.email}\n- Password: ${
-      this.#password
-    }\n- Username: ${this.username}\n\nAnd posted the following messages:${this.collectionPost
-      .map((post, i) => {
-        return `\n\n*****  Post number: ${i}  *****\nDate: ${post.date}\nHour: ${post.hour}\nMessage: ${post.message}`
-      })
-      .join('')}`
+  unfollow(userToUnfollow) {
+    if (userToUnfollow) {
+      const indexOfUser = this.interaction.following.indexOf(userToUnfollow.profile.userName)
+      this.interaction.following.splice(indexOfUser, 1)
+      const indexOfUserUnfollowed = userToUnfollow.interaction.followedBy.indexOf(userToUnfollow.userName)
+      userToUnfollow.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
+    }
+  }
+
+  datePostFormat(datePost) {
+    const calcDaysPassed = datePost => {
+      const currentDate = new Date()
+      const daysPassed = Math.round(Math.abs(currentDate - datePost) / (1000 * 60 * 60 * 24))
+      return daysPassed
+    }
+    const daysPassed = calcDaysPassed(datePost)
+
+    if (daysPassed === 0) return 'Today'
+    if (daysPassed === 1) return 'Yesterday'
+    if (daysPassed < 7) return `${daysPassed} days ago`
+    if (daysPassed) return `${Math.floor(daysPassed / 7)} weeks ago`
+  }
+
+  dateExpirationFormat(dateExpPost) {
+    const calcTime = dateExpPost => {
+      const currentDate = new Date()
+      const timeDifferenceInSeconds = Math.abs(dateExpPost - currentDate) / 1000
+
+      const hours = Math.floor(timeDifferenceInSeconds / 3600)
+      const minutes = Math.floor((timeDifferenceInSeconds % 3600) / 60)
+      const seconds = Math.floor(timeDifferenceInSeconds % 60)
+
+      return `Time left: ${hours}:${minutes}:${seconds}`
+    }
+
+    const expirationTime = calcTime(dateExpPost)
+    return expirationTime
+  }
+
+  get profileInfo() {
+    return `\n --- PROFILE INFO ---\n Username: ${this.profile.userName}\n Email: ${this.email}\n Description: ${this.profile.description}\n Profile picture URL: ${this.profile.profilePictureURL}`
+  }
+  get interactionInfo() {
+    const followedByString =
+      this.interaction.followedBy.length === 0
+        ? 'There are no followers'
+        : this.interaction.followedBy.map((el, i) => `${i + 1}- ${el}`).join('\n')
+    const followingString =
+      this.interaction.following.length === 0
+        ? 'Does not follow anyone'
+        : this.interaction.following.map((el, i) => `${i + 1}- ${el}`).join('\n')
+    return `\n --- INTERACTION ---\n Followed by:\n${followedByString}\n Following:\n${followingString}`
+  }
+  get postsInfo() {
+    const postByString =
+      this.posts === 0
+        ? 'Has not published post'
+        : this.posts
+            .map(
+              (el, i) =>
+                `Posted: ${this.datePostFormat(el.date)}\n Status: ${el.status ? 'Visible' : 'Expired'}\n ${
+                  el.status ? this.dateExpirationFormat(el.expirationDate) : ''
+                }\nPost: ${el.message}\n ${el.allComments}\n ${el.allLikes}`
+            )
+            .join('\n')
+    return `--- POSTS ---\n ${postByString}`
   }
 }
 
