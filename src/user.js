@@ -5,9 +5,9 @@ class User {
   posts = []
   interaction = { following: [], followedBy: [] }
 
-  constructor(email, userName) {
+  constructor(email) {
     this.email = email
-    this.profile = new Profile(userName)
+    this.profile = new Profile(email)
   }
 
   // Profile setters
@@ -118,6 +118,14 @@ class User {
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
+  static create({ email }) {
+    console.log('Creating user with email: ', email)
+    const newUser = new User(email)
+    User.list.push(newUser)
+    return newUser
+  }
+
+  static list = []
 }
 
 module.exports = User

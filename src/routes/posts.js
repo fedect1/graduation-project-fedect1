@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 
 /* POST create a new user. */
 router.post('/', function (req, res, next) {
-  const user = User.create({ email: req.body.email })
+  const user = User.create({ email: req.body.email, username: req.body.username })
   res.send(user)
 })
 

@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+#users {
+  margin-bottom: 30px;
+  background-color: bisque;
+}
+.user {
+  margin-bottom: 10px;
+  background-color: #00B7FF;
+}
