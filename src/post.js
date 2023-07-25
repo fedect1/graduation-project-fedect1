@@ -51,6 +51,12 @@ class Post {
       this.likes.length === 0 ? 'No likes yet' : this.likes.map((el, i) => `${i + 1}- ${el}`).join('\n') //refactor
     return `--- Likes ---\n${likesByString}\n`
   }
+
+  static createPost({ message }) {
+    const post = new Post(message)
+    Post.list.push(post)
+  }
+  static list = []
 }
 
 module.exports = Post

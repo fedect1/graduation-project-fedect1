@@ -3,10 +3,14 @@ const User = require('./user')
 const axios = require('axios')
 
 async function main() {
-  await axios.post('http://localhost:3000/users', { email: 'Fede@gmail.com' })
-  await axios.post('http://localhost:3000/users', { email: 'juli@gmail.com' })
-  const allUsers = await axios.get('http://localhost:3000/users')
+  await axios.post('http://localhost:5000/users', { email: 'Fede' })
+  await axios.post('http://localhost:5000/users', { email: 'juli' })
+  const allUsers = await axios.get('http://localhost:5000/users')
+  const fedePosts = await axios.post('http://localhost:5000/users/Fede/posts', {
+    message: 'This is my first message',
+  })
   console.log('List of all users: ', allUsers.data)
+  console.log('Fede posts: ', fedePosts.data)
 }
 main()
 

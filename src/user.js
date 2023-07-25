@@ -22,9 +22,9 @@ class User {
   }
 
   //Post functionalities
-  addPost(message) {
-    const newPost = new Post(message)
-    this.posts.push(newPost)
+  createPost(message) {
+    const post = Post.create({ message })
+    this.posts.push(post)
   }
   deletePost(indexPost) {
     if (indexPost >= 0 && indexPost <= this.posts.length) {
