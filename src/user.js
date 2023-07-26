@@ -25,6 +25,7 @@ class User {
   createPost(message) {
     const post = Post.create({ message })
     this.posts.push(post)
+    return post
   }
   deletePost(indexPost) {
     if (indexPost >= 0 && indexPost <= this.posts.length) {
@@ -118,7 +119,7 @@ class User {
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
-  static create({ email }) {
+  static createUser({ email }) {
     console.log('Creating user with email: ', email)
     const newUser = new User(email)
     User.list.push(newUser)

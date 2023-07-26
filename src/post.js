@@ -52,9 +52,10 @@ class Post {
     return `--- Likes ---\n${likesByString}\n`
   }
 
-  static createPost({ message }) {
+  static create({ message }) {
     const post = new Post(message)
     Post.list.push(post)
+    return post
   }
   static list = []
 }

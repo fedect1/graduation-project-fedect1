@@ -6,10 +6,11 @@ async function main() {
   await axios.post('http://localhost:5000/users', { email: 'Fede' })
   await axios.post('http://localhost:5000/users', { email: 'juli' })
   const allUsers = await axios.get('http://localhost:5000/users')
-  const fedePosts = await axios.post('http://localhost:5000/users/Fede/posts', {
+  const fedePosts = await axios.post('http://localhost:5000/posts', {
+    email: 'Fede',
     message: 'This is my first message',
   })
-  console.log('List of all users: ', allUsers.data)
+  //console.log('List of all users: ', allUsers.data)
   console.log('Fede posts: ', fedePosts.data)
 }
 main()
