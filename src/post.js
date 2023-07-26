@@ -10,10 +10,11 @@ class Post {
     this.message = message
   }
 
-  addComment(author, comment) {
-    const newComment = new Comment(author.profile.userName, comment)
+  createComment(author, comment) {
+    const newComment = Comment.create({ author, comment })
     this.comments.push(newComment)
     this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
+    return newComment
   }
 
   addDeleteComment(index) {
@@ -56,6 +57,11 @@ class Post {
     const post = new Post(message)
     Post.list.push(post)
     return post
+  }
+  static delete(index) {
+    if (index >= 0 && index <= Post.list.length) {
+      return Post.list.splice(index, 1)
+    }
   }
   static list = []
 }

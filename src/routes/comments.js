@@ -15,11 +15,4 @@ router.post('/', function (req, res, next) {
   res.send(post)
 })
 
-/* DELETE delete a post. */
-router.delete('/:index', function (req, res, next) {
-  const user = User.list.find(user => user.email === req.body.email)
-  const post = user.deletePost(req.params.index)
-  res.send(post)
-})
-
 module.exports = router

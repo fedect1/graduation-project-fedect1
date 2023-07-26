@@ -3,15 +3,26 @@ const User = require('./user')
 const axios = require('axios')
 
 async function main() {
+  // Create user Fede
   await axios.post('http://localhost:5000/users', { email: 'Fede' })
+  // Create user Julio
   await axios.post('http://localhost:5000/users', { email: 'juli' })
-  const allUsers = await axios.get('http://localhost:5000/users')
-  const fedePosts = await axios.post('http://localhost:5000/posts', {
+  // Create post for Fede
+  await axios.post('http://localhost:5000/posts', {
     email: 'Fede',
     message: 'This is my first message',
   })
-  //console.log('List of all users: ', allUsers.data)
-  console.log('Fede posts: ', fedePosts.data)
+  // Create post for Julio
+  await axios.post('http://localhost:5000/posts', {
+    email: 'Fede',
+    message: 'This is my second message',
+  })
+  // Delete post for Fede by index
+  await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
+
+  // Get user Fede
+  const allUsers = await axios.get('http://localhost:5000/users')
+  console.log('List of all users: ', allUsers.data[0])
 }
 main()
 
