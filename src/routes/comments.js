@@ -3,16 +3,16 @@ var router = express.Router()
 const Post = require('../post')
 const User = require('../user')
 
-/* GET users listing. */
+/* GET Comments of a post. */
 router.get('/', function (req, res, next) {
-  res.send(Post.list)
+  res.send(Comment.list)
 })
 
-/* POST create a new post. */
+/* POST a new comment for a post of a user */
 router.post('/', function (req, res, next) {
   const user = User.list.find(user => user.email === req.body.email)
-  const post = user.createPost(req.body.message)
-  res.send(post)
+  const post = Post.list[req.body.indexPost]
+  const comment = post.createComment(req.body.author, req.body.comment)
+  res.send(comment)
 })
-
 module.exports = router

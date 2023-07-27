@@ -3,16 +3,20 @@ const Profile = require('./profile')
 
 class User {
   posts = []
-  interaction = { following: [], followedBy: [] }
+  following = []
+  followedBy = []
+  description
+  profilePictureURL
 
-  constructor(email) {
+  constructor(email, name) {
     this.email = email
-    this.profile = new Profile(email)
+    this.name = name
   }
 
   // Create post
   createPost(message) {
     const newPost = Post.create({ message })
+    console.log(newPost)
     this.posts.push(newPost)
     return newPost
   }
@@ -31,8 +35,9 @@ class User {
   //Iteraction functionalities
   follow(user) {
     if (user) {
-      this.interaction.following.push(user.profile.userName)
-      user.interaction.followedBy.push(this.profile.userName)
+      this.following.push(user)
+
+      user.followedBy.push(this)
     }
   }
 
@@ -111,14 +116,13 @@ class User {
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
-
+  // Create user
   static createUser({ email }) {
     console.log('Creating user with email: ', email)
     const newUser = new User(email)
     User.list.push(newUser)
     return newUser
   }
-
   static list = []
 }
 

@@ -4,8 +4,8 @@ class Comment {
     this.author = author
     this.comment = comment
   }
-  static create({ comment }) {
-    const newComment = new Comment(comment)
+  static create({ author, comment }) {
+    const newComment = new Comment(author, comment)
     Comment.list.push(newComment)
     return newComment
   }
