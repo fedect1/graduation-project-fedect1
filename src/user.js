@@ -36,7 +36,6 @@ class User {
   follow(user) {
     if (user) {
       this.following.push(user)
-
       user.followedBy.push(this)
     }
   }
