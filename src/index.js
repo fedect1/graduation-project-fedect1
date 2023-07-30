@@ -13,16 +13,16 @@ async function main() {
   // Create user Rambo
   await axios.post('http://localhost:3000/users', { email: 'rambo' })
 
-  // // Create post for Fede
-  // await axios.post('http://localhost:5000/posts', {
-  //   email: 'Fede',
-  //   message: 'This is my first message',
-  // })
-  // // Create post for Fede
-  // await axios.post('http://localhost:5000/posts', {
-  //   email: 'Fede',
-  //   message: 'This is my second message',
-  // })
+  // Create post for Fede
+  await axios.post('http://localhost:3000/posts', {
+    email: 'Fede',
+    bodyPost: 'This is my first message',
+  })
+  // Create post for Fede
+  await axios.post('http://localhost:3000/posts', {
+    email: 'Fede',
+    bodyPost: 'This is my second message',
+  })
 
   // // Delete post for Fede by index
   // await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })

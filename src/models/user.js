@@ -10,24 +10,13 @@ const userSchema = new mongoose.Schema({
   description: String,
   profilePictureURL: String,
 })
-module.exports = mongoose.model('User', userSchema)
 class User {
-  posts = []
-  following = []
-  followedBy = []
-  description
-  profilePictureURL
-
-  constructor(email, name) {
-    this.email = email
-    this.name = name
-  }
-
   // Create post
-  createPost(message) {
-    const newPost = Post.create({ message })
-    console.log(newPost)
-    this.posts.push(newPost)
+  async createPost(bodyPost) {
+    const newPost = await Post.create({ bodyPost })
+    await this.posts.push(newPost)
+
+    await this.save()
     return newPost
   }
 
@@ -116,13 +105,15 @@ class User {
                 i //rename
               ) =>
                 `Posted: ${this.datePostFormat(el.date)}\n
-                Status: ${el.status ? 'Visible' : 'Expired'}\n
-                ${el.status ? this.dateExpirationFormat(el.expirationDate) : ''}\n
-                Post: ${el.message}\n
-                ${el.allComments}\n
-                ${el.allLikes}`
+        Status: ${el.status ? 'Visible' : 'Expired'}\n
+        ${el.status ? this.dateExpirationFormat(el.expirationDate) : ''}\n
+        Post: ${el.message}\n
+        ${el.allComments}\n
+        ${el.allLikes}`
             )
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
 }
+userSchema.loadClass(User)
+module.exports = mongoose.model('User', userSchema)

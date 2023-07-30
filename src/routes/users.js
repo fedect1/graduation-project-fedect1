@@ -9,8 +9,8 @@ router.get('/', async function (req, res, next) {
 })
 
 /* POST create a new user. */
-router.post('/', function (req, res, next) {
-  const user = User.create({ email: req.body.email })
+router.post('/', async function (req, res, next) {
+  const user = await User.create({ email: req.body.email })
   res.send(user)
 })
 

@@ -1,14 +1,18 @@
 const Comment = require('./comment')
-class Post {
-  comments = []
-  likes = []
-  date = new Date()
-  expirationDate = new Date(this.date.getTime() + 3 * 60 * 60 * 1000)
-  status = true
+const mongoose = require('mongoose')
 
-  constructor(message) {
-    this.message = message
-  }
+const postSchema = new mongoose.Schema({
+  bodyPost: String,
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  date: Date,
+  expirationDate: Date,
+  status: Boolean,
+})
+class Post {
+  //date = new Date()
+  //expirationDate = new Date(this.date.getTime() + 3 * 60 * 60 * 1000)
+  //status = true
 
   createComment(author, comment) {
     const newComment = Comment.create({ author, comment })
@@ -52,18 +56,6 @@ class Post {
       this.likes.length === 0 ? 'No likes yet' : this.likes.map((el, i) => `${i + 1}- ${el}`).join('\n') //refactor
     return `--- Likes ---\n${likesByString}\n`
   }
-
-  static create({ message }) {
-    const post = new Post(message)
-    Post.list.push(post)
-    return post
-  }
-  static delete(index) {
-    if (index >= 0 && index <= Post.list.length) {
-      return Post.list.splice(index, 1)
-    }
-  }
-  static list = []
 }
-
-module.exports = Post
+postSchema.loadClass(Post)
+module.exports = mongoose.model('Post', postSchema)

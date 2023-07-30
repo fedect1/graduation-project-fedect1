@@ -3,15 +3,16 @@ var router = express.Router()
 const Post = require('../models/post')
 const User = require('../models/user')
 
-/* GET users listing. */
+/* GET Post. */
 router.get('/', function (req, res, next) {
   res.send(Post.list)
 })
 
 /* POST create a new post. */
-router.post('/', function (req, res, next) {
-  const user = User.list.find(user => user.email === req.body.email)
-  const post = user.createPost(req.body.message)
+router.post('/', async function (req, res, next) {
+  const user = await User.findOne({ email: req.body.email })
+  //const user = User.list.find(user => user.email === req.body.email)
+  const post = await user.createPost(req.body.bodyPost)
   res.send(post)
 })
 
