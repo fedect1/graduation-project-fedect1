@@ -1,35 +1,34 @@
 //Domain: DW Messenger
-const User = require('./models/user')
 const axios = require('axios')
 
 async function main() {
   // Create user Fede
-  await axios.post('http://localhost:5000/users', { email: 'Fede' })
+  await axios.post('http://localhost:3000/users', { email: 'Fede' })
   // Create user Julio
-  await axios.post('http://localhost:5000/users', { email: 'juli' })
+  await axios.post('http://localhost:3000/users', { email: 'juli' })
   // Create user Maria
-  await axios.post('http://localhost:5000/users', { email: 'maria' })
+  await axios.post('http://localhost:3000/users', { email: 'maria' })
   // Create user Pepita
-  await axios.post('http://localhost:5000/users', { email: 'pepita' })
+  await axios.post('http://localhost:3000/users', { email: 'pepita' })
   // Create user Rambo
-  await axios.post('http://localhost:5000/users', { email: 'rambo' })
+  await axios.post('http://localhost:3000/users', { email: 'rambo' })
 
-  // Create post for Fede
-  await axios.post('http://localhost:5000/posts', {
-    email: 'Fede',
-    message: 'This is my first message',
-  })
-  // Create post for Fede
-  await axios.post('http://localhost:5000/posts', {
-    email: 'Fede',
-    message: 'This is my second message',
-  })
+  // // Create post for Fede
+  // await axios.post('http://localhost:5000/posts', {
+  //   email: 'Fede',
+  //   message: 'This is my first message',
+  // })
+  // // Create post for Fede
+  // await axios.post('http://localhost:5000/posts', {
+  //   email: 'Fede',
+  //   message: 'This is my second message',
+  // })
 
-  // Delete post for Fede by index
-  await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
+  // // Delete post for Fede by index
+  // await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
 
-  // Post a new follow
-  await axios.post('http://localhost:5000/users/follow', { email: 'Fede', userToFollow: 'juli' })
+  // // Post a new follow
+  // await axios.post('http://localhost:5000/users/follow', { email: 'Fede', userToFollow: 'juli' })
 
   // Create comment for a post of Fede
   // await axios.post('http://localhost:5000/comments', {
@@ -41,13 +40,13 @@ async function main() {
   // })
 
   // Get user Fede
-  const allUsers = await axios.get('http://localhost:5000/users')
-  console.log('List of all users: ', allUsers.data)
-  // Get Post of Fede
-  const allPosts = await axios.get('http://localhost:5000/posts')
-  console.log('Comment of a the post in position 0: ', allPosts.data[0])
+  // const allUsers = await axios.get('http://localhost:5000/users')
+  // console.log('List of all users: ', allUsers.data)
+  // // Get Post of Fede
+  // const allPosts = await axios.get('http://localhost:5000/posts')
+  // console.log('Comment of a the post in position 0: ', allPosts.data[0])
 }
-main()
+main().catch(err => console.log(err.data.message ? err.data.message : err))
 
 // Fetch users with axios
 // axios.get('http://localhost:3000/users').then(response => {

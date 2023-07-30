@@ -1,6 +1,16 @@
 const Post = require('./post')
-const Profile = require('./profile')
+const mongoose = require('mongoose')
 
+const userSchema = new mongoose.Schema({
+  email: String,
+  name: String,
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  description: String,
+  profilePictureURL: String,
+})
+module.exports = mongoose.model('User', userSchema)
 class User {
   posts = []
   following = []
@@ -115,14 +125,4 @@ class User {
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
-  // Create user
-  static createUser({ email }) {
-    console.log('Creating user with email: ', email)
-    const newUser = new User(email)
-    User.list.push(newUser)
-    return newUser
-  }
-  static list = []
 }
-
-module.exports = User
