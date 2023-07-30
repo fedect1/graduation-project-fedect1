@@ -3,21 +3,10 @@ var router = express.Router()
 const User = require('../models/user')
 
 /* GET users listing. */
-// router.get('/', function (req, res, next) {
-//   try {
-//     res.send(
-//       User.list.map(el => {
-//         return {
-//           email: el.email,
-//           following: el.following.map(el => el.email),
-//           followedBy: el.followedBy.map(el => el.email),
-//         }
-//       })
-//     )
-//   } catch (error) {
-//     res.status(404).send(error.message)
-//   }
-// })
+router.get('/', async function (req, res, next) {
+  const users = await User.find()
+  res.send(users)
+})
 
 /* POST create a new user. */
 router.post('/', function (req, res, next) {

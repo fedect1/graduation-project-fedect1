@@ -40,8 +40,8 @@ async function main() {
   // })
 
   // Get user Fede
-  // const allUsers = await axios.get('http://localhost:5000/users')
-  // console.log('List of all users: ', allUsers.data)
+  const allUsers = await axios.get('http://localhost:3000/users')
+  console.log('List of all users: ', allUsers.data)
   // // Get Post of Fede
   // const allPosts = await axios.get('http://localhost:5000/posts')
   // console.log('Comment of a the post in position 0: ', allPosts.data[0])
