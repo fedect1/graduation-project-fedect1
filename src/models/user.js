@@ -3,53 +3,49 @@ const Profile = require('./profile')
 
 class User {
   posts = []
-  interaction = { following: [], followedBy: [] }
+  following = []
+  followedBy = []
+  description
+  profilePictureURL
 
-  constructor(email) {
+  constructor(email, name) {
     this.email = email
-    this.profile = new Profile(email)
+    this.name = name
   }
 
-  // Profile setters
-  set profileUsername(userName) {
-    return (this.profile.userName = userName)
-  }
-  set profileDescription(description) {
-    return (this.profile.description = description)
-  }
-  set profilePictureURL(profilePictureURL) {
-    return (this.profile.profilePictureURL = profilePictureURL)
-  }
-
-  //Post functionalities
-  addPost(message) {
-    const newPost = new Post(message)
+  // Create post
+  createPost(message) {
+    const newPost = Post.create({ message })
+    console.log(newPost)
     this.posts.push(newPost)
+    return newPost
   }
+
+  // Delete post
   deletePost(indexPost) {
     if (indexPost >= 0 && indexPost <= this.posts.length) {
+      const postToDelete = Post.delete(indexPost)
       this.posts.splice(indexPost, 1)
+      return postToDelete
     } else {
       throw new Error('The index you entered does not correspond to the length of the array.')
     }
   }
 
   //Iteraction functionalities
-  follow(userToFollow) {
-    //Rename userToFollow ->user
-    if (userToFollow) {
-      this.interaction.following.push(userToFollow.profile.userName)
-      userToFollow.interaction.followedBy.push(this.profile.userName)
+  follow(user) {
+    if (user) {
+      this.following.push(user)
+      user.followedBy.push(this)
     }
   }
 
-  unfollow(userToUnfollow) {
-    //Rename userToFollow ->user
-    if (userToUnfollow) {
-      const indexOfUser = this.interaction.following.indexOf(userToUnfollow.profile.userName)
+  unfollow(user) {
+    if (user) {
+      const indexOfUser = this.interaction.following.indexOf(user.profile.userName)
       this.interaction.following.splice(indexOfUser, 1)
-      const indexOfUserUnfollowed = userToUnfollow.interaction.followedBy.indexOf(userToUnfollow.userName)
-      userToUnfollow.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
+      const indexOfUserUnfollowed = user.interaction.followedBy.indexOf(user.userName)
+      user.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
     }
   }
   // Date formating
@@ -61,6 +57,7 @@ class User {
     }
     const daysPassed = calcDaysPassed(datePost)
 
+    if (typeof datePost !== 'object') return 'Invalid date format'
     if (daysPassed === 0) return 'Today'
     if (daysPassed === 1) return 'Yesterday'
     if (daysPassed < 7) return `${daysPassed} days ago`
@@ -118,13 +115,13 @@ class User {
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
-  static create({ email }) {
+  // Create user
+  static createUser({ email }) {
     console.log('Creating user with email: ', email)
     const newUser = new User(email)
     User.list.push(newUser)
     return newUser
   }
-
   static list = []
 }
 
