@@ -1,5 +1,5 @@
 //Domain: DW Messenger
-const User = require('./user')
+const User = require('./models/user')
 const axios = require('axios')
 
 async function main() {
