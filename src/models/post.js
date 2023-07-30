@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema({
   date: Date,
   expirationDate: Date,
   status: Boolean,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
 class Post {
   //date = new Date()

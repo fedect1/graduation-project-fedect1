@@ -13,9 +13,8 @@ const userSchema = new mongoose.Schema({
 class User {
   // Create post
   async createPost(bodyPost) {
-    const newPost = await Post.create({ bodyPost })
-    await this.posts.push(newPost)
-
+    const newPost = await Post.create({ bodyPost, user: this._id })
+    this.posts.push(newPost)
     await this.save()
     return newPost
   }
