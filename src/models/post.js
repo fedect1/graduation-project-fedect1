@@ -1,12 +1,19 @@
-const Comment = require('./comment')
 const mongoose = require('mongoose')
-
+const Comment = require('./comment')
 const postSchema = new mongoose.Schema({
   bodyPost: String,
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  comments: [],
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  date: Date,
-  expirationDate: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  expirationDate: {
+    type: Date,
+    default: function () {
+      return new Date(this.createdAt.getTime() + 3 * 60 * 60 * 1000)
+    },
+  },
   status: Boolean,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
@@ -15,11 +22,12 @@ class Post {
   //expirationDate = new Date(this.date.getTime() + 3 * 60 * 60 * 1000)
   //status = true
 
-  createComment(author, comment) {
-    const newComment = Comment.create({ author, comment })
+  async createComment(author, text) {
+    const newComment = new Comment(author, text)
     this.comments.push(newComment)
-    this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
-    return newComment
+    //this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
+    await this.save()
+    return this
   }
 
   addDeleteComment(index) {

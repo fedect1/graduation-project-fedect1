@@ -23,4 +23,16 @@ router.delete('/:index', function (req, res, next) {
   res.send(post)
 })
 
+/* GET Comments of a post. */
+router.get('/:postId/comments', function (req, res, next) {
+  res.send(Comment.list)
+})
+
+/* POST a new comment for a post of a user */
+router.post('/:postId/comments', async function (req, res, next) {
+  const post = await Post.findById(req.params.postId)
+  const comment = await post.createComment(req.body.user, req.body.text)
+  res.send(comment)
+})
+
 module.exports = router

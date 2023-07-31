@@ -1,25 +1,25 @@
 //Domain: DW Messenger
 const axios = require('axios')
-
+axios.defaults.baseURL = 'http://localhost:3000'
 async function main() {
   // Create user Fede
-  const fede = await axios.post('http://localhost:3000/users', { email: 'Fede' })
+  const fede = await axios.post('/users', { email: 'Fede' })
   // Create user Juli
-  const juli = await axios.post('http://localhost:3000/users', { email: 'juli' })
+  const juli = await axios.post('/users', { email: 'juli' })
   // Create user Maria
-  const maria = axios.post('http://localhost:3000/users', { email: 'maria' })
+  const maria = axios.post('/users', { email: 'maria' })
   // Create user Pepita
-  const pepita = axios.post('http://localhost:3000/users', { email: 'pepita' })
+  const pepita = axios.post('/users', { email: 'pepita' })
   // Create user Rambo
-  const rambo = await axios.post('http://localhost:3000/users', { email: 'rambo' })
+  const rambo = await axios.post('/users', { email: 'rambo' })
 
   // Create post for Fede
-  await axios.post('http://localhost:3000/posts', {
+  const firstPost = await axios.post('/posts', {
     user: fede.data._id,
     bodyPost: 'This is my first message',
   })
   // Create post for Fede
-  await axios.post('http://localhost:3000/posts', {
+  await axios.post('/posts', {
     user: fede.data._id,
     bodyPost: 'This is my second message',
   })
@@ -28,16 +28,13 @@ async function main() {
   // await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
 
   // New follow
-  await axios.post(`http://localhost:3000/users/${fede.data._id}/follow`, { user: juli.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id })
 
-  // Create comment for a post of Fede
-  // await axios.post('http://localhost:5000/comments', {
-  //   //Change url http://localhost:5000/posts/0/comments
-  //   email: 'Fede',
-  //   indexPost: 0,
-  //   author: 'juli',
-  //   comment: 'It is working', //text or body
-  // })
+  //Create comment for a post of Fede
+  await axios.post(`/posts/${firstPost.data._id}/comments`, {
+    user: juli.data._id,
+    text: 'It is working', //text or body
+  })
 
   // Get user Fede
   const allUsers = await axios.get('http://localhost:3000/users')
@@ -46,7 +43,7 @@ async function main() {
   // const allPosts = await axios.get('http://localhost:5000/posts')
   // console.log('Comment of a the post in position 0: ', allPosts.data[0])
 }
-main().catch(err => console.log(err.data.message ? err.data.message : err))
+main() //.catch(err => console.log(err.data.message ? err.data.message : err))
 
 // Fetch users with axios
 // axios.get('http://localhost:3000/users').then(response => {
