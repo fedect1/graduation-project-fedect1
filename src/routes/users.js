@@ -16,24 +16,15 @@ router.post('/', async function (req, res, next) {
 
 /* POST a new follow. */
 
-// router.post(
-//   '/follow',
-
-//   function (req, res, next) {
-//     try {
-//       const user = User.list.find(el => el.email === req.body.email)
-//       const userToFollow = User.list.find(el => el.email === req.body.userToFollow)
-//       const resultFollow = user.follow(userToFollow)
-//       res.send(resultFollow)
-//       // ({
-//       //   email: user.email,
-//       //   following: user.following.map(el => el.email),
-//       //   followedBy: user.followedBy.map(el => el.email),
-//       // })
-//     } catch (error) {
-//       res.status(404).send(error.message)
-//     }
-//   }
-// )
+router.post('/:userId/follow', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    const userToFollow = await User.findById(req.body.user)
+    const resultFollow = await user.follow(userToFollow)
+    res.send(resultFollow)
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
 
 module.exports = router

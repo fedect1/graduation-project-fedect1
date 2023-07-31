@@ -1,15 +1,18 @@
 const Post = require('./post')
 const mongoose = require('mongoose')
+const autopopulate = require('mongoose-autopopulate')
 
 const userSchema = new mongoose.Schema({
   email: String,
   name: String,
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   description: String,
   profilePictureURL: String,
 })
+
+userSchema.plugin(autopopulate)
 class User {
   // Create post
   async createPost(bodyPost) {
@@ -31,11 +34,12 @@ class User {
   }
 
   //Iteraction functionalities
-  follow(user) {
-    if (user) {
-      this.following.push(user)
-      user.followedBy.push(this)
-    }
+  async follow(user) {
+    this.following.push(user)
+    await this.save()
+    user.followedBy.push(this)
+    await user.save()
+    return this
   }
 
   unfollow(user) {

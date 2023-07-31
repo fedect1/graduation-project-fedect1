@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 /* POST create a new post. */
 router.post('/', async function (req, res, next) {
-  const user = await User.findOne({ email: req.body.email })
+  const user = await User.findById(req.body.user)
   //const user = User.list.find(user => user.email === req.body.email)
   const post = await user.createPost(req.body.bodyPost)
   res.send(post)

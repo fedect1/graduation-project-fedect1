@@ -3,32 +3,32 @@ const axios = require('axios')
 
 async function main() {
   // Create user Fede
-  await axios.post('http://localhost:3000/users', { email: 'Fede' })
-  // Create user Julio
-  await axios.post('http://localhost:3000/users', { email: 'juli' })
+  const fede = await axios.post('http://localhost:3000/users', { email: 'Fede' })
+  // Create user Juli
+  const juli = await axios.post('http://localhost:3000/users', { email: 'juli' })
   // Create user Maria
-  await axios.post('http://localhost:3000/users', { email: 'maria' })
+  const maria = axios.post('http://localhost:3000/users', { email: 'maria' })
   // Create user Pepita
-  await axios.post('http://localhost:3000/users', { email: 'pepita' })
+  const pepita = axios.post('http://localhost:3000/users', { email: 'pepita' })
   // Create user Rambo
-  await axios.post('http://localhost:3000/users', { email: 'rambo' })
+  const rambo = await axios.post('http://localhost:3000/users', { email: 'rambo' })
 
   // Create post for Fede
   await axios.post('http://localhost:3000/posts', {
-    email: 'Fede',
+    user: fede.data._id,
     bodyPost: 'This is my first message',
   })
   // Create post for Fede
   await axios.post('http://localhost:3000/posts', {
-    email: 'Fede',
+    user: fede.data._id,
     bodyPost: 'This is my second message',
   })
 
   // // Delete post for Fede by index
   // await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
 
-  // // Post a new follow
-  // await axios.post('http://localhost:5000/users/follow', { email: 'Fede', userToFollow: 'juli' })
+  // New follow
+  await axios.post(`http://localhost:3000/users/${fede.data._id}/follow`, { user: juli.data._id })
 
   // Create comment for a post of Fede
   // await axios.post('http://localhost:5000/comments', {
