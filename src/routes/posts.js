@@ -4,22 +4,15 @@ const Post = require('../models/post')
 const User = require('../models/user')
 
 /* GET Post. */
-router.get('/', function (req, res, next) {
-  res.send(Post.list)
+router.get('/', async function (req, res, next) {
+  const posts = await Post.find()
+  res.send(posts)
 })
 
 /* POST create a new post. */
 router.post('/', async function (req, res, next) {
   const user = await User.findById(req.body.user)
-  //const user = User.list.find(user => user.email === req.body.email)
   const post = await user.createPost(req.body.bodyPost)
-  res.send(post)
-})
-
-/* DELETE delete a post. */
-router.delete('/:index', function (req, res, next) {
-  const user = User.list.find(user => user.email === req.body.email)
-  const post = user.deletePost(req.params.index)
   res.send(post)
 })
 
@@ -33,6 +26,33 @@ router.post('/:postId/comments', async function (req, res, next) {
   const post = await Post.findById(req.params.postId)
   const comment = await post.createComment(req.body.user, req.body.text)
   res.send(comment)
+})
+
+/* DELETE */
+
+// Delete a post
+router.delete('/:userId/delete/:postId', async function (req, res, next) {
+  try {
+    // Find the user
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+
+    // Find the post index in the user's posts array
+    await user.deletePost(req.params.postId)
+
+    // Delete the post from the posts collection
+    const deletedPost = await Post.findByIdAndDelete(req.params.postId)
+    if (!deletedPost) {
+      return res.status(404).send({ message: 'Post not found in collection' })
+    }
+
+    // Send the response
+    res.send({ message: 'Post deleted successfully' })
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router

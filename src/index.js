@@ -2,35 +2,30 @@
 const axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:3000'
 async function main() {
-  // Create user Fede
+  // CREATE USERS
   const fede = await axios.post('/users', { email: 'Fede' })
-  // Create user Juli
   const juli = await axios.post('/users', { email: 'juli' })
-  // Create user Maria
   const maria = axios.post('/users', { email: 'maria' })
-  // Create user Pepita
   const pepita = axios.post('/users', { email: 'pepita' })
-  // Create user Rambo
   const rambo = await axios.post('/users', { email: 'rambo' })
 
-  // Create post for Fede
+  // CREATE POSTS
   const firstPost = await axios.post('/posts', {
     user: fede.data._id,
     bodyPost: 'This is my first message',
   })
-  // Create post for Fede
-  await axios.post('/posts', {
+  const secondPost = await axios.post('/posts', {
     user: fede.data._id,
     bodyPost: 'This is my second message',
   })
 
-  // // Delete post for Fede by index
-  // await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
+  // DELETE POST
+  await axios.delete(`/posts/${fede.data._id}/delete/${secondPost.data._id}`)
 
-  // New follow
+  // FOLLOW
   await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id })
 
-  //Create comment for a post of Fede
+  //COMMENT
   await axios.post(`/posts/${firstPost.data._id}/comments`, {
     user: juli.data._id,
     text: 'It is working', //text or body

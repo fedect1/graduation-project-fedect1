@@ -22,15 +22,14 @@ class User {
     return newPost
   }
 
-  // Delete post
-  deletePost(indexPost) {
-    if (indexPost >= 0 && indexPost <= this.posts.length) {
-      const postToDelete = Post.delete(indexPost)
-      this.posts.splice(indexPost, 1)
-      return postToDelete
-    } else {
-      throw new Error('The index you entered does not correspond to the length of the array.')
+  //Delete post
+  async deletePost(postId) {
+    const postIndex = this.posts.findIndex(post => post._id.toString() === postId)
+    if (postIndex === -1) {
+      return res.status(404).send({ message: 'Post not found in user' })
     }
+    this.posts.splice(postIndex, 1)
+    await this.save()
   }
 
   //Iteraction functionalities

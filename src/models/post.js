@@ -18,10 +18,6 @@ const postSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
 class Post {
-  //date = new Date()
-  //expirationDate = new Date(this.date.getTime() + 3 * 60 * 60 * 1000)
-  //status = true
-
   async createComment(author, text) {
     const newComment = new Comment(author, text)
     this.comments.push(newComment)
