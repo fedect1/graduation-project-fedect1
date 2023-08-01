@@ -32,7 +32,7 @@ class User {
     await this.save()
   }
 
-  //Iteraction functionalities
+  //Follow
   async follow(user) {
     this.following.push(user)
     await this.save()
@@ -42,12 +42,15 @@ class User {
   }
 
   unfollow(user) {
-    if (user) {
-      const indexOfUser = this.interaction.following.indexOf(user.profile.userName)
-      this.interaction.following.splice(indexOfUser, 1)
-      const indexOfUserUnfollowed = user.interaction.followedBy.indexOf(user.userName)
-      user.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
+    const followedIndex = this.following.findIndex(followed => followed._id.toString() === user._id.toString())
+    if (followedIndex === -1) {
+      return res.status(404).send({ message: 'User not found in following' })
     }
+    this.following.splice(followedIndex, 1)
+    user.followedBy.splice(user.followedBy.indexOf(this._id), 1)
+    this.save()
+    user.save()
+    return this
   }
   // Date formating
   datePostFormat(datePost) {

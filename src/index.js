@@ -5,8 +5,8 @@ async function main() {
   // CREATE USERS
   const fede = await axios.post('/users', { email: 'Fede' })
   const juli = await axios.post('/users', { email: 'juli' })
-  const maria = axios.post('/users', { email: 'maria' })
-  const pepita = axios.post('/users', { email: 'pepita' })
+  const maria = await axios.post('/users', { email: 'maria' })
+  const pepita = await axios.post('/users', { email: 'pepita' })
   const rambo = await axios.post('/users', { email: 'rambo' })
 
   // CREATE POSTS
@@ -24,6 +24,12 @@ async function main() {
 
   // FOLLOW
   await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: rambo.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: pepita.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: maria.data._id })
+
+  // UNFOLLOW
+  await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
 
   //COMMENT
   await axios.post(`/posts/${firstPost.data._id}/comments`, {

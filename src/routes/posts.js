@@ -2,23 +2,24 @@ var express = require('express')
 var router = express.Router()
 const Post = require('../models/post')
 const User = require('../models/user')
-
+// GETTERS
 /* GET Post. */
 router.get('/', async function (req, res, next) {
   const posts = await Post.find()
   res.send(posts)
 })
 
+/* GET Comments of a post. */
+router.get('/:postId/comments', function (req, res, next) {
+  res.send(Comment.list)
+})
+
+//POSTS
 /* POST create a new post. */
 router.post('/', async function (req, res, next) {
   const user = await User.findById(req.body.user)
   const post = await user.createPost(req.body.bodyPost)
   res.send(post)
-})
-
-/* GET Comments of a post. */
-router.get('/:postId/comments', function (req, res, next) {
-  res.send(Comment.list)
 })
 
 /* POST a new comment for a post of a user */
@@ -28,9 +29,8 @@ router.post('/:postId/comments', async function (req, res, next) {
   res.send(comment)
 })
 
-/* DELETE */
-
-// Delete a post
+//DELETE
+/* Delete a post */
 router.delete('/:userId/delete/:postId', async function (req, res, next) {
   try {
     // Find the user
