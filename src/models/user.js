@@ -4,10 +4,10 @@ const autopopulate = require('mongoose-autopopulate')
 
 const userSchema = new mongoose.Schema({
   email: String,
-  name: String,
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  name: String,
   description: String,
   profilePictureURL: String,
 })

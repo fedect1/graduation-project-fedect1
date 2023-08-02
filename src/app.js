@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const postsRouter = require('./routes/posts')
 const profilesRouter = require('./routes/profiles')
+const secretdbRouter = require('./routes/secretdb')
 const app = express()
 
 // view engine setup
@@ -26,6 +27,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
 app.use('/profiles', profilesRouter)
+app.use('/secretdb', secretdbRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
