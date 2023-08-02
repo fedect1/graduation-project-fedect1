@@ -18,4 +18,14 @@ router.patch('/:userId/name', async function (req, res, next) {
   }
 })
 
+/* Update user description by id */
+router.patch('/:userId/description', async function (req, res, next) {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, { description: req.body.description }, { new: true })
+    res.send(user)
+  } catch (error) {
+    res.status(404).send({ message: 'Error creating/updating user description' })
+  }
+})
+
 module.exports = router

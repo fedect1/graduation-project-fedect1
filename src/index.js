@@ -32,7 +32,10 @@ async function main() {
   await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
 
   // PROFILE
+  // Update profile name
   await axios.patch(`/profiles/${fede.data._id}/name`, { name: 'Federico' })
+  // Update profile description
+  await axios.patch(`/profiles/${fede.data._id}/description`, { description: 'Hi! I am Fede! Alles gut?' })
 
   //COMMENT
   const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
