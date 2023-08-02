@@ -28,8 +28,11 @@ async function main() {
   await axios.post(`/users/${fede.data._id}/follow`, { user: pepita.data._id })
   await axios.post(`/users/${fede.data._id}/follow`, { user: maria.data._id })
 
-  // UNFOLLOW
+  //UNFOLLOW
   await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
+
+  // PROFILE
+  await axios.patch(`/profiles/${fede.data._id}/name`, { name: 'Federico' })
 
   //COMMENT
   const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {

@@ -2,19 +2,25 @@ var express = require('express')
 var router = express.Router()
 const User = require('../models/user')
 
-/* GET users listing. */
+/* Get all users. */
 router.get('/', async function (req, res, next) {
   const users = await User.find()
   res.send(users)
 })
 
-/* POST create a new user. */
+/* Get user by id. */
+router.get('/:userId', async function (req, res, next) {
+  const user = await User.findById(req.params.userId)
+  res.send(user)
+})
+
+/* // Create a new user */
 router.post('/', async function (req, res, next) {
   const user = await User.create({ email: req.body.email })
   res.send(user)
 })
 
-/* POST a new follow. */
+/* POST a new follow to a user */
 
 router.post('/:userId/follow', async function (req, res, next) {
   try {
