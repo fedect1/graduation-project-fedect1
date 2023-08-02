@@ -1,0 +1,21 @@
+services:
+  api:
+    image: dwproject
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data/db:/data/db
