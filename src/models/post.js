@@ -26,11 +26,10 @@ class Post {
     return this
   }
 
-  addDeleteComment(index) {
-    if (index >= 0 && index <= this.comments.length) {
-      this.expirationDate = new Date(this.expirationDate.getTime() - 15 * 60 * 1000) //refactor
-      return this.comments.splice(indexPost, 1)
-    }
+  async deleteComment(index) {
+    this.comments.splice(index, 1)
+    await this.save()
+    return this
   }
 
   addLike(author) {

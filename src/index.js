@@ -20,10 +20,10 @@ async function main() {
   })
 
   // DELETE POST
-  await axios.delete(`/posts/${fede.data._id}/delete/${secondPost.data._id}`)
+  await axios.delete(`/posts/${fede.data._id}/delete/${secondPost.data._id}`) //remove delete
 
   // FOLLOW
-  await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id }) //follower
   await axios.post(`/users/${fede.data._id}/follow`, { user: rambo.data._id })
   await axios.post(`/users/${fede.data._id}/follow`, { user: pepita.data._id })
   await axios.post(`/users/${fede.data._id}/follow`, { user: maria.data._id })
@@ -32,10 +32,17 @@ async function main() {
   await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
 
   //COMMENT
-  await axios.post(`/posts/${firstPost.data._id}/comments`, {
+  const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
     user: juli.data._id,
     text: 'It is working', //text or body
   })
+  const secondComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
+    user: pepita.data._id,
+    text: 'Well done', //text or body
+  })
+
+  // DELETE
+  //await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
 
   // Get user Fede
   const allUsers = await axios.get('http://localhost:3000/users')

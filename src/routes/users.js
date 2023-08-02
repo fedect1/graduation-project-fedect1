@@ -31,12 +31,10 @@ router.post('/:userId/follow', async function (req, res, next) {
 router.delete('/:userId/unfollow/:userIdUnfollow', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
-    console.log(req.params.userId)
     if (!user) {
       return res.status(404).send({ message: 'User not found' })
     }
     const userToUnfollow = await User.findById(req.params.userIdUnfollow)
-    console.log(req.params.userIdUnfollow)
     if (!userToUnfollow) {
       return res.status(404).send({ message: 'User to unfollow not found' })
     }
