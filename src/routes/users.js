@@ -2,49 +2,52 @@ var express = require('express')
 var router = express.Router()
 const User = require('../models/user')
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
+/* Get all users. */
+router.get('/', async function (req, res, next) {
+  const users = await User.find()
+  res.send(users)
+})
+
+/* Get user by id. */
+router.get('/:userId', async function (req, res, next) {
+  const user = await User.findById(req.params.userId)
+  res.send(user)
+})
+
+/* // Create a new user */
+router.post('/', async function (req, res, next) {
+  const user = await User.create({ email: req.body.email })
+  res.send(user)
+})
+
+/* POST a new follow to a user */
+
+router.post('/:userId/follow', async function (req, res, next) {
   try {
-    res.send(
-      User.list.map(el => {
-        return {
-          email: el.email,
-          following: el.following.map(el => el.email),
-          followedBy: el.followedBy.map(el => el.email),
-        }
-      })
-    )
+    const user = await User.findById(req.params.userId)
+    const userToFollow = await User.findById(req.body.user)
+    const resultFollow = await user.follow(userToFollow)
+    res.send(resultFollow)
   } catch (error) {
     res.status(404).send(error.message)
   }
 })
 
-/* POST create a new user. */
-router.post('/', function (req, res, next) {
-  const user = User.createUser({ email: req.body.email })
-  res.send(user)
-})
-
-/* POST a new follow. */
-
-router.post(
-  '/follow',
-
-  function (req, res, next) {
-    try {
-      const user = User.list.find(el => el.email === req.body.email)
-      const userToFollow = User.list.find(el => el.email === req.body.userToFollow)
-      const resultFollow = user.follow(userToFollow)
-      res.send(resultFollow)
-      // ({
-      //   email: user.email,
-      //   following: user.following.map(el => el.email),
-      //   followedBy: user.followedBy.map(el => el.email),
-      // })
-    } catch (error) {
-      res.status(404).send(error.message)
+/* DELETE a follow. */
+router.delete('/:userId/unfollow/:userIdUnfollow', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
     }
+    const userToUnfollow = await User.findById(req.params.userIdUnfollow)
+    if (!userToUnfollow) {
+      return res.status(404).send({ message: 'User to unfollow not found' })
+    }
+    await user.unfollow(userToUnfollow)
+    res.send({ message: 'Unfollow user successfully' })
+  } catch (error) {
+    res.status(404).send(error.message)
   }
-)
-
+})
 module.exports = router

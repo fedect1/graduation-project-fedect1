@@ -1,53 +1,63 @@
 //Domain: DW Messenger
-const User = require('./models/user')
 const axios = require('axios')
-
+axios.defaults.baseURL = 'http://localhost:3000'
 async function main() {
-  // Create user Fede
-  await axios.post('http://localhost:5000/users', { email: 'Fede' })
-  // Create user Julio
-  await axios.post('http://localhost:5000/users', { email: 'juli' })
-  // Create user Maria
-  await axios.post('http://localhost:5000/users', { email: 'maria' })
-  // Create user Pepita
-  await axios.post('http://localhost:5000/users', { email: 'pepita' })
-  // Create user Rambo
-  await axios.post('http://localhost:5000/users', { email: 'rambo' })
+  // CREATE USERS
+  const fede = await axios.post('/users', { email: 'Fede' })
+  const juli = await axios.post('/users', { email: 'juli' })
+  const maria = await axios.post('/users', { email: 'maria' })
+  const pepita = await axios.post('/users', { email: 'pepita' })
+  const rambo = await axios.post('/users', { email: 'rambo' })
 
-  // Create post for Fede
-  await axios.post('http://localhost:5000/posts', {
-    email: 'Fede',
-    message: 'This is my first message',
+  // CREATE POSTS
+  const firstPost = await axios.post('/posts', {
+    user: fede.data._id,
+    bodyPost: 'This is my first message',
   })
-  // Create post for Fede
-  await axios.post('http://localhost:5000/posts', {
-    email: 'Fede',
-    message: 'This is my second message',
+  const secondPost = await axios.post('/posts', {
+    user: fede.data._id,
+    bodyPost: 'This is my second message',
   })
 
-  // Delete post for Fede by index
-  await axios.delete('http://localhost:5000/posts/0', { data: { email: 'Fede' } })
+  // DELETE POST
+  await axios.delete(`/posts/${fede.data._id}/delete/${secondPost.data._id}`) //remove delete
 
-  // Post a new follow
-  await axios.post('http://localhost:5000/users/follow', { email: 'Fede', userToFollow: 'juli' })
+  // FOLLOW
+  await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id }) //follower
+  await axios.post(`/users/${fede.data._id}/follow`, { user: rambo.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: pepita.data._id })
+  await axios.post(`/users/${fede.data._id}/follow`, { user: maria.data._id })
 
-  // Create comment for a post of Fede
-  // await axios.post('http://localhost:5000/comments', {
-  //   //Change url http://localhost:5000/posts/0/comments
-  //   email: 'Fede',
-  //   indexPost: 0,
-  //   author: 'juli',
-  //   comment: 'It is working', //text or body
-  // })
+  //UNFOLLOW
+  await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
+
+  // PROFILE
+  // Update profile name
+  await axios.patch(`/profiles/${fede.data._id}/name`, { name: 'Federico' })
+  // Update profile description
+  await axios.patch(`/profiles/${fede.data._id}/description`, { description: 'Hi! I am Fede! Alles gut?' })
+
+  //COMMENT
+  const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
+    user: juli.data._id,
+    text: 'It is working', //text or body
+  })
+  const secondComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
+    user: pepita.data._id,
+    text: 'Well done', //text or body
+  })
+
+  // DELETE
+  //await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
 
   // Get user Fede
-  const allUsers = await axios.get('http://localhost:5000/users')
+  const allUsers = await axios.get('http://localhost:3000/users')
   console.log('List of all users: ', allUsers.data)
-  // Get Post of Fede
-  const allPosts = await axios.get('http://localhost:5000/posts')
-  console.log('Comment of a the post in position 0: ', allPosts.data[0])
+  // // Get Post of Fede
+  // const allPosts = await axios.get('http://localhost:5000/posts')
+  // console.log('Comment of a the post in position 0: ', allPosts.data[0])
 }
-main()
+main() //.catch(err => console.log(err.data.message ? err.data.message : err))
 
 // Fetch users with axios
 // axios.get('http://localhost:3000/users').then(response => {

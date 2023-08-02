@@ -1,52 +1,56 @@
 const Post = require('./post')
-const Profile = require('./profile')
+const mongoose = require('mongoose')
+const autopopulate = require('mongoose-autopopulate')
 
+const userSchema = new mongoose.Schema({
+  email: String,
+  name: String,
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  description: String,
+  profilePictureURL: String,
+})
+
+userSchema.plugin(autopopulate)
 class User {
-  posts = []
-  following = []
-  followedBy = []
-  description
-  profilePictureURL
-
-  constructor(email, name) {
-    this.email = email
-    this.name = name
-  }
-
   // Create post
-  createPost(message) {
-    const newPost = Post.create({ message })
-    console.log(newPost)
+  async createPost(bodyPost) {
+    const newPost = await Post.create({ bodyPost, user: this._id })
     this.posts.push(newPost)
+    await this.save()
     return newPost
   }
 
-  // Delete post
-  deletePost(indexPost) {
-    if (indexPost >= 0 && indexPost <= this.posts.length) {
-      const postToDelete = Post.delete(indexPost)
-      this.posts.splice(indexPost, 1)
-      return postToDelete
-    } else {
-      throw new Error('The index you entered does not correspond to the length of the array.')
+  //Delete post
+  async deletePost(postId) {
+    const postIndex = this.posts.findIndex(post => post._id.toString() === postId)
+    if (postIndex === -1) {
+      return res.status(404).send({ message: 'Post not found in user' })
     }
+    this.posts.splice(postIndex, 1)
+    await this.save()
   }
 
-  //Iteraction functionalities
-  follow(user) {
-    if (user) {
-      this.following.push(user)
-      user.followedBy.push(this)
-    }
+  //Follow
+  async follow(user) {
+    this.following.push(user)
+    await this.save()
+    user.followedBy.push(this)
+    await user.save()
+    return this
   }
 
   unfollow(user) {
-    if (user) {
-      const indexOfUser = this.interaction.following.indexOf(user.profile.userName)
-      this.interaction.following.splice(indexOfUser, 1)
-      const indexOfUserUnfollowed = user.interaction.followedBy.indexOf(user.userName)
-      user.interaction.followedBy.splice(indexOfUserUnfollowed, 1)
+    const followedIndex = this.following.findIndex(followed => followed._id.toString() === user._id.toString())
+    if (followedIndex === -1) {
+      return res.status(404).send({ message: 'User not found in following' })
     }
+    this.following.splice(followedIndex, 1)
+    user.followedBy.splice(user.followedBy.indexOf(this._id), 1)
+    this.save()
+    user.save()
+    return this
   }
   // Date formating
   datePostFormat(datePost) {
@@ -106,23 +110,15 @@ class User {
                 i //rename
               ) =>
                 `Posted: ${this.datePostFormat(el.date)}\n
-                Status: ${el.status ? 'Visible' : 'Expired'}\n
-                ${el.status ? this.dateExpirationFormat(el.expirationDate) : ''}\n
-                Post: ${el.message}\n
-                ${el.allComments}\n
-                ${el.allLikes}`
+        Status: ${el.status ? 'Visible' : 'Expired'}\n
+        ${el.status ? this.dateExpirationFormat(el.expirationDate) : ''}\n
+        Post: ${el.message}\n
+        ${el.allComments}\n
+        ${el.allLikes}`
             )
             .join('\n')
     return `--- POSTS ---\n ${postByString}`
   }
-  // Create user
-  static createUser({ email }) {
-    console.log('Creating user with email: ', email)
-    const newUser = new User(email)
-    User.list.push(newUser)
-    return newUser
-  }
-  static list = []
 }
-
-module.exports = User
+userSchema.loadClass(User)
+module.exports = mongoose.model('User', userSchema)

@@ -1,27 +1,35 @@
+const mongoose = require('mongoose')
 const Comment = require('./comment')
+const postSchema = new mongoose.Schema({
+  bodyPost: String,
+  comments: [],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  expirationDate: {
+    type: Date,
+    default: function () {
+      return new Date(this.createdAt.getTime() + 3 * 60 * 60 * 1000)
+    },
+  },
+  status: Boolean,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+})
 class Post {
-  comments = []
-  likes = []
-  date = new Date()
-  expirationDate = new Date(this.date.getTime() + 3 * 60 * 60 * 1000)
-  status = true
-
-  constructor(message) {
-    this.message = message
-  }
-
-  createComment(author, comment) {
-    const newComment = Comment.create({ author, comment })
+  async createComment(author, text) {
+    const newComment = new Comment(author, text)
     this.comments.push(newComment)
-    this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
-    return newComment
+    //this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
+    await this.save()
+    return this
   }
 
-  addDeleteComment(index) {
-    if (index >= 0 && index <= this.comments.length) {
-      this.expirationDate = new Date(this.expirationDate.getTime() - 15 * 60 * 1000) //refactor
-      return this.comments.splice(indexPost, 1)
-    }
+  async deleteComment(index) {
+    this.comments.splice(index, 1)
+    await this.save()
+    return this
   }
 
   addLike(author) {
@@ -52,18 +60,6 @@ class Post {
       this.likes.length === 0 ? 'No likes yet' : this.likes.map((el, i) => `${i + 1}- ${el}`).join('\n') //refactor
     return `--- Likes ---\n${likesByString}\n`
   }
-
-  static create({ message }) {
-    const post = new Post(message)
-    Post.list.push(post)
-    return post
-  }
-  static delete(index) {
-    if (index >= 0 && index <= Post.list.length) {
-      return Post.list.splice(index, 1)
-    }
-  }
-  static list = []
 }
-
-module.exports = Post
+postSchema.loadClass(Post)
+module.exports = mongoose.model('Post', postSchema)

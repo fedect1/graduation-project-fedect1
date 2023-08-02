@@ -1,15 +1,9 @@
 class Comment {
   date = new Date()
-  constructor(author, comment) {
+  constructor(author, text) {
     this.author = author
-    this.comment = comment
+    this.text = text
   }
-  static create({ author, comment }) {
-    const newComment = new Comment(author, comment)
-    Comment.list.push(newComment)
-    return newComment
-  }
-  static list = []
 }
 
 module.exports = Comment
