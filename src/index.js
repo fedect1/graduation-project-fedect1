@@ -23,22 +23,27 @@ async function main() {
   })
 
   // DELETE POST
-  await axios.delete(`/posts/${fede.data._id}/delete/${secondPost.data._id}`) //remove delete
+  await axios.delete(`/posts/${fede.data._id}/${secondPost.data._id}`)
 
   // FOLLOW
-  await axios.post(`/users/${fede.data._id}/follow`, { user: juli.data._id }) //follower
-  await axios.post(`/users/${fede.data._id}/follow`, { user: rambo.data._id })
-  await axios.post(`/users/${fede.data._id}/follow`, { user: pepita.data._id })
-  await axios.post(`/users/${fede.data._id}/follow`, { user: maria.data._id })
-
+  await axios.post(`/users/${fede.data._id}/following`, { user: juli.data._id })
+  await axios.post(`/users/${fede.data._id}/following`, { user: rambo.data._id })
+  await axios.post(`/users/${fede.data._id}/following`, { user: pepita.data._id })
+  await axios.post(`/users/${fede.data._id}/following`, { user: maria.data._id })
+  console.log(fede.data.following)
   //UNFOLLOW
-  await axios.delete(`/users/${fede.data._id}/unfollow/${pepita.data._id}`)
+  await axios.delete(`/users/${fede.data._id}/unfollowing/${pepita.data._id}`)
 
   // PROFILE
   // Update profile name
-  await axios.patch(`/profiles/${fede.data._id}/name`, { name: 'Federico' })
+  await axios.patch(`/users/${fede.data._id}/name`, { name: 'Federico' })
   // Update profile description
-  await axios.patch(`/profiles/${fede.data._id}/description`, { description: 'Hi! I am Fede! Alles gut?' })
+  await axios.patch(`/users/${fede.data._id}/description`, { description: 'Hi! I am Fede! Alles gut?' })
+  // Update profile avatar
+  await axios.patch(`/users/${fede.data._id}/avatar`, {
+    avatar:
+      'https://www.google.com/imgres?imgurl=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2FD4E03AQEETspkloHJIw%2Fprofile-displayphoto-shrink_800_800%2F0%2F1682453844837%3Fe%3D2147483647%26v%3Dbeta%26t%3D5H-eDEqsGK62FTdov1nqny3yDv--M7UAKrLonxLUW80&tbnid=LKxBoDD5chcu4M&vet=12ahUKEwj9sYabzMCAAxUiuaQKHehODKAQMygAegQIARBL..i&imgrefurl=https%3A%2F%2Fde.linkedin.com%2Fin%2Fcarrillofa&docid=8StHT0K3T_G6IM&w=800&h=800&q=federico%20andres%20carrillo&ved=2ahUKEwj9sYabzMCAAxUiuaQKHehODKAQMygAegQIARBL',
+  })
 
   //COMMENT
   const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
@@ -55,7 +60,7 @@ async function main() {
 
   // Get user Fede
   const allUsers = await axios.get('http://localhost:3000/users')
-  console.log('List of all users: ', allUsers.data)
+  //console.log('List of all users: ', allUsers.data)
   // // Get Post of Fede
   // const allPosts = await axios.get('http://localhost:5000/posts')
   // console.log('Comment of a the post in position 0: ', allPosts.data[0])
