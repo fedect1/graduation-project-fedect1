@@ -62,10 +62,9 @@ router.delete('/:postId/comments/:commentId', async function (req, res, next) {
     if (!post) {
       return res.status(404).send({ message: 'Post not found' })
     }
-    console.log(req.params.commentId)
-    // Find the comment index in the post's comments array
-    //await post.deleteComment(req.params.commentIndex)
-
+    console.log(post.comments)
+    post.comments = post.comments.filter(comment => comment._id.toString() !== req.params.commentId)
+    await post.save()
     // Send the response
     res.send({ message: 'Comment deleted successfully' })
   } catch (error) {

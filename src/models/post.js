@@ -19,11 +19,11 @@ const postSchema = new mongoose.Schema({
 })
 class Post {
   async createComment(author, text) {
-    const newComment = new Comment(author, text)
+    const newComment = new Comment({ author, text })
     this.comments.push(newComment)
     //this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
     await this.save()
-    return this
+    return newComment
   }
 
   async deleteComment(index) {

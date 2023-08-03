@@ -56,7 +56,7 @@ async function main() {
   })
 
   // DELETE
-  //await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
+  await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
 
   // Get user Fede
   const allUsers = await axios.get('http://localhost:3000/users')
