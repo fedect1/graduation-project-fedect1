@@ -31,7 +31,7 @@ router.post('/:postId/comments', async function (req, res, next) {
 
 //DELETE
 /* Delete a post */
-router.delete('/:userId/delete/:postId', async function (req, res, next) {
+router.delete('/:userId/:postId', async function (req, res, next) {
   try {
     // Find the user
     const user = await User.findById(req.params.userId)

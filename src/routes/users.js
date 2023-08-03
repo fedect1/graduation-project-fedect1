@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 const User = require('../models/user')
 
+//User Routes
 /* Get all users. */
 router.get('/', async function (req, res, next) {
   const users = await User.find()
@@ -22,7 +23,7 @@ router.post('/', async function (req, res, next) {
 
 /* POST a new follow to a user */
 
-router.post('/:userId/follow', async function (req, res, next) {
+router.post('/:userId/following', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
     const userToFollow = await User.findById(req.body.user)
@@ -34,7 +35,7 @@ router.post('/:userId/follow', async function (req, res, next) {
 })
 
 /* DELETE a follow. */
-router.delete('/:userId/unfollow/:userIdUnfollow', async function (req, res, next) {
+router.delete('/:userId/unfollowing/:userIdUnfollow', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
     if (!user) {
@@ -48,6 +49,38 @@ router.delete('/:userId/unfollow/:userIdUnfollow', async function (req, res, nex
     res.send({ message: 'Unfollow user successfully' })
   } catch (error) {
     res.status(404).send(error.message)
+  }
+})
+
+//Profile Routes
+
+/* Update user name by id */
+router.patch('/:userId/name', async function (req, res, next) {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, { name: req.body.name }, { new: true })
+    res.send(user)
+  } catch (error) {
+    res.status(404).send({ message: 'Error creating/updating user name' })
+  }
+})
+
+/* Update user description by id */
+router.patch('/:userId/description', async function (req, res, next) {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, { description: req.body.description }, { new: true })
+    res.send(user)
+  } catch (error) {
+    res.status(404).send({ message: 'Error creating/updating user description' })
+  }
+})
+
+/* Update user avatar by id */
+router.patch('/:userId/avatar', async function (req, res, next) {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, { avatar: req.body.avatar }, { new: true })
+    res.send(user)
+  } catch (error) {
+    res.status(404).send({ message: 'Error creating/updating user avatar' })
   }
 })
 module.exports = router
