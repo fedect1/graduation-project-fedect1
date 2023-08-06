@@ -4,7 +4,7 @@ axios.defaults.baseURL = 'http://localhost:3000'
 
 async function main() {
   // DELETE ALL
-  await axios.get('/secretdb')
+  //await axios.get('/secretdb')
   // CREATE USERS
   const fede = await axios.post('/users', { email: 'Fede' })
   const juli = await axios.post('/users', { email: 'juli' })

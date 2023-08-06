@@ -6,11 +6,17 @@ const logger = require('morgan')
 require('dotenv').config()
 require('./database-connection')
 
+const Middleware = require('./middleware')
+
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const postsRouter = require('./routes/posts')
 const secretdbRouter = require('./routes/secretdb')
 const app = express()
+
+// Call middleware expirationCheck
+const middleware = new Middleware()
+app.use(middleware.expirationCheck)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
