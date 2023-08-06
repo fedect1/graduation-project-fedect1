@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Comment = require('./comment')
+
 const expitartionTime = 3 * 15 * 60 * 1000
 const commentTimeExtension = 15 * 60 * 1000
 const likeTimeExtension = 5 * 60 * 1000
@@ -22,17 +22,15 @@ const postSchema = new mongoose.Schema({
 })
 class Post {
   async createComment(author, text) {
-    const newComment = new Comment({ author, text })
-    this.comments.push(newComment)
-    console.log('fecha antes del comentario', this.expirationDate)
+    this.comments.push({ author, text })
     this.expirationDate = new Date(this.expirationDate.getTime() + commentTimeExtension)
-    console.log('fecha luego del comentario', this.expirationDate)
     await this.save()
-    return newComment
+    return this
   }
 
   async deleteComment(index) {
     this.comments.splice(index, 1)
+    this.expirationDate = new Date(this.expirationDate.getTime() - commentTimeExtension)
     await this.save()
     return this
   }

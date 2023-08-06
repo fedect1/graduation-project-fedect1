@@ -54,11 +54,10 @@ async function main() {
     user: pepita.data._id,
     text: 'Well done', //text or body
   })
-
   // DELETE
-  //await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
+  await axios.delete(`/posts/${firstPost.data._id}/comments/0`)
   // Get user Fede
-  const allUsers = await axios.get('http://localhost:3000/users')
+  //const allUsers = await axios.get('http://localhost:3000/users')
   //console.log('List of all users: ', allUsers.data)
   // // Get Post of Fede
   // const allPosts = await axios.get('http://localhost:5000/posts')

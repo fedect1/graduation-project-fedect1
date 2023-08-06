@@ -55,16 +55,14 @@ router.delete('/:userId/:postId', async function (req, res, next) {
   }
 })
 /* Delete a comment */
-router.delete('/:postId/comments/:commentId', async function (req, res, next) {
+router.delete('/:postId/comments/:commentIndex', async function (req, res, next) {
   try {
     // Find the post
     const post = await Post.findById(req.params.postId)
     if (!post) {
       return res.status(404).send({ message: 'Post not found' })
     }
-    console.log(post.comments)
-    post.comments = post.comments.filter(comment => comment._id.toString() !== req.params.commentId)
-    await post.save()
+    await post.deleteComment(req.params.commentIndex)
     // Send the response
     res.send({ message: 'Comment deleted successfully' })
   } catch (error) {
