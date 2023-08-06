@@ -69,4 +69,37 @@ router.delete('/:postId/comments/:commentIndex', async function (req, res, next)
     next(error)
   }
 })
+router.post('/:postId/likes', async function (req, res, next) {
+  try {
+    // Find the post
+    const post = await Post.findById(req.params.postId)
+    if (!post) {
+      return res.status(404).send({ message: 'Post not found' })
+    }
+    // Add the like
+    await post.addLike(req.body.user)
+
+    // Send the response
+    res.send({ message: 'Like added successfully' })
+  } catch (error) {
+    next(error)
+  }
+})
+router.delete(`/unlike/:postId/:userId`, async function (req, res, next) {
+  try {
+    // Find the post
+    const post = await Post.findById(req.params.postId)
+    if (!post) {
+      return res.status(404).send({ message: 'Post not found' })
+    }
+    // Remove the like
+    await post.deleteLike(req.params.userId)
+
+    // Send the response
+    res.send({ message: 'Like removed successfully' })
+  } catch (error) {
+    next(error)
+  }
+})
+router.delete
 module.exports = router

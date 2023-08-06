@@ -30,7 +30,7 @@ async function main() {
   await axios.post(`/users/${fede.data._id}/following`, { user: rambo.data._id })
   await axios.post(`/users/${fede.data._id}/following`, { user: pepita.data._id })
   await axios.post(`/users/${fede.data._id}/following`, { user: maria.data._id })
-  console.log(fede.data.following)
+
   //UNFOLLOW
   await axios.delete(`/users/${fede.data._id}/unfollowing/${pepita.data._id}`)
 
@@ -56,6 +56,17 @@ async function main() {
   })
   // DELETE
   await axios.delete(`/posts/${firstPost.data._id}/comments/0`)
+
+  // LIKE
+  await axios.post(`/posts/${firstPost.data._id}/likes`, {
+    user: juli.data._id,
+  })
+  await axios.post(`/posts/${firstPost.data._id}/likes`, {
+    user: pepita.data._id,
+  })
+
+  // UNLIKE
+  await axios.delete(`/posts/unlike/${firstPost.data._id}/${juli.data._id}`)
   // Get user Fede
   //const allUsers = await axios.get('http://localhost:3000/users')
   //console.log('List of all users: ', allUsers.data)

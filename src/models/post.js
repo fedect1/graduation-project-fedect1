@@ -35,19 +35,19 @@ class Post {
     return this
   }
 
-  addLike(author) {
+  async addLike(author) {
     //addLikeBy
-    this.likes.push(author.profile.userName)
-    this.expirationDate = new Date(this.expirationDate.getTime() + 5 * 60 * 1000)
+    this.likes.push(author)
+    this.expirationDate = new Date(this.expirationDate.getTime() + likeTimeExtension)
+    await this.save()
+    return this
   }
 
-  deleteLike(author) {
-    //removeLikeFrom
-    const indexOfAuthor = this.interaction.following.indexOf(author.profile.userName)
-    if (indexOfAuthor !== -1) {
-      this.interaction.following.splice(indexOfAuthor, 1)
-      return (this.expirationDate = new Date(this.expirationDate.getTime() - 5 * 60 * 1000))
-    }
+  async deleteLike(user) {
+    this.likes = this.likes.filter(like => like.toString() !== user.toString())
+    this.expirationDate = new Date(this.expirationDate.getTime() - likeTimeExtension)
+    await this.save()
+    return this
   }
 
   get allComments() {
