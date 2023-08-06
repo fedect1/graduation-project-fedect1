@@ -46,18 +46,17 @@ async function main() {
   })
 
   //COMMENT
-  const firstComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
+  await axios.post(`/posts/${firstPost.data._id}/comments`, {
     user: juli.data._id,
     text: 'It is working', //text or body
   })
-  const secondComment = await axios.post(`/posts/${firstPost.data._id}/comments`, {
+  await axios.post(`/posts/${firstPost.data._id}/comments`, {
     user: pepita.data._id,
     text: 'Well done', //text or body
   })
 
   // DELETE
-  await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
-
+  //await axios.delete(`/posts/${firstPost.data._id}/comments/${secondComment.data._id}`)
   // Get user Fede
   const allUsers = await axios.get('http://localhost:3000/users')
   //console.log('List of all users: ', allUsers.data)
