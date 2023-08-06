@@ -23,3 +23,6 @@ node_modules/
 .env.local
 data
 secretdb.js
+
+# testing
+test

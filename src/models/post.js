@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
-const Comment = require('./comment')
+
+const expitartionTime = 3 * 15 * 60 * 1000
+const commentTimeExtension = 15 * 60 * 1000
+const likeTimeExtension = 5 * 60 * 1000
 const postSchema = new mongoose.Schema({
   bodyPost: String,
   comments: [],
@@ -11,40 +14,40 @@ const postSchema = new mongoose.Schema({
   expirationDate: {
     type: Date,
     default: function () {
-      return new Date(this.createdAt.getTime() + 3 * 60 * 60 * 1000)
+      return new Date(this.createdAt.getTime() + expitartionTime)
     },
   },
-  status: Boolean,
+  status: { type: Boolean, default: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 })
 class Post {
   async createComment(author, text) {
-    const newComment = new Comment({ author, text })
-    this.comments.push(newComment)
-    //this.expirationDate = new Date(this.expirationDate.getTime() + 15 * 60 * 1000) //refactor
-    await this.save()
-    return newComment
-  }
-
-  async deleteComment(index) {
-    this.comments.splice(index, 1)
+    this.comments.push({ author, text })
+    this.expirationDate = new Date(this.expirationDate.getTime() + commentTimeExtension)
     await this.save()
     return this
   }
 
-  addLike(author) {
-    //addLikeBy
-    this.likes.push(author.profile.userName)
-    this.expirationDate = new Date(this.expirationDate.getTime() + 5 * 60 * 1000)
+  async deleteComment(index) {
+    this.comments.splice(index, 1)
+    this.expirationDate = new Date(this.expirationDate.getTime() - commentTimeExtension)
+    await this.save()
+    return this
   }
 
-  deleteLike(author) {
-    //removeLikeFrom
-    const indexOfAuthor = this.interaction.following.indexOf(author.profile.userName)
-    if (indexOfAuthor !== -1) {
-      this.interaction.following.splice(indexOfAuthor, 1)
-      return (this.expirationDate = new Date(this.expirationDate.getTime() - 5 * 60 * 1000))
-    }
+  async addLike(author) {
+    //addLikeBy
+    this.likes.push(author)
+    this.expirationDate = new Date(this.expirationDate.getTime() + likeTimeExtension)
+    await this.save()
+    return this
+  }
+
+  async deleteLike(user) {
+    this.likes = this.likes.filter(like => like.toString() !== user.toString())
+    this.expirationDate = new Date(this.expirationDate.getTime() - likeTimeExtension)
+    await this.save()
+    return this
   }
 
   get allComments() {
