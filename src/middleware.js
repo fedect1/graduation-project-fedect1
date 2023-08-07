@@ -1,6 +1,7 @@
 const Post = require('./models/post')
 
 class Middleware {
+  //Interceptor
   async expirationCheck(req, res, next) {
     try {
       const currentTime = new Date()
