@@ -68,7 +68,7 @@ async function main() {
   // UNLIKE
   await axios.delete(`/posts/unlike/${firstPost.data._id}/${juli.data._id}`)
   // Get user Fede
-  //const allUsers = await axios.get('http://localhost:3000/users')
+  allUsers = await axios.get('http://localhost:3000/users')
   //console.log('List of all users: ', allUsers.data)
   // // Get Post of Fede
   // const allPosts = await axios.get('http://localhost:5000/posts')
