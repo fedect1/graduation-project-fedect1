@@ -1,11 +1,11 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import TheNavbar from '../components/TheNavbar.vue'
+import LoginForm from '../components/LoginForm.vue'
 </script>
 
 <template>
   <main>
-    <Suspense>
-      <TheWelcome />
-    </Suspense>
+    <TheNavbar />
+    <LoginForm />
   </main>
 </template>

@@ -11,7 +11,7 @@
     "eslint:fix": "npx eslint --fix .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --watch"
+    "test:coverage": "jest --coverage --watch --detectOpenHandles"
   },
   "devDependencies": {
     "eslint": "^8.19.0",
