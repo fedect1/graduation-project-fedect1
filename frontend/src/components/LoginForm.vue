@@ -13,7 +13,6 @@ export default {
         const response = await axios.post('http://localhost:3000/users', { email: this.email })
         console.log(this.email)
         if (response.status === 201) {
-          console.log('User created')
         } else {
           console.log('Error')
         }
