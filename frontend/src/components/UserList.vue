@@ -1,31 +1,20 @@
 <script>
-import axios from 'axios'
-export default {
-  name: 'UserList',
-  data() {
-    return {
-      users: []
+import { defineComponent } from 'vue'
+import { useUserStore } from '../stores/userStore'
+
+export default defineComponent({
+  setup() {
+    const userStore = useUserStore()
+    userStore.fetchUsers()
+    function redirectToUserDetails(id) {
+      this.$router.push({ name: 'user-details', params: { id } })
     }
-  },
-  created() {
-    this.getUsers()
-  },
-  methods: {
-    async getUsers() {
-      try {
-        const response = await axios.get('http://localhost:3000/users')
-        if (response.status === 200) {
-          this.users = response.data
-          console.log(this.users)
-        } else {
-          console.log('Error')
-        }
-      } catch (error) {
-        console.log('Error request')
-      }
+    return {
+      userStore,
+      redirectToUserDetails
     }
   }
-}
+})
 </script>
 
 <template>
@@ -34,11 +23,11 @@ export default {
       <a href="#" class="list-group-item list-group-item-action">List of users</a>
 
       <a
-        href="#"
+        v-for="user in userStore.users"
+        :key="user._id"
+        @click="redirectToUserDetails(user._id)"
         class="list-group-item list-group-item-action list-group-item-primary"
-        v-for="user in users"
-        :key="user.id"
-        >{{ user }}</a
+        >{{ user.email }} {{ user._id }}</a
       >
     </div>
   </div>
