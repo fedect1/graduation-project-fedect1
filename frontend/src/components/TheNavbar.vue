@@ -1,39 +1,28 @@
-<template>
-  <nav class="navbar">
-    <ul>
-      <li><router-link to="/">Index</router-link></li>
-      <li><router-link to="/">About</router-link></li>
-      <li><router-link to="/">Contact</router-link></li>
-    </ul>
-  </nav>
-</template>
-
-<style scoped>
-.navbar {
-  background-color: #333;
-  color: white;
-}
-
-ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  padding: 0;
-}
-
-li {
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
-
 <script>
 export default {
   name: 'TheNavbar'
 }
 </script>
+<template>
+  <h1>Sign Up</h1>
+  <div class="card">
+    <div class="image">
+      <img src="ruta_de_la_imagen.jpg" alt="Imagen" />
+    </div>
+    <div class="form-container">
+      <form>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <button type="submit">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

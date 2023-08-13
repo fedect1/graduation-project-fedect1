@@ -3,9 +3,11 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <Suspense>
-    <RouterView />
-  </Suspense>
+  <main class="containter">
+    <Suspense>
+      <RouterView />
+    </Suspense>
+  </main>
 </template>
 
 <style scoped></style>

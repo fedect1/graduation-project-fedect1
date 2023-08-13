@@ -6,6 +6,5 @@ import LoginForm from '../components/LoginForm.vue'
 <template>
   <main>
     <TheNavbar />
-    <LoginForm />
   </main>
 </template>
