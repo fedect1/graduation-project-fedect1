@@ -3,6 +3,7 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const session = require('express-session')
 
 const cors = require('cors')
 
@@ -25,6 +26,19 @@ app.use(middleware.expirationCheck)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
+
+// Session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week,
+    },
+  })
+)
 
 app.use(logger('dev'))
 app.use(express.json())

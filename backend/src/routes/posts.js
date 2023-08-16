@@ -5,6 +5,9 @@ const User = require('../models/user')
 // GETTERS
 /* GET Post. */
 router.get('/', async function (req, res, next) {
+  const numberOfVisits = req.session.numberOfVisits || 0
+  console.log(`Number of visits: ${numberOfVisits}`)
+  req.session.numberOfVisits = numberOfVisits + 1
   const posts = await Post.find()
   res.send(posts)
 })
