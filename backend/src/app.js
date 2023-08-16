@@ -4,6 +4,9 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
+
+const mongoose = require('mongoose')
 
 const cors = require('cors')
 
@@ -30,7 +33,7 @@ app.set('view engine', 'pug')
 // Session
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "123456789'*-+",
     resave: false,
     saveUninitialized: true,
     cookie: {

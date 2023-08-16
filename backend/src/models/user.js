@@ -16,7 +16,7 @@ userSchema.plugin(autopopulate)
 class User {
   // Create post
   async createPost(bodyPost) {
-    const newPost = await Post.create({ bodyPost, user: this._id })
+    const newPost = await Post.create({ body: bodyPost, user: this._id })
     this.posts.push(newPost)
     await this.save()
     return newPost

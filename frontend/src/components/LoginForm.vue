@@ -25,7 +25,7 @@ export default {
 </script>
 <template>
   <h1>Sign Up</h1>
-  <div class="card mb-3 text-bg-secondary">
+  <div class="container card mb-3 text-bg-secondary">
     <div class="row g-0">
       <div class="col-md-4">
         <img
