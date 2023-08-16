@@ -5,7 +5,8 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-
+const passport = require('passport')
+const User = require('./models/user')
 const mongoose = require('mongoose')
 
 const cors = require('cors')
@@ -18,6 +19,12 @@ const Middleware = require('./middleware')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const postsRouter = require('./routes/posts')
+
+passport.use(User.createStrategy())
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 const app = express()
 
 app.use(cors())
@@ -30,6 +37,8 @@ app.use(middleware.expirationCheck)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
+const connectionPromise = mongoose.connection.asPromise().then(connection => (connection = connection.getClient()))
+
 // Session
 app.use(
   session({
@@ -40,8 +49,23 @@ app.use(
       secure: process.env.NODE_ENV === 'production' ? true : false,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week,
     },
+    store: MongoStore.create({
+      clientPromise: connectionPromise,
+      stringify: false,
+    }),
   })
 )
+app.use(passport.session())
+app.use((req, res, next) => {
+  const numberOfVisits = req.session.numberOfVisits || 0
+  req.session.numberOfVisits = numberOfVisits + 1
+  req.session.history = req.session.history || []
+  req.session.history.push({ url: req.url, date: new Date(), ip: req.ip })
+
+  console.log(req.session)
+
+  next()
+})
 
 app.use(logger('dev'))
 app.use(express.json())
