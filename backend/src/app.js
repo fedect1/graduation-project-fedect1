@@ -28,7 +28,12 @@ passport.deserializeUser(User.deserializeUser())
 
 const app = express()
 
-app.use(cors())
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+)
 
 // Call middleware expirationCheck
 const middleware = new Middleware()
@@ -47,8 +52,9 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === 'production' ? true : false,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week,
+      //sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     },
     store: MongoStore.create({
       clientPromise: connectionPromise,
@@ -56,6 +62,7 @@ app.use(
     }),
   })
 )
+app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
   const numberOfVisits = req.session.numberOfVisits || 0
@@ -63,7 +70,7 @@ app.use((req, res, next) => {
   req.session.history = req.session.history || []
   req.session.history.push({ url: req.url, date: new Date(), ip: req.ip })
 
-  console.log(req.session)
+  //console.log(req.session)
 
   next()
 })
