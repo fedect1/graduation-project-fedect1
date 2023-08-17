@@ -5,7 +5,7 @@ const User = require('../models/user')
 
 /* GET home page. */
 router.get('/session', async function (req, res, next) {
-  res.send(req.session)
+  res.send(req.user)
 })
 
 /* POST signup */
