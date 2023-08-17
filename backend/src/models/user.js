@@ -1,9 +1,9 @@
 const Post = require('./post')
 const mongoose = require('mongoose')
 const autopopulate = require('mongoose-autopopulate')
+const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
-  email: String,
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
   followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
@@ -16,7 +16,7 @@ userSchema.plugin(autopopulate)
 class User {
   // Create post
   async createPost(bodyPost) {
-    const newPost = await Post.create({ bodyPost, user: this._id })
+    const newPost = await Post.create({ body: bodyPost, user: this._id })
     this.posts.push(newPost)
     await this.save()
     return newPost
@@ -53,5 +53,8 @@ class User {
     return this
   }
 }
+
+userSchema.plugin(autopopulate)
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 userSchema.loadClass(User)
 module.exports = mongoose.model('User', userSchema)

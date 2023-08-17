@@ -5,6 +5,9 @@ const User = require('../models/user')
 // GETTERS
 /* GET Post. */
 router.get('/', async function (req, res, next) {
+  const numberOfVisits = req.session.numberOfVisits || 0
+  console.log(`Number of visits: ${numberOfVisits}`)
+  req.session.numberOfVisits = numberOfVisits + 1
   const posts = await Post.find()
   res.send(posts)
 })
@@ -17,7 +20,9 @@ router.get('/:postId/comments', function (req, res, next) {
 //POSTS
 /* POST create a new post. */
 router.post('/', async function (req, res, next) {
+  console.log(req.body)
   const user = await User.findById(req.body.user)
+  console.log(user)
   const post = await user.createPost(req.body.bodyPost)
   res.send(post)
 })

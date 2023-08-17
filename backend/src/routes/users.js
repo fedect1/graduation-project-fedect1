@@ -6,7 +6,7 @@ const User = require('../models/user')
 /* Get all users. */
 router.get('/', async function (req, res, next) {
   const users = await User.find()
-  res.send(users)
+  res.send(users.map(user => user))
 })
 
 /* Get user by id. */
@@ -18,7 +18,7 @@ router.get('/:userId', async function (req, res, next) {
 /* // Create a new user */
 router.post('/', async function (req, res, next) {
   const user = await User.create({ email: req.body.email })
-  res.send(user)
+  res.status(201).send(user._id)
 })
 
 /* POST a new follow to a user */
