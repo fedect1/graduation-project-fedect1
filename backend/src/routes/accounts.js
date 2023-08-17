@@ -24,4 +24,11 @@ router.post('/session', passport.authenticate('local', { failWithError: true }),
   res.send(req.user)
 })
 
+/* DELETE destroy a session */
+router.delete('/session', function (req, res) {
+  req.logout(() => {
+    res.sendStatus(200)
+  })
+})
+
 module.exports = router

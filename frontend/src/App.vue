@@ -1,34 +1,24 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import { Suspense } from 'vue'
-import axios from 'axios'
+import { useAccountStore } from './stores/account'
+import { mapActions } from 'pinia'
+import { mapState } from 'pinia'
+
 export default {
   name: 'App',
   components: {
     RouterLink,
-    RouterView,
-    Suspense
-  },
-  data() {
-    return {
-      user: null
-    }
+    RouterView
   },
   async mounted() {
     await this.fetchUser()
   },
   methods: {
-    async fetchUser() {
-      try {
-        this.user = (
-          await axios.get('http://127.0.0.1:3000/accounts/session', {
-            withCredentials: true
-          })
-        ).data
-      } catch (e) {
-        this.user = null
-      }
-    }
+    ...mapActions(useAccountStore, ['fetchUser', 'logout'])
+  },
+  computed: {
+    ...mapState(useAccountStore, ['user'])
   }
 }
 </script>
@@ -37,11 +27,12 @@ export default {
   <header>
     <nav>
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <RouterLink to="/login">Login</RouterLink>
-      <RouterLink to="/signup">Sign up</RouterLink>
+      <RouterLink v-if="!user" to="/login">Login</RouterLink>
+      <a v-if="user" @click="logout">Log out</a>
     </nav>
   </header>
+
+  <h1>DW for {{ user?.email }}</h1>
   <main class="containter">
     <Suspense>
       <RouterView />

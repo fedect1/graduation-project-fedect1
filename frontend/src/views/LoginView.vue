@@ -1,22 +1,20 @@
 <script>
-import axios from 'axios'
+import { mapActions } from 'pinia'
+import { useAccountStore } from '../stores/account'
+
 export default {
   name: 'LoginView',
   data() {
     return {
       email: '',
-      password: '',
-      user: null
+      password: ''
     }
   },
   methods: {
-    async login() {
-      this.user = (
-        await axios.post('http://localhost:3000/accounts/session', {
-          email: this.email,
-          password: this.password
-        })
-      ).data
+    ...mapActions(useAccountStore, ['login']),
+    async doLogin() {
+      await this.login(this.email, this.password)
+      this.$router.push('/')
     }
   }
 }
@@ -24,14 +22,14 @@ export default {
 <template lang="pug">
 h2 Login
 
-p(v-if="user") You are logged in as {{ user.email }}
-form(@submit.prevent="login")
+form(@submit.prevent="doLogin")
   div
-    label(for="email") email
-    input#email(v-model="email")
+    label(for="email") Email:
+    input#email(v-model="email" type="text" required)
+
   div
-    label(for="password") Password
-    input#password(v-model="password")
-  div
-  button(type="submit") Login
+    label(for="password") Password:
+    input#password(v-model="password" type="password" required)
+
+  button(type="submit") Log in
 </template>
