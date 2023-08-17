@@ -23,6 +23,8 @@ services:
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
+    env_file:
+      - ./frontend/.env
 
   mongo:
     image: mongo

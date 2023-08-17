@@ -42,7 +42,7 @@ app.use(middleware.expirationCheck)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
-
+app.set('trust proxy', 1)
 const connectionPromise = mongoose.connection.asPromise().then(connection => (connection = connection.getClient()))
 
 // Session
