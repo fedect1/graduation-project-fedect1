@@ -54,7 +54,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week,
-      //sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     },
     store: MongoStore.create({
       clientPromise: connectionPromise,

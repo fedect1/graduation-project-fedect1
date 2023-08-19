@@ -84,3 +84,14 @@ router.patch('/:userId/avatar', async function (req, res, next) {
   }
 })
 module.exports = router
+
+// /* POST signup */
+// router.post('/', async function (req, res, next) {
+//   try {
+//     const { email, password } = req.body
+//     const user = await User.register({ email }, password)
+//     res.status(201).send(user)
+//   } catch (error) {
+//     next(error)
+//   }
+// })

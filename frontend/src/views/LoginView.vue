@@ -32,4 +32,5 @@ form(@submit.prevent="doLogin")
     input#password(v-model="password" type="password" required)
 
   button(type="submit") Log in
+
 </template>

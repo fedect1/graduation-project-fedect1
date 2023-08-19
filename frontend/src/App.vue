@@ -26,8 +26,6 @@ export default {
 <template>
   <header>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink v-if="!user" to="/login">Login</RouterLink>
       <a v-if="user" @click="logout">Log out</a>
     </nav>
   </header>
