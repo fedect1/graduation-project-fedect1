@@ -15,10 +15,21 @@ router.get('/:userId', async function (req, res, next) {
   res.send(user)
 })
 
-/* // Create a new user */
+// /* // Create a new user */
+// router.post('/', async function (req, res, next) {
+//   const user = await User.create({ email: req.body.email })
+//   res.status(201).send(user._id)
+// })
+
+/* POST signup */
 router.post('/', async function (req, res, next) {
-  const user = await User.create({ email: req.body.email })
-  res.status(201).send(user._id)
+  try {
+    const { email, password } = req.body
+    const user = await User.register({ email }, password)
+    res.status(201).send(user)
+  } catch (error) {
+    next(error)
+  }
 })
 
 /* POST a new follow to a user */
@@ -84,14 +95,3 @@ router.patch('/:userId/avatar', async function (req, res, next) {
   }
 })
 module.exports = router
-
-// /* POST signup */
-// router.post('/', async function (req, res, next) {
-//   try {
-//     const { email, password } = req.body
-//     const user = await User.register({ email }, password)
-//     res.status(201).send(user)
-//   } catch (error) {
-//     next(error)
-//   }
-// })

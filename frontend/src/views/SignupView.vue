@@ -1,23 +1,25 @@
 <script>
-import '../assets/base.css'
+import { useCreateUserStore } from '../stores/createUser'
 import { mapActions } from 'pinia'
-import { useAccountStore } from '../stores/account'
 export default {
-  name: 'HomeView',
   data() {
     return {
       email: '',
-      password: ''
+      password1: '',
+      password2: '',
+      passwordsMatch: true
+    }
+  },
+  watch: {
+    password2: function () {
+      this.passwordsMatch = this.password1 === this.password2
     }
   },
   methods: {
-    ...mapActions(useAccountStore, ['login']),
-    async doLogin() {
-      await this.login(this.email, this.password)
-      //this.$router.push('/')
-    },
-    goToSignUp() {
-      this.$router.push('/signup')
+    ...mapActions(useCreateUserStore, ['createUser']),
+    async register() {
+      await this.createUser(this.email, this.password1)
+      this.$router.push('/')
     }
   }
 }
@@ -25,24 +27,19 @@ export default {
 
 <template lang="pug">
 .wrapper
-  form(@submit.prevent="doLogin")
-    h1 Login
+  form(@submit.prevent="register")
+    h1 Sign up
     .input-box
-      input#email(v-model="email" type="text" required)
+      input#email(v-model="email" type="text" placeholder="Email" required)
       i.bx.bxs-envelope
     .input-box
-      input#password(v-model="password" type="password" required)
+      input#password(v-model="password1" type="password" placeholder="Password" required)
       i.bx.bxs-lock-alt
-    .remember-forgot
-      label
-        input(type='checkbox')
-        | Remember me
-      a(href='#' ) Forgot Password?
-    button.btn(type='submit') Log in
-  .sign-up-link
-    p
-      | Don&apos;t have an account?
-      a(href="#" @click.prevent="goToSignUp")  Sign up
+    .input-box
+      input#password(v-model="password2" type="password" placeholder="Repeat your password" :class="{ 'password-mismatch': !passwordsMatch }" required)
+      i.bx.bxs-lock-alt
+    button.btn(type='submit' :disabled="password1 !== password2 || !password1 || !password2") Create account
+
 
 </template>
 
@@ -92,26 +89,6 @@ export default {
   transform: translateY(-50%);
   font-size: 1.2rem;
 }
-.wrapper .remember-forgot {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  margin: -15px 0 15px;
-}
-
-.remember-forgot label input {
-  margin-right: 5px;
-  accent-color: var(--text-color);
-}
-
-.remember-forgot a {
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-.remember-forgot a:hover {
-  text-decoration: underline;
-}
 
 .wrapper .btn {
   width: 100%;
@@ -132,20 +109,7 @@ export default {
   background-color: var(--page-background);
 }
 
-.wrapper .sign-up-link {
-  font-size: 0.9rem;
-
-  text-align: center;
-  margin: 20px 0 15px;
-}
-
-.sign-up-link p a {
-  color: var(--secondary-color);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.sign-up-link p a:hover {
-  text-decoration: underline;
+.password-mismatch {
+  border-color: red;
 }
 </style>
