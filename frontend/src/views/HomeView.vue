@@ -52,7 +52,6 @@ export default {
   width: 100%;
   background: transparent;
   border: 2px solid var(--tertiary-color, 0.2);
-
   color: var(--text-color);
   border-radius: 10px;
 }
