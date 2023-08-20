@@ -27,6 +27,15 @@ router.post('/', async function (req, res, next) {
   res.send(post)
 })
 
+router.post('/', async function (req, res, next) {
+  console.log(req.body)
+  const userId = req.session.userId
+  const user = await User.findById(userId)
+  console.log(user)
+  const post = await user.createPost(req.body.bodyPost)
+  res.status(201).send(post)
+})
+
 /* POST a new comment for a post of a user */
 router.post('/:postId/comments', async function (req, res, next) {
   const post = await Post.findById(req.params.postId)

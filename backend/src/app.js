@@ -65,7 +65,7 @@ app.use(
     }),
   })
 )
-//app.use(passport.initialize())
+app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
   const numberOfVisits = req.session.numberOfVisits || 0
