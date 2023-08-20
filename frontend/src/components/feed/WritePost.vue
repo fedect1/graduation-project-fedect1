@@ -1,12 +1,26 @@
 <script>
 export default {
-  name: 'WritePost'
+  name: 'WritePost',
+  props: ['submitPost'],
+  data() {
+    return {
+      bodyPost: ''
+    }
+  },
+  methods: {
+    async handleSubmit() {
+      if (this.bodyPost.trim() !== '') {
+        await this.submitPost(this.bodyPost)
+        this.bodyPost = ''
+      }
+    }
+  }
 }
 </script>
 <template>
   <div class="post-container">
     <textarea
-      v-model="postContent"
+      v-model="bodyPost"
       name="post"
       id="post"
       cols="30"
@@ -14,7 +28,7 @@ export default {
       class="write-post-container"
       placeholder="What's on your mind?"
     ></textarea>
-    <button @click="submitPost" type="submit" class="btn">Send</button>
+    <button @click="handleSubmit" type="submit" class="btn">Send</button>
   </div>
 </template>
 

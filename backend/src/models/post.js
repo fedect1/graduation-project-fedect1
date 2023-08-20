@@ -4,7 +4,7 @@ const expitartionTime = 3 * 15 * 60 * 1000
 const commentTimeExtension = 15 * 60 * 1000
 const likeTimeExtension = 5 * 60 * 1000
 const postSchema = new mongoose.Schema({
-  bodyPost: String,
+  body: String,
   comments: [],
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   createdAt: {
