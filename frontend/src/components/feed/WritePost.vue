@@ -6,6 +6,7 @@ export default {
 <template>
   <div class="post-container">
     <textarea
+      v-model="postContent"
       name="post"
       id="post"
       cols="30"
@@ -13,7 +14,7 @@ export default {
       class="write-post-container"
       placeholder="What's on your mind?"
     ></textarea>
-    <button type="submit" class="btn">Send</button>
+    <button @click="submitPost" type="submit" class="btn">Send</button>
   </div>
 </template>
 

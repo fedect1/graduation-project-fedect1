@@ -3,15 +3,12 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const cors = require('cors')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-const passport = require('passport')
-const User = require('./models/user')
+
 const mongoose = require('mongoose')
 
-const cors = require('cors')
-
-require('dotenv').config()
 require('./database-connection')
 
 const Middleware = require('./middleware')
@@ -21,10 +18,15 @@ const usersRouter = require('./routes/users')
 const postsRouter = require('./routes/posts')
 const accountsRouter = require('./routes/accounts')
 
+const User = require('./models/user')
+const passport = require('passport')
+
 passport.use(User.createStrategy())
 
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
+
+require('dotenv').config()
 
 const app = express()
 
@@ -42,9 +44,10 @@ app.use(middleware.expirationCheck)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
-app.set('trust proxy', 1)
-const connectionPromise = mongoose.connection.asPromise().then(connection => (connection = connection.getClient()))
 
+app.set('trust proxy', 1)
+
+const clientPromise = mongoose.connection.asPromise().then(connection => (connection = connection.getClient()))
 // Session
 app.use(
   session({
@@ -57,20 +60,18 @@ app.use(
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     },
     store: MongoStore.create({
-      clientPromise: connectionPromise,
+      clientPromise,
       stringify: false,
     }),
   })
 )
-app.use(passport.initialize())
+//app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
   const numberOfVisits = req.session.numberOfVisits || 0
   req.session.numberOfVisits = numberOfVisits + 1
   req.session.history = req.session.history || []
-  req.session.history.push({ url: req.url, date: new Date(), ip: req.ip })
-
-  //console.log(req.session)
+  req.session.history.push({ url: req.url, ip: req.ip })
 
   next()
 })
