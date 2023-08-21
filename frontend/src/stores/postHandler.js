@@ -17,6 +17,9 @@ export const usePostHandler = defineStore('postHandler', {
     },
     async createPost(bodyPost) {
       this.post = (await axios.post('/posts', { bodyPost })).data
+    },
+    async createComment(postId, text, user) {
+      this.comment = (await axios.post(`/posts/${postId}/comments`, { text, user })).data
     }
   }
 })

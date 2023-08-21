@@ -1,9 +1,24 @@
 <script>
+import { mapActions } from 'pinia'
+import { usePostHandler } from '../../stores/postHandler'
+import { useAccountStore } from '../../stores/account'
+
 export default {
   name: 'WriteComment',
+  props: ['post-id'],
   data() {
     return {
-      bodyComment: ''
+      text: ''
+    }
+  },
+  methods: {
+    ...mapActions(usePostHandler, ['createComment']),
+    async handleSubmitComment() {
+      const user = useAccountStore().user._id
+      if (this.text.trim() !== '') {
+        await this.createComment(this.postId, this.text, user)
+        this.text = ''
+      }
     }
   }
 }
@@ -12,7 +27,7 @@ export default {
 <template>
   <div class="comment-container">
     <textarea
-      v-model="bodyComment"
+      v-model="text"
       name="comment"
       id="comment"
       cols="30"
@@ -20,7 +35,7 @@ export default {
       class="write-comment-container"
       placeholder="Write a comment..."
     ></textarea>
-    <button class="btn-comment">Send</button>
+    <button @click="handleSubmitComment" class="btn-comment" type="submit">Send</button>
   </div>
 </template>
 
