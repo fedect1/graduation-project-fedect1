@@ -12,7 +12,7 @@ export const usePostHandler = defineStore('postHandler', {
     comment: null
   }),
   actions: {
-    async getPosts() {
+    async fetchPosts() {
       this.posts = (await axios.get('/posts')).data
     },
     async createPost(bodyPost) {

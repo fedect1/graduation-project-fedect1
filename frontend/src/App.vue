@@ -4,7 +4,7 @@ import { Suspense } from 'vue'
 import { useAccountStore } from './stores/account'
 import { mapActions } from 'pinia'
 import { mapState } from 'pinia'
-
+import Navbar from './components/global/Navbar.vue'
 export default {
   name: 'App',
   components: {
@@ -25,6 +25,7 @@ export default {
 
 <template>
   <header>
+    <!-- <Navbar /> -->
     <nav>
       <a v-if="user" @click="logout">Log out</a>
     </nav>
