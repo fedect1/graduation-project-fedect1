@@ -33,10 +33,10 @@ export default {
       input#email(v-model="email" type="text" placeholder="Email" required)
       i.bx.bxs-envelope
     .input-box
-      input#password(v-model="password1" type="password" placeholder="Password" required)
+      input#password1(v-model="password1" type="password" placeholder="Password" required)
       i.bx.bxs-lock-alt
     .input-box
-      input#password(v-model="password2" type="password" placeholder="Repeat your password" :class="{ 'password-mismatch': !passwordsMatch }" required)
+      input#password2(v-model="password2" type="password" placeholder="Repeat your password" :class="{ 'password-mismatch': !passwordsMatch }" required)
       i.bx.bxs-lock-alt
     button.btn(type='submit' :disabled="password1 !== password2 || !password1 || !password2") Create account
 

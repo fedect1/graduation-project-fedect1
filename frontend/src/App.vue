@@ -15,7 +15,11 @@ export default {
     await this.fetchUser()
   },
   methods: {
-    ...mapActions(useAccountStore, ['fetchUser', 'logout'])
+    ...mapActions(useAccountStore, ['fetchUser', 'logout']),
+    async handleLogout() {
+      await this.logout()
+      this.$router.push('/')
+    }
   },
   computed: {
     ...mapState(useAccountStore, ['user'])
@@ -27,7 +31,7 @@ export default {
   <header>
     <!-- <Navbar /> -->
     <nav>
-      <a v-if="user" @click="logout">Log out</a>
+      <a v-if="user" @click="handleLogout">Log out</a>
     </nav>
   </header>
 

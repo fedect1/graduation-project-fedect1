@@ -1,6 +1,10 @@
 <script>
+import WriteComment from '@/components/feed/WriteComment.vue'
 export default {
   name: 'ListPosts',
+  components: {
+    WriteComment
+  },
   props: ['posts'],
   data() {
     return {}
@@ -16,6 +20,7 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
+    <WriteComment />
   </div>
 </template>
 
