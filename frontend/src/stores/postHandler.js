@@ -20,6 +20,9 @@ export const usePostHandler = defineStore('postHandler', {
     },
     async createComment(postId, text, user) {
       this.comment = (await axios.post(`/posts/${postId}/comments`, { text, user })).data
+    },
+    async fetchComments(postId) {
+      this.comments = (await axios.get(`/posts/${postId}/comments`)).data
     }
   }
 })

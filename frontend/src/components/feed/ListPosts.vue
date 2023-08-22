@@ -1,19 +1,19 @@
 <script>
 import WriteComment from '@/components/feed/WriteComment.vue'
+import ListComments from '@/components/feed/ListComments.vue'
 
 export default {
   name: 'ListPosts',
   components: {
-    WriteComment
+    WriteComment,
+    ListComments
   },
-  props: ['posts'],
-  data() {
-    return {}
-  }
+
+  props: ['posts']
 }
 </script>
 <template>
-  <div class="post-container" v-for="post in posts" key="post.id">
+  <div class="post-container" v-for="post in posts" :key="post.id">
     <div class="post-header">
       <h3>{{ post.user }}</h3>
       <p>{{ post.expirationDate }}</p>
@@ -21,6 +21,7 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
+    <ListComments :post-id="post._id" />
     <WriteComment :post-id="post._id" />
   </div>
 </template>

@@ -13,8 +13,9 @@ router.get('/', async function (req, res, next) {
 })
 
 /* GET Comments of a post. */
-router.get('/:postId/comments', function (req, res, next) {
-  res.send(Comment.list)
+router.get('/:postId/comments', async function (req, res, next) {
+  const post = await Post.findById(req.params.postId)
+  res.send(post.comments)
 })
 
 //POSTS
@@ -27,6 +28,7 @@ router.get('/:postId/comments', function (req, res, next) {
 //   res.send(post)
 // })
 
+/* POST create a new post. */
 router.post('/', async function (req, res, next) {
   const userId = req.session.userId
   const user = await User.findById(userId)
