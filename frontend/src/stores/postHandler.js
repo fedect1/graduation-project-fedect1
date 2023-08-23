@@ -34,6 +34,12 @@ export const usePostHandler = defineStore('postHandler', {
     },
     async dislikePost(postId, userId) {
       this.like = (await axios.delete(`/posts/unlike/${postId}/${userId}`)).data
+    },
+    async deletePost(postId, userId) {
+      await axios.delete(`/posts/${postId}/${userId}`)
+    },
+    async deleteComment(postId, commentId, userId) {
+      await axios.delete(`/posts/${postId}/comments/${commentId}/${userId}`)
     }
   }
 })

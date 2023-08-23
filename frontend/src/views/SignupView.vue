@@ -1,5 +1,5 @@
 <script>
-import { useCreateUserStore } from '../stores/createUser'
+import { useUserStore } from '../stores/user'
 import { mapActions } from 'pinia'
 export default {
   data() {
@@ -16,7 +16,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useCreateUserStore, ['createUser']),
+    ...mapActions(useUserStore, ['createUser']),
     async register() {
       await this.createUser(this.email, this.password1)
       this.$router.push('/')

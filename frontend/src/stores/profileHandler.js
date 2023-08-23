@@ -12,6 +12,7 @@ export const useProfileHandler = defineStore('profileHandler', {
   }),
   actions: {
     async fetchProfile(user) {
+      console.log(user)
       const response = await axios.get(`/users/profile/${user._id}`)
       this.name = response.data.name
       this.description = response.data.description

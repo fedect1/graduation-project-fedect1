@@ -1,11 +1,12 @@
 <script>
-import { mapActions } from 'pinia'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useProfileHandler } from '../stores/profileHandler'
+import { useAccountStore } from '../stores/account'
 export default {
   name: 'ProfileView',
   async mounted() {
-    await this.fetchProfile()
+    await this.fetchUser()
+    await this.fetchProfile(this.user)
   },
   methods: {
     ...mapActions(useProfileHandler, [
@@ -13,10 +14,12 @@ export default {
       'updateName',
       'updateDescription',
       'updateAvatar'
-    ])
+    ]),
+    ...mapActions(useAccountStore, ['fetchUser'])
   },
   computed: {
-    ...mapState(useProfileHandler, ['username', 'description', 'avatar'])
+    ...mapState(useProfileHandler, ['username', 'description', 'avatar']),
+    ...mapState(useAccountStore, ['user'])
   }
 }
 </script>

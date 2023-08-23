@@ -2,12 +2,14 @@
 import WriteComment from '@/components/feed/WriteComment.vue'
 import ListComments from '@/components/feed/ListComments.vue'
 import Like from '@/components/feed/Like.vue'
+import deletePost from '@/components/feed/DeletePost.vue'
 export default {
   name: 'ListPosts',
   components: {
     WriteComment,
     ListComments,
-    Like
+    Like,
+    deletePost
   },
 
   props: ['posts']
@@ -19,6 +21,7 @@ export default {
       <h3>{{ post.user }}</h3>
       <p>{{ post.expirationDate }}</p>
     </div>
+    <deletePost :post-id="post._id" />
     <p class="post-body">
       {{ post.body }}
     </p>

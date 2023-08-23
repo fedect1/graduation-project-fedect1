@@ -17,8 +17,8 @@ export default {
   methods: {
     ...mapActions(useAccountStore, ['fetchUser', 'logout']),
     async handleLogout() {
-      await this.logout()
       this.$router.push('/')
+      await this.logout()
     }
   },
   computed: {

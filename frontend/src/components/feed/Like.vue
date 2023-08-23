@@ -57,7 +57,7 @@ export default {
 
 <template>
   <button class="like-button" @click="toggleLike">
-    <i class="fas fa-heart">Icon</i>
+    <i class="bx bx-like"></i>
     <span class="like-count">{{ likeText }}</span>
   </button>
 </template>

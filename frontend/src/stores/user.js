@@ -3,8 +3,8 @@ import axios from 'axios'
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
-
-export const useCreateUserStore = defineStore('CreateUser', {
+//Change this to user.js
+export const useUserStore = defineStore('User', {
   state: () => ({
     user: null
   }),
