@@ -9,11 +9,16 @@ export const usePostHandler = defineStore('postHandler', {
     posts: [],
     post: null,
     comments: [],
-    comment: null
+    comment: null,
+    likes: [],
+    like: null
   }),
   actions: {
     async fetchPosts() {
       this.posts = (await axios.get('/posts')).data
+    },
+    async fetchPostById(postId) {
+      this.post = (await axios.get(`/posts/${postId}`)).data
     },
     async createPost(bodyPost) {
       this.post = (await axios.post('/posts', { bodyPost })).data
@@ -23,6 +28,12 @@ export const usePostHandler = defineStore('postHandler', {
     },
     async fetchComments(postId) {
       this.comments = (await axios.get(`/posts/${postId}/comments`)).data
+    },
+    async likePost(postId, userId) {
+      this.like = (await axios.post(`/posts/${postId}/likes`, { userId })).data
+    },
+    async dislikePost(postId, userId) {
+      this.like = (await axios.delete(`/posts/unlike/${postId}/${userId}`)).data
     }
   }
 })

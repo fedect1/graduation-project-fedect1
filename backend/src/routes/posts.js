@@ -12,6 +12,12 @@ router.get('/', async function (req, res, next) {
   res.send(posts)
 })
 
+/* GET Post by id. */
+router.get('/:postId', async function (req, res, next) {
+  const post = await Post.findById(req.params.postId)
+  res.send(post)
+})
+
 /* GET Comments of a post. */
 router.get('/:postId/comments', async function (req, res, next) {
   const post = await Post.findById(req.params.postId)
@@ -91,7 +97,7 @@ router.post('/:postId/likes', async function (req, res, next) {
       return res.status(404).send({ message: 'Post not found' })
     }
     // Add the like
-    await post.addLike(req.body.user)
+    await post.addLike(req.body.userId)
 
     // Send the response
     res.send({ message: 'Like added successfully' })
@@ -106,6 +112,7 @@ router.delete(`/unlike/:postId/:userId`, async function (req, res, next) {
     if (!post) {
       return res.status(404).send({ message: 'Post not found' })
     }
+    console.log(req.params.userId)
     // Remove the like
     await post.deleteLike(req.params.userId)
 

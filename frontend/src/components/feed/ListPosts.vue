@@ -1,12 +1,13 @@
 <script>
 import WriteComment from '@/components/feed/WriteComment.vue'
 import ListComments from '@/components/feed/ListComments.vue'
-
+import Like from '@/components/feed/Like.vue'
 export default {
   name: 'ListPosts',
   components: {
     WriteComment,
-    ListComments
+    ListComments,
+    Like
   },
 
   props: ['posts']
@@ -21,6 +22,7 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
+    <Like :post-id="post._id" />
     <ListComments :post-id="post._id" />
     <WriteComment :post-id="post._id" />
   </div>

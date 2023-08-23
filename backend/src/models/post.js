@@ -44,7 +44,9 @@ class Post {
   }
 
   async deleteLike(user) {
-    this.likes = this.likes.filter(like => like.toString() !== user.toString())
+    console.log(user)
+    this.likes = this.likes.filter(like => like.toString() !== user)
+    console.log(this.likes)
     this.expirationDate = new Date(this.expirationDate.getTime() - likeTimeExtension)
     await this.save()
     return this
