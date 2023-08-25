@@ -4,54 +4,84 @@ import { useProfileHandler } from '../stores/profileHandler'
 import { useAccountStore } from '../stores/account'
 export default {
   name: 'ProfileView',
-  async mounted() {
-    await this.fetchUser()
-    await this.fetchProfile(this.user)
+  data() {
+    return {
+      newUsername: '',
+      newDescription: '',
+      newAvatar: ''
+    }
+  },
+
+  computed: {
+    ...mapState(useAccountStore, ['user'])
   },
   methods: {
-    ...mapActions(useProfileHandler, [
-      'fetchProfile',
-      'updateName',
-      'updateDescription',
-      'updateAvatar'
-    ]),
-    ...mapActions(useAccountStore, ['fetchUser'])
-  },
-  computed: {
-    ...mapState(useProfileHandler, ['username', 'description', 'avatar']),
-    ...mapState(useAccountStore, ['user'])
+    ...mapActions(useAccountStore, ['fetchUser']),
+    ...mapActions(useProfileHandler, ['updateName', 'updateDescription', 'updateAvatar']),
+    async handleNameChange() {
+      const newName = this.newUsername
+      await this.updateName(this.user, newName)
+      this.newUsername = ''
+      await this.fetchUser()
+    },
+    async handleDescriptionChange() {
+      const newDescription = this.newDescription
+      await this.updateDescription(this.user, newDescription)
+      this.newDescription = ''
+      await this.fetchUser()
+    },
+    async handleAvatarChange() {
+      const newAvatar = this.newAvatar
+      await this.updateAvatar(this.user, newAvatar)
+      this.newAvatar = ''
+      await this.fetchUser()
+    }
   }
 }
 </script>
 
 <template>
-  <div class="profile-container">
+  <div v-if="user" class="profile-container">
     <h2>Profile</h2>
     <div class="profile-info">
       <div class="profile-info-username">
         <p>Username</p>
-        <p>{{ username }}</p>
+        <p>{{ user.name }}</p>
       </div>
       <div class="profile-info-description">
         <p>Description</p>
-        <p>{{ description }}</p>
+        <p>{{ user.description }}</p>
       </div>
       <div class="profile-info-avatar">
         <p>Avatar</p>
-        <img :src="avatar" alt="avatar" />
+        <p>{{ this.user.avatar }}</p>
+        <img alt="avatar" />
       </div>
     </div>
   </div>
+
   <div class="profile-edit-container">
     <div class="username">
       <p>Username</p>
-      <input type="text" name="username" id="username" placeholder="Username" />
-      <button>Save</button>
+      <input
+        v-model="newUsername"
+        type="text"
+        name="username"
+        id="username"
+        placeholder="Username"
+      />
+      <button @click="handleNameChange">Save</button>
     </div>
     <div class="description">
       <p>Description</p>
-      <input type="text" name="description" id="description" placeholder="Description" />
-      <button>Save</button>
+      <input
+        v-model="newDescription"
+        type="text"
+        name="description"
+        id="description"
+        placeholder="Description"
+      />
+      <button @click="handleDescriptionChange">Save</button>
     </div>
     <div class="avatar">
       <p>Avatar</p>
