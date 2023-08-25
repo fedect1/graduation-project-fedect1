@@ -29,7 +29,13 @@ export default defineComponent({
 <template>
   <div class="feed-container">
     <WritePost :submitPost="submitPost" />
-    <h3 style="color: white">List of posts:</h3>
     <ListPosts :posts="posts" />
   </div>
 </template>
+<style scoped>
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
