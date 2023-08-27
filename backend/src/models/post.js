@@ -4,7 +4,7 @@ const expitartionTime = 3 * 15 * 60 * 1000
 const commentTimeExtension = 15 * 60 * 1000
 const likeTimeExtension = 5 * 60 * 1000
 const postSchema = new mongoose.Schema({
-  bodyPost: String,
+  body: String,
   comments: [],
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   createdAt: {
@@ -44,7 +44,9 @@ class Post {
   }
 
   async deleteLike(user) {
-    this.likes = this.likes.filter(like => like.toString() !== user.toString())
+    console.log(user)
+    this.likes = this.likes.filter(like => like.toString() !== user)
+    console.log(this.likes)
     this.expirationDate = new Date(this.expirationDate.getTime() - likeTimeExtension)
     await this.save()
     return this

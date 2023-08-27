@@ -4,7 +4,7 @@ import { Suspense } from 'vue'
 import { useAccountStore } from './stores/account'
 import { mapActions } from 'pinia'
 import { mapState } from 'pinia'
-
+import Navbar from './components/global/Navbar.vue'
 export default {
   name: 'App',
   components: {
@@ -15,7 +15,11 @@ export default {
     await this.fetchUser()
   },
   methods: {
-    ...mapActions(useAccountStore, ['fetchUser', 'logout'])
+    ...mapActions(useAccountStore, ['fetchUser', 'logout']),
+    async handleLogout() {
+      this.$router.push('/')
+      await this.logout()
+    }
   },
   computed: {
     ...mapState(useAccountStore, ['user'])
@@ -25,8 +29,9 @@ export default {
 
 <template>
   <header>
+    <!-- <Navbar /> -->
     <nav>
-      <a v-if="user" @click="logout">Log out</a>
+      <a v-if="user" @click="handleLogout">Log out</a>
     </nav>
   </header>
 

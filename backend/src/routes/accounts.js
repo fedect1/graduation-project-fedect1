@@ -9,6 +9,7 @@ router.get('/session', async function (req, res, next) {
 
 /* POST create a session */
 router.post('/session', passport.authenticate('local', { failWithError: true }), async function (req, res, next) {
+  req.session.userId = req.user.id
   res.send(req.user)
 })
 

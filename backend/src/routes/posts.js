@@ -12,19 +12,34 @@ router.get('/', async function (req, res, next) {
   res.send(posts)
 })
 
+/* GET Post by id. */
+router.get('/:postId', async function (req, res, next) {
+  const post = await Post.findById(req.params.postId)
+  res.send(post)
+})
+
 /* GET Comments of a post. */
-router.get('/:postId/comments', function (req, res, next) {
-  res.send(Comment.list)
+router.get('/:postId/comments', async function (req, res, next) {
+  const post = await Post.findById(req.params.postId)
+  res.send(post.comments)
 })
 
 //POSTS
 /* POST create a new post. */
+// router.post('/', async function (req, res, next) {
+//   console.log(req.body)
+//   const user = await User.findById(req.body.user)
+//   console.log(user)
+//   const post = await user.createPost(req.body.bodyPost)
+//   res.send(post)
+// })
+
+/* POST create a new post. */
 router.post('/', async function (req, res, next) {
-  console.log(req.body)
-  const user = await User.findById(req.body.user)
-  console.log(user)
+  const userId = req.session.userId
+  const user = await User.findById(userId)
   const post = await user.createPost(req.body.bodyPost)
-  res.send(post)
+  res.status(201).send(post)
 })
 
 /* POST a new comment for a post of a user */
@@ -36,7 +51,7 @@ router.post('/:postId/comments', async function (req, res, next) {
 
 //DELETE
 /* Delete a post */
-router.delete('/:userId/:postId', async function (req, res, next) {
+router.delete('/:postId/:userId', async function (req, res, next) {
   try {
     // Find the user
     const user = await User.findById(req.params.userId)
@@ -82,7 +97,7 @@ router.post('/:postId/likes', async function (req, res, next) {
       return res.status(404).send({ message: 'Post not found' })
     }
     // Add the like
-    await post.addLike(req.body.user)
+    await post.addLike(req.body.userId)
 
     // Send the response
     res.send({ message: 'Like added successfully' })
@@ -97,6 +112,7 @@ router.delete(`/unlike/:postId/:userId`, async function (req, res, next) {
     if (!post) {
       return res.status(404).send({ message: 'Post not found' })
     }
+    console.log(req.params.userId)
     // Remove the like
     await post.deleteLike(req.params.userId)
 

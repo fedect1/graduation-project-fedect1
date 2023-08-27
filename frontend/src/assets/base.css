@@ -1,7 +1,27 @@
 :root {
+  /* Colors */
   --page-background: #0a0a0a;
-  --primary-color: #c35831;
+  --card-background: #1a1a1a6b;
+  --primary-color: #c1c91f;
   --secondary-color: #54c06d;
   --tertiary-color: #278dc2;
   --text-color: #e0e0e0;
+  --card-border-color: #e0e0e0;
+  /* Fonts */
+  --font-family: 'Roboto', sans-serif;
+  /* Sizes */
+  --h1-size: 2.5rem;
+  --h2-size: 2rem;
+  --h3-size: 1.75rem;
+  --p-size: 1rem;
+  /* Padding */
+  --xs-padding: 0.25rem;
+  --s-padding: 0.5rem;
+  --m-padding: 1rem;
+  --l-padding: 2rem;
+  /* Margins */
+  --xs-margin: 0.25rem;
+  --s-margin: 0.5rem;
+  --m-margin: 1rem;
+  --l-margin: 2rem;
 }

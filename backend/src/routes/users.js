@@ -15,10 +15,21 @@ router.get('/:userId', async function (req, res, next) {
   res.send(user)
 })
 
-/* // Create a new user */
+// /* // Create a new user */
+// router.post('/', async function (req, res, next) {
+//   const user = await User.create({ email: req.body.email })
+//   res.status(201).send(user._id)
+// })
+
+/* POST signup */
 router.post('/', async function (req, res, next) {
-  const user = await User.create({ email: req.body.email })
-  res.status(201).send(user._id)
+  try {
+    const { email, password } = req.body
+    const user = await User.register({ email }, password)
+    res.status(201).send(user)
+  } catch (error) {
+    next(error)
+  }
 })
 
 /* POST a new follow to a user */
@@ -53,45 +64,59 @@ router.delete('/:userId/unfollowing/:userIdUnfollow', async function (req, res, 
 })
 
 //Profile Routes
+/* Get profile by id. */
+router.get('/profile/:userId', async function (req, res, next) {
+  const user = await User.findById(req.params.userId)
+  const profile = {
+    name: user.name,
+    description: user.description,
+    avatar: user.avatar,
+  }
+  res.status(200).send(profile)
+}),
+  /* Update name of a user */
+  router.put('/profile/:userId/name', async function (req, res, next) {
+    try {
+      const user = await User.findById(req.params.userId)
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' })
+      }
+      user.name = req.body.name
+      await user.save()
+      res.status(204).send(user)
+    } catch (error) {
+      res.status(404).send(error.message)
+    }
+  })
 
-/* Update user name by id */
-router.patch('/:userId/name', async function (req, res, next) {
+/* Update description of a user */
+router.put('/profile/:userId/description', async function (req, res, next) {
   try {
-    const user = await User.findByIdAndUpdate(req.params.userId, { name: req.body.name }, { new: true })
-    res.send(user)
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    user.description = req.body.description
+    await user.save()
+    res.status(204).send(user)
   } catch (error) {
-    res.status(404).send({ message: 'Error creating/updating user name' })
+    res.status(404).send(error.message)
   }
 })
 
-/* Update user description by id */
-router.patch('/:userId/description', async function (req, res, next) {
+/* Update avatar of a user */
+router.put('/profile/:userId/avatar', async function (req, res, next) {
   try {
-    const user = await User.findByIdAndUpdate(req.params.userId, { description: req.body.description }, { new: true })
-    res.send(user)
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    user.avatar = req.body.avatar
+    await user.save()
+    res.status(204).send(user)
   } catch (error) {
-    res.status(404).send({ message: 'Error creating/updating user description' })
+    res.status(404).send(error.message)
   }
 })
 
-/* Update user avatar by id */
-router.patch('/:userId/avatar', async function (req, res, next) {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.userId, { avatar: req.body.avatar }, { new: true })
-    res.send(user)
-  } catch (error) {
-    res.status(404).send({ message: 'Error creating/updating user avatar' })
-  }
-})
 module.exports = router
-
-// /* POST signup */
-// router.post('/', async function (req, res, next) {
-//   try {
-//     const { email, password } = req.body
-//     const user = await User.register({ email }, password)
-//     res.status(201).send(user)
-//   } catch (error) {
-//     next(error)
-//   }
-// })

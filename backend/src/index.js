@@ -68,7 +68,7 @@ async function main() {
   // // console.log('Comment of a the post in position 0: ', allPosts.data[0])
 
   // Register a new user
-  const user = await axios.post('/accounts', { email: 'Fede', password: '1234' })
+  const user = await axios.post('/users', { email: 'Fede', password: '1234' })
 
   // Login
   const login = await axios.post('/accounts/session', { email: 'Fede', password: '1234' })
