@@ -6,7 +6,7 @@ axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 
 export const useFormatDay = defineStore('formatDay', {
   actions: {
-    async formatDay(dateStr) {
+    formatDay(dateStr) {
       const date = new Date(dateStr)
       if (isNaN(date.getTime())) {
         return 'Invalid Date'

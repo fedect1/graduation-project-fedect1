@@ -7,15 +7,7 @@ import { mapActions } from 'pinia'
 import { useFormatDay } from '../../stores/formatDay'
 export default {
   name: 'ListPosts',
-  // date() {
-  //   return {
-  //     allFormatedDates: []
-  //   }
-  // },
-
-  // beforeMount() {
-  //   this.fetchFormattedDates()
-  // },
+  props: ['posts'],
 
   components: {
     WriteComment,
@@ -23,33 +15,16 @@ export default {
     Like,
     deletePost
   },
-  // methods: {
-  //   ...mapActions(useFormatDay, ['formatDay']),
-  //   async fetchFormattedDates() {
-  //     this.all = await Promise.all(this.posts.map((post) => this.formatDay(post.expirationDate)))
-  //   }
-  // },
-  // methods: {
-  //   ...mapActions(useFormatDay, ['formatDay']),
-  //   // async recordingTime(date) {
-  //   //   const res = await this.formatDay(date)
-  //   //   return res
-  //   // },
-  //   async fetchAllFormatedDates() {
-  //     this.allFormatedDates = await this.posts.map((post) => {
-  //       return this.formatDay(post.createdAt)
-  //     })
-  //   }
-  // },
-
-  props: ['posts']
+  methods: {
+    ...mapActions(useFormatDay, ['formatDay']),
+  }
 }
 </script>
 <template>
   <div class="post-container" v-for="(post, index) in posts" :key="post.id">
     <div class="post-header">
       <h3>{{ post.user }}</h3>
-      <p class="formatDate">{{ formattedDates[index] }}</p>
+      <p class="formatDate">{{ formatDay(post.createdAt) }}</p>
       <deletePost :post-id="post._id" />
     </div>
     <p class="post-body">
