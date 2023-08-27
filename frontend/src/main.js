@@ -13,3 +13,5 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
+console.log("Checking if Slack is working...")
