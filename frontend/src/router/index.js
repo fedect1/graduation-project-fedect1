@@ -8,7 +8,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { requiresAuth: false }
     },
     {
       path: '/signup',
@@ -31,20 +32,21 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!useAccountStore().user
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({ name: 'home' })
-    } else {
-      if (to.name !== 'feed' && to.name !== 'profile') {
-        next({ name: 'feed' })
-      }
-      next()
-    }
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = !!useAccountStore().user
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (!isAuthenticated) {
+//       next({ name: 'home' })
+//     } else {
+//       if (to.name !== 'feed' && to.name !== 'profile') {
+//         next({ name: 'feed' })
+//       } else {
+//         next()
+//       }
+//     }
+//   } else {
+//     next() // If the route does not require authentication, proceed
+//   }
+// })
 
 export default router
