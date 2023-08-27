@@ -1,11 +1,12 @@
 :root {
   /* Colors */
   --page-background: #0a0a0a;
-  --card-background: #1a1a1a6b;
+  --card-background-light: #535353;
   --primary-color: #c1c91f;
   --secondary-color: #54c06d;
   --tertiary-color: #278dc2;
   --text-color: #e0e0e0;
+  --text-color-dark: #0a0a0a;
   --card-border-color: #e0e0e0;
   /* Fonts */
   --font-family: 'Roboto', sans-serif;

@@ -23,8 +23,13 @@ export default {
 <template>
   <div class="post-container" v-for="(post, index) in posts" :key="post.id">
     <div class="post-header">
-      <h3>{{ post.user }}</h3>
-      <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
+      <div class="user-image">
+        <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
+      </div>
+      <div class="user-info">
+        <h3>{{ post.user }}</h3>
+        <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
+      </div>
       <deletePost :post-id="post._id" />
     </div>
     <p class="post-body">
@@ -40,17 +45,28 @@ export default {
 .post-container {
   padding: 30px 40px;
   width: 100%;
-  background: var(--card-background);
-  border: 2px solid var(--card-border-color);
+  background: transparent;
+  border: 2px solid var(--card-background-light);
   color: var(--text-color);
-  border-radius: 10px;
-  margin-bottom: var(--m-margin);
+  border-radius: 3px;
+  margin-bottom: var(--xs-margin);
 }
 .post-container .post-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-start; /* Align items at the top */
+  margin-bottom: var(--xs-margin);
+}
+.user-image {
+  margin-right: 20px; /* Add space to the right of the image */
+}
+.user-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.user-info {
+  flex-grow: 1; /* Allow user info to grow and take remaining space */
 }
 .post-container .post-header h3 {
   font-size: 1.2rem;
@@ -65,7 +81,7 @@ export default {
   background-color: transparent;
   border: none;
   outline: none;
-  border: 2px solid var(--text-color, 0.2);
+  border: 2px solid var(--card-background-light, 0.2);
   border-radius: 5px;
   font-size: 1rem;
   color: var(--text-color);
