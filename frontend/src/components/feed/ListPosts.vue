@@ -16,7 +16,7 @@ export default {
     deletePost
   },
   methods: {
-    ...mapActions(useFormatDay, ['formatDay']),
+    ...mapActions(useFormatDay, ['formatDay','expirationTime']),
   }
 }
 </script>
@@ -24,7 +24,7 @@ export default {
   <div class="post-container" v-for="(post, index) in posts" :key="post.id">
     <div class="post-header">
       <h3>{{ post.user }}</h3>
-      <p class="formatDate">{{ formatDay(post.createdAt) }}</p>
+      <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       <deletePost :post-id="post._id" />
     </div>
     <p class="post-body">

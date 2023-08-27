@@ -25,6 +25,20 @@ export const useFormatDay = defineStore('formatDay', {
       } else {
         return `${Math.floor(dayPassed / 365)} years ago`
       }
+    },
+    expirationTime(dateExp) {
+      const date = new Date(dateExp)
+      if (isNaN(date.getTime())) {
+        return 'Invalid Date'
+      }
+      const minutesLeft = Math.floor((date.getTime() - Date.now()) / (1000 * 60))
+      if (minutesLeft < 60) {
+        return `${minutesLeft} minutes left`
+      }
+      const hoursLeft = Math.floor(minutesLeft / 60)
+      if (hoursLeft < 24) {
+        return `${hoursLeft} hours ${minutesLeft % 60} minutes left`
+      }
     }
   }
 })

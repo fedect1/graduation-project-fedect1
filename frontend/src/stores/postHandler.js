@@ -11,7 +11,8 @@ export const usePostHandler = defineStore('postHandler', {
     comments: [],
     comment: null,
     likes: [],
-    like: null
+    like: null,
+
   }),
   actions: {
     async fetchPosts() {
@@ -40,6 +41,9 @@ export const usePostHandler = defineStore('postHandler', {
     },
     async deleteComment(postId, commentId, userId) {
       await axios.delete(`/posts/${postId}/comments/${commentId}/${userId}`)
+    },
+    async fetchValidPosts() {
+      return (await axios.get('/posts/valid')).data
     }
   }
 })
