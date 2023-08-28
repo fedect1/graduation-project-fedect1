@@ -20,42 +20,42 @@ const router = createRouter({
       path: '/feed',
       name: 'feed',
       component: () => import('../views/FeedView.vue'),
-      beforeEnter: (to, from, next) => {
-        const accountStore = useAccountStore()
-        if (to.meta.requiresAuth && !accountStore.user) return '/'
-        return next()
-      },
+      // beforeEnter: (to, from, next) => {
+      //   const accountStore = useAccountStore()
+      //   if (to.meta.requiresAuth && !accountStore.user) return '/'
+      //   return next()
+      // },
       meta: { requiresAuth: true }
     },
     {
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
-      beforeEnter: (to, from, next) => {
-        const accountStore = useAccountStore()
-        if (to.meta.requiresAuth && !accountStore.user) return '/'
-        return next()
-      },
+      // beforeEnter: (to, from, next) => {
+      //   const accountStore = useAccountStore()
+      //   if (to.meta.requiresAuth && !accountStore.user) return '/'
+      //   return next()
+      // },
       meta: { requiresAuth: true }
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!useAccountStore().user
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({ name: 'home' })
-    } else {
-      if (to.name !== 'feed' && to.name !== 'profile') {
-        next({ name: 'feed' })
-      } else {
-        next()
-      }
-    }
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = !!useAccountStore().user
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (!isAuthenticated) {
+//       next({ name: 'home' })
+//     } else {
+//       if (to.name !== 'feed' && to.name !== 'profile') {
+//         next({ name: 'feed' })
+//       } else {
+//         next()
+//       }
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

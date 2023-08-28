@@ -14,9 +14,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useProfileHandler, ['followUser']),
+    ...mapActions(useProfileHandler, ['followUser', 'unfollowUser']),
     async handleFollowUser() {
       await this.followUser(useAccountStore().user, this.postUser)
+    },
+    async handleUnfollowUser() {
+      await this.unfollowUser(useAccountStore().user, this.postUser)
     }
   }
 }
