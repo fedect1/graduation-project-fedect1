@@ -5,6 +5,11 @@ import { useProfileHandler } from '../../stores/profileHandler'
 export default {
   name: 'FollowUser',
   props: ['postUser'],
+  data() {
+    return {
+      following: false
+    }
+  },
   computed: {
     //...mapState(usePostHandler, ['posts']),
     ...mapState(useAccountStore, ['user']),
@@ -20,6 +25,16 @@ export default {
     },
     async handleUnfollowUser() {
       await this.unfollowUser(useAccountStore().user, this.postUser)
+    },
+    async checkIfFollowing() {
+      const user = useAccountStore().user._id
+      const profile = await this.fetchProfileById(user)
+      const following = profile.following
+      if (following.includes(this.postUser)) {
+        this.following = true
+      } else {
+        this.following = false
+      }
     }
   }
 }
