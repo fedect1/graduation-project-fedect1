@@ -34,16 +34,20 @@ router.post('/', async function (req, res, next) {
 
 /* POST a new follow to a user */
 
-router.post('/:userId/following', async function (req, res, next) {
+router.put('/profile/:userId/follow', async function (req, res, next) {
+  console.log('Corre el put')
   try {
+    console.log(req.body.user)
+    console.log(req.params.userId)
     const user = await User.findById(req.params.userId)
     const userToFollow = await User.findById(req.body.user)
     const resultFollow = await user.follow(userToFollow)
-    res.send(resultFollow)
+    res.status(201).send(resultFollow)
   } catch (error) {
     res.status(404).send(error.message)
   }
 })
+
 
 /* DELETE a follow. */
 router.delete('/:userId/unfollowing/:userIdUnfollow', async function (req, res, next) {

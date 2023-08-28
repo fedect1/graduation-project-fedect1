@@ -13,8 +13,11 @@ export const useProfileHandler = defineStore('profileHandler', {
       await axios.put(`/users/profile/${user._id}/description`, { description })
     },
     async updateAvatar(user, avatar) {
-      axios.put(`/users/profile/${user._id}/avatar`, { avatar })
+      await axios.put(`/users/profile/${user._id}/avatar`, { avatar })
       this.avatar = response.data.avatar
+    },
+    async followUser(user, userToFollow) {
+      await axios.put(`/users/profile/${user._id}/follow`, { userToFollow })
     }
   }
 })

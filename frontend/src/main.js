@@ -12,6 +12,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
+const accountStore = useAccountStore()
+await accountStore.fetchUser()
 
-console.log("Checking if Slack is working...")
+app.mount('#app')
