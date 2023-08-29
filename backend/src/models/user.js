@@ -4,9 +4,9 @@ const autopopulate = require('mongoose-autopopulate')
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
-  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }],
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
   name: { type: String, default: '' },
   description: { type: String, default: '' },
   avatar: { type: String, default: '' },
@@ -42,16 +42,21 @@ class User {
   }
 
   unfollow(user) {
-    const followedIndex = this.following.findIndex(followed => followed._id.toString() === user._id.toString())
-    if (followedIndex === -1) {
+    // Remove from following by id
+    const followingIndex = this.following.findIndex(following => following._id.toString() === user._id.toString())
+    if (followingIndex === -1) {
       return res.status(404).send({ message: 'User not found in following' })
     }
-    this.following.splice(followedIndex, 1)
-    user.followedBy.splice(user.followedBy.indexOf(this._id), 1)
-    this.save()
-    user.save()
+    this.following.splice(followingIndex, 1)
+    // Remove from followedBy by id
+    const followedByIndex = user.followedBy.findIndex(followedBy => followedBy._id.toString() === this._id.toString())
+    if (followedByIndex === -1) {
+      return res.status(404).send({ message: 'User not found in followedBy' })
+    }
+    user.followedBy.splice(followedByIndex, 1)
     return this
   }
+
 }
 
 userSchema.plugin(autopopulate)

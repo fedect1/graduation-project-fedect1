@@ -26,6 +26,8 @@ export default defineComponent({
     ...mapActions(usePostHandler, ['createPost', 'fetchPosts', 'fetchValidPosts']),
     async submitPost(bodyPost) {
       await this.createPost(bodyPost)
+      this.validPosts = await this.fetchValidPosts()
+
     }
   },
   computed: {

@@ -22,8 +22,8 @@ const router = createRouter({
       component: () => import('../views/FeedView.vue'),
       // beforeEnter: (to, from, next) => {
       //   const accountStore = useAccountStore()
-      //   if (to.meta.requiresAuth && !accountStore.user) return '/'
-      //   return next()
+      //   console.log(accountStore.user)
+      //   if (to.meta.requiresAuth && !accountStore.user) return { name: 'home' }
       // },
       meta: { requiresAuth: true }
     },

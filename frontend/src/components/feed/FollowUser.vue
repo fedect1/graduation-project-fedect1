@@ -10,6 +10,10 @@ export default {
       following: false
     }
   },
+  mounted() {
+    this.checkIfFollowing()
+    console.log(this.following)
+  },
   computed: {
     //...mapState(usePostHandler, ['posts']),
     ...mapState(useAccountStore, ['user']),
@@ -19,7 +23,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useProfileHandler, ['followUser', 'unfollowUser']),
+    ...mapActions(useProfileHandler, ['followUser', 'unfollowUser', 'getFollowings']),
     async handleFollowUser() {
       await this.followUser(useAccountStore().user, this.postUser)
     },
@@ -27,10 +31,12 @@ export default {
       await this.unfollowUser(useAccountStore().user, this.postUser)
     },
     async checkIfFollowing() {
-      const user = useAccountStore().user._id
-      const profile = await this.fetchProfileById(user)
-      const following = profile.following
-      if (following.includes(this.postUser)) {
+      const user = useAccountStore().user
+      const followings = await this.getFollowings(user)
+      console.log(followings)
+      console.log(this.postUser)
+      const followingCheck = followings.some((following) => following._id === this.postUser)
+      if (followingCheck) {
         this.following = true
       } else {
         this.following = false
@@ -41,7 +47,8 @@ export default {
 </script>
 
 <template>
-  <button v-if="!isCurrentUserPostOwner" @click="handleFollowUser" class="follow-button">Follow</button>
+  <button v-if="!isCurrentUserPostOwner && !following" @click="handleFollowUser" class="follow-button">Follow</button>
+  <button v-if="!isCurrentUserPostOwner && following" @click="handleUnfollowUser" class="unfollow-button">Unfollow</button>
 </template>
 
 <style scoped>

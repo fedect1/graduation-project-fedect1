@@ -50,18 +50,49 @@ router.put('/profile/:userId/follow', async function (req, res, next) {
 
 
 /* DELETE a follow. */
-router.delete('/:userId/unfollowing/:userIdUnfollow', async function (req, res, next) {
+router.delete('/profile/:userId/unfollowing', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
     if (!user) {
       return res.status(404).send({ message: 'User not found' })
     }
-    const userToUnfollow = await User.findById(req.params.userIdUnfollow)
-    if (!userToUnfollow) {
+    const ToUnfollow = await User.findById(req.body.userToUnfollow)
+    if (!ToUnfollow) {
       return res.status(404).send({ message: 'User to unfollow not found' })
     }
-    await user.unfollow(userToUnfollow)
-    res.send({ message: 'Unfollow user successfully' })
+    await user.unfollow(req.body.userToUnfollow)
+    res.sendStatus(204)
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
+
+
+/* GET followers of a user. */
+router.get('/profile/:userId/followers', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    const followers = await user.following
+    console.log(followers)
+    res.status(200).send({ followers })
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
+
+/* GET followings of a user. */
+router.get('/profile/:userId/followings', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    const followings = user.following
+    console.log('followings', followings)
+    res.status(200).send({ followings })
   } catch (error) {
     res.status(404).send(error.message)
   }

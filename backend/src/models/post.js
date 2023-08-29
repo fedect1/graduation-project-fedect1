@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const autopopulate = require('mongoose-autopopulate')
 const expitartionTime = 3 * 15 * 60 * 1000
 const commentTimeExtension = 15 * 60 * 1000
 const likeTimeExtension = 5 * 60 * 1000
@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
     },
   },
   status: { type: Boolean, default: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 }},
 })
 class Post {
   async createComment(author, text) {
@@ -67,4 +67,5 @@ class Post {
   }
 }
 postSchema.loadClass(Post)
+postSchema.plugin(autopopulate)
 module.exports = mongoose.model('Post', postSchema)

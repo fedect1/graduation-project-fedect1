@@ -19,20 +19,27 @@ export default {
     Like,
     deletePost,
     FollowUser
-},
+  },
+  computed: {
+    sortedPosts () {
+      return this.posts.sort((a, b) => {
+        return new Date(b.expirationDate) - new Date(a.expirationDate)
+      })
+    },
+  },
   methods: {
     ...mapActions(useFormatDay, ['formatDay','expirationTime']),
   }
 }
 </script>
 <template>
-  <div class="post-container" v-for="(post) in posts" :key="post.id">
+  <div class="post-container" v-for="(post) in sortedPosts" :key="post.id">
     <div class="post-header">
       <div class="user-image">
         <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
       </div>
       <div class="user-info">
-        <h3>{{ post.user }}</h3>
+        <h3>{{ post.user.email }}</h3>
         <FollowUser :postUser="post.user"/>
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
