@@ -29,7 +29,7 @@ export default {
       await this.followUser(useAccountStore().user, this.postUser._id)
     },
     async handleUnfollowUser() {
-      console.log(this.postUser._id)
+      //console.log(this.postUser._id)
       await this.unfollowUser(useAccountStore().user, this.postUser._id)
     },
     async checkIfFollowing() {

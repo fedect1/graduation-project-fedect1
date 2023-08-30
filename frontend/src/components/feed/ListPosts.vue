@@ -2,7 +2,7 @@
 import WriteComment from '@/components/feed/WriteComment.vue'
 import ListComments from '@/components/feed/ListComments.vue'
 import Like from '@/components/feed/Like.vue'
-import deletePost from '@/components/feed/DeletePost.vue'
+import DeletePost from '@/components/feed/DeletePost.vue'
 import FollowUser from '@/components/feed/FollowUser.vue'
 
 import { mapActions } from 'pinia'
@@ -17,7 +17,7 @@ export default {
     WriteComment,
     ListComments,
     Like,
-    deletePost,
+    DeletePost,
     FollowUser
   },
   computed: {
@@ -43,7 +43,7 @@ export default {
         <FollowUser :postUser="post.user"/>
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
-      <deletePost :post-id="post._id" />
+      <DeletePost :post-id="post._id" />
     </div>
     <p class="post-body">
       {{ post.body }}

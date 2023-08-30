@@ -41,19 +41,11 @@ class User {
     return this
   }
 
-  unfollow(user) {
-    // Remove from following by id
-    const followingIndex = this.following.findIndex(following => following._id.toString() === user._id.toString())
-    if (followingIndex === -1) {
-      return res.status(404).send({ message: 'User not found in following' })
-    }
-    this.following.splice(followingIndex, 1)
-    // Remove from followedBy by id
-    const followedByIndex = user.followedBy.findIndex(followedBy => followedBy._id.toString() === this._id.toString())
-    if (followedByIndex === -1) {
-      return res.status(404).send({ message: 'User not found in followedBy' })
-    }
-    user.followedBy.splice(followedByIndex, 1)
+  async unfollow(user) {
+    this.following.pull(user)
+    user.followedBy.pull(this)
+    await this.save()
+    await user.save()
     return this
   }
 

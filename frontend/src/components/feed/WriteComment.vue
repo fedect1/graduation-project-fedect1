@@ -11,7 +11,7 @@ export default {
       text: ''
     }
   },
-  methods: {
+  methods: {//change name to userId
     ...mapActions(usePostHandler, ['createComment']),
     async handleSubmitComment() {
       const user = useAccountStore().user._id

@@ -49,18 +49,18 @@ router.put('/profile/:userId/follow', async function (req, res, next) {
 
 
 /* DELETE a follow. */
-router.delete('/profile/:userId/unfollowing', async function (req, res, next) {
+router.delete('/profile/:userId/unfollowing/:unfollowId', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
     if (!user) {
       return res.status(404).send({ message: 'User not found' })
     }
-    console.log('userToUnfollow', req.body.userToUnfollow)
-    const ToUnfollow = await User.findById(req.body.userToUnfollow)
-    if (!ToUnfollow) {
+    console.log('userToUnfollow', req.params.unfollowId)
+    const toUnfollow = await User.findById(req.params.unfollowId)
+    if (!toUnfollow) {
       return res.status(404).send({ message: 'User to unfollow not found' })
     }
-    await user.unfollow(req.body.userToUnfollow)
+    await user.unfollow(toUnfollow)
     res.sendStatus(204)
   } catch (error) {
     res.status(404).send(error.message)

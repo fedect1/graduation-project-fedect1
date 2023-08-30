@@ -18,7 +18,7 @@ export default defineComponent({
     ListPosts
   },
   async mounted() {
-    await this.fetchPosts()
+    //await this.fetchPosts()
     this.validPosts = await this.fetchValidPosts()
   },
 
@@ -30,9 +30,9 @@ export default defineComponent({
 
     }
   },
-  computed: {
-    ...mapState(usePostHandler, ['posts'])
-  }
+  // computed: {
+  //   ...mapState(usePostHandler, ['posts'])
+  // }
 })
 </script>
 <template>
