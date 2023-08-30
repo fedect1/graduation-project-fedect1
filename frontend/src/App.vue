@@ -9,7 +9,8 @@ export default {
   name: 'App',
   components: {
     RouterLink,
-    RouterView
+    RouterView,
+    Navbar
   },
   async mounted() {
     await this.fetchUser()
@@ -29,7 +30,7 @@ export default {
 
 <template>
   <header>
-    <!-- <Navbar /> -->
+    <Navbar />
     <nav>
       <a v-if="user" @click="handleLogout">Log out</a>
     </nav>

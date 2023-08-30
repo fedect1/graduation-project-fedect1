@@ -35,10 +35,9 @@ router.post('/', async function (req, res, next) {
 /* POST a new follow to a user */
 
 router.put('/profile/:userId/follow', async function (req, res, next) {
-  console.log('Corre el put')
+
   try {
-    console.log(req.body.userToFollow)
-    console.log(req.params.userId)
+
     const user = await User.findById(req.params.userId)
     const ToFollow = await User.findById(req.body.userToFollow)
     const resultFollow = await user.follow(ToFollow)
@@ -56,6 +55,7 @@ router.delete('/profile/:userId/unfollowing', async function (req, res, next) {
     if (!user) {
       return res.status(404).send({ message: 'User not found' })
     }
+    console.log('userToUnfollow', req.body.userToUnfollow)
     const ToUnfollow = await User.findById(req.body.userToUnfollow)
     if (!ToUnfollow) {
       return res.status(404).send({ message: 'User to unfollow not found' })
@@ -76,7 +76,6 @@ router.get('/profile/:userId/followers', async function (req, res, next) {
       return res.status(404).send({ message: 'User not found' })
     }
     const followers = await user.following
-    console.log(followers)
     res.status(200).send({ followers })
   } catch (error) {
     res.status(404).send(error.message)
@@ -91,7 +90,6 @@ router.get('/profile/:userId/followings', async function (req, res, next) {
       return res.status(404).send({ message: 'User not found' })
     }
     const followings = user.following
-    console.log('followings', followings)
     res.status(200).send({ followings })
   } catch (error) {
     res.status(404).send(error.message)
