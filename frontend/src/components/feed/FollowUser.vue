@@ -12,6 +12,7 @@ export default {
   },
   mounted() {
     this.checkIfFollowing()
+
     console.log(this.following)
   },
   computed: {
@@ -19,7 +20,9 @@ export default {
     ...mapState(useAccountStore, ['user']),
     isCurrentUserPostOwner() {
       const currentUser = this.user
-      return this.postUser === currentUser._id
+      console.log(this.postUser._id)
+      console.log(currentUser._id)
+      return this.postUser._id === currentUser._id
     }
   },
   methods: {
@@ -33,8 +36,6 @@ export default {
     async checkIfFollowing() {
       const user = useAccountStore().user
       const followings = await this.getFollowings(user)
-      console.log(followings)
-      console.log(this.postUser)
       const followingCheck = followings.some((following) => following._id === this.postUser)
       if (followingCheck) {
         this.following = true
