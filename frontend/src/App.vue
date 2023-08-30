@@ -30,7 +30,7 @@ export default {
 
 <template>
   <header>
-    <Navbar />
+    <Navbar v-if="user" :user="user" />
     <nav>
       <a v-if="user" @click="handleLogout">Log out</a>
     </nav>

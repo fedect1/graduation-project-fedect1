@@ -1,14 +1,43 @@
+<script>
+import { useAccountStore } from "../../stores/account";
+import { mapActions } from "pinia";
+export default {
+  name: "Navbar",
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    isProfileRoute() {
+      return this.$route.path === "/profile";
+    },
+    isFeedRoute() {
+      return this.$route.path === "/feed";
+    },
+  },
+  methods: {
+    ...mapActions(useAccountStore, ["logout"]),
+    async handleLogout() {
+      this.$router.push("/");
+      await this.logout();
+    },
+  },
+};
+</script>
 <template>
   <header class="header">
     <a href="/" class="logo">
       White Dwarfs Messenger
     </a>
     <span class="user-greeting">
-      Hi Fede
+      Hi {{ user.email }}
     </span>
     <nav class="navbar">
-      <a href="#">Profile</a>
-      <a href="#">Log out</a>
+      <a v-if="!isProfileRoute" href="/profile">Profile</a>
+      <a v-if="!isFeedRoute" href="/feed">Feed</a>
+      <a v-if="user" @click="handleLogout" href="#">Log out</a>
     </nav>
   </header>
 </template>
