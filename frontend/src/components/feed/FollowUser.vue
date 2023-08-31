@@ -17,7 +17,7 @@ export default {
     ...mapState(useAccountStore, ['user']),
     isCurrentUserPostOwner() {
       const currentUser = this.user
-      return this.postUser._id === currentUser._id
+      if (currentUser) return this.postUser._id === currentUser._id
     }
   },
   methods: {

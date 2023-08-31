@@ -34,7 +34,6 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const store = useAccountStore()
-  await store.fetchUser()
   if (to.meta.requiresAuth && !store.user) return '/'
   if (!to.meta.requiresAuth && store.user) return '/feed'
 })

@@ -1,5 +1,5 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import { Suspense } from 'vue'
 import { useAccountStore } from './stores/account'
 import { mapActions } from 'pinia'
@@ -8,7 +8,6 @@ import Navbar from './components/global/Navbar.vue'
 export default {
   name: 'App',
   components: {
-    RouterLink,
     RouterView,
     Navbar
   },

@@ -10,9 +10,11 @@ import { useAccountStore } from './stores/account'
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(router)
 
 const accountStore = useAccountStore()
 await accountStore.fetchUser()
+
+app.use(router)
+
 
 app.mount('#app')
