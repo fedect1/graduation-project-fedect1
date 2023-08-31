@@ -12,9 +12,9 @@ export default {
     RouterView,
     Navbar
   },
-  async mounted() {
-    await this.fetchUser()
-  },
+  // async mounted() {
+  //   await this.fetchUser()
+  // },
   methods: {
     ...mapActions(useAccountStore, ['fetchUser', 'logout']),
     async handleLogout() {
