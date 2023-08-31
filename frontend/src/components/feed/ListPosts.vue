@@ -48,7 +48,8 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
-    <Like :post-id="post._id" />
+    <p>{{ post.likes }}</p>
+    <Like :post-id="post._id" :postLikes="post.likes"/>
     <ListComments :postComments="post.comments" />
     <WriteComment :post-id="post._id" />
   </div>
