@@ -20,42 +20,23 @@ const router = createRouter({
       path: '/feed',
       name: 'feed',
       component: () => import('../views/FeedView.vue'),
-      // beforeEnter: (to, from, next) => {
-      //   const accountStore = useAccountStore()
-      //   console.log(accountStore.user)
-      //   if (to.meta.requiresAuth && !accountStore.user) return { name: 'home' }
-      // },
       meta: { requiresAuth: true }
     },
     {
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
-      // beforeEnter: (to, from, next) => {
-      //   const accountStore = useAccountStore()
-      //   if (to.meta.requiresAuth && !accountStore.user) return '/'
-      //   return next()
-      // },
       meta: { requiresAuth: true }
     }
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const isAuthenticated = !!useAccountStore().user
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (!isAuthenticated) {
-//       next({ name: 'home' })
-//     } else {
-//       if (to.name !== 'feed' && to.name !== 'profile') {
-//         next({ name: 'feed' })
-//       } else {
-//         next()
-//       }
-//     }
-//   } else {
-//     next()
-//   }
-// })
+
+router.beforeEach(async (to) => {
+  const store = useAccountStore()
+  await store.fetchUser()
+  if (to.meta.requiresAuth && !store.user) return '/'
+  if (!to.meta.requiresAuth && store.user) return '/feed'
+})
 
 export default router

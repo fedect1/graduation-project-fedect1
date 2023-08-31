@@ -20,8 +20,8 @@ export default {
   methods: {
     ...mapActions(useAccountStore, ["logout"]),
     async handleLogout() {
-      this.$router.push("/");
       await this.logout();
+      this.$router.push("/");
     },
   },
 };
