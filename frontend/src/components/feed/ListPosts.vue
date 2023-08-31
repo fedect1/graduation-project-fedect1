@@ -49,7 +49,7 @@ export default {
       {{ post.body }}
     </p>
     <Like :post-id="post._id" />
-    <ListComments :post-id="post._id" />
+    <ListComments :postComments="post.comments" />
     <WriteComment :post-id="post._id" />
   </div>
 </template>
