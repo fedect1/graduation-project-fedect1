@@ -10,13 +10,10 @@ export default {
       following: false
     }
   },
-  mounted() {
+  async mounted() {
     this.checkIfFollowing()
-
-    console.log(this.following)
   },
   computed: {
-    //...mapState(usePostHandler, ['posts']),
     ...mapState(useAccountStore, ['user']),
     isCurrentUserPostOwner() {
       const currentUser = this.user
@@ -29,12 +26,11 @@ export default {
       await this.followUser(useAccountStore().user, this.postUser._id)
     },
     async handleUnfollowUser() {
-      //console.log(this.postUser._id)
       await this.unfollowUser(useAccountStore().user, this.postUser._id)
     },
-    async checkIfFollowing() {
+    checkIfFollowing() {
       const user = useAccountStore().user
-      const followings = await this.getFollowings(user)
+      const followings = user.following
       const followingCheck = followings.some((following) => following._id === this.postUser._id)
       if (followingCheck) {
         this.following = true
@@ -42,7 +38,7 @@ export default {
         this.following = false
       }
     }
-  }
+  },
 }
 </script>
 

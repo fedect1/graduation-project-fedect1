@@ -6,7 +6,7 @@ const User = require('../models/user')
 /* Get all users. */
 router.get('/', async function (req, res, next) {
   const users = await User.find()
-  res.send(users.map(user => user))
+  res.send(users)
 })
 
 /* Get user by id. */

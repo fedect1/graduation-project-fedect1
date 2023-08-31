@@ -26,7 +26,7 @@ export const useFormatDay = defineStore('formatDay', {
         return `${Math.floor(dayPassed / 365)} years ago`
       }
     },
-    expirationTime(dateExp) {
+    expirationTime(dateExp) { //Pass in the date of expiration to ListPosts.vue
       const date = new Date(dateExp)
       if (isNaN(date.getTime())) {
         return 'Invalid Date'

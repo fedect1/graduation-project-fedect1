@@ -20,7 +20,6 @@ export const useProfileHandler = defineStore('profileHandler', {
       await axios.put(`/users/profile/${user._id}/follow`, { userToFollow })
     },
     async unfollowUser(user, userToUnfollow) {
-      console.log('userToUnfollow from handler',userToUnfollow)
       await axios.delete(`/users/profile/${user._id}/unfollowing/${userToUnfollow}`)
     },
     async getFollowers(user) {
