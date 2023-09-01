@@ -1,57 +1,41 @@
 <script>
-const inputs = document.querySelectorAll(".input-field");
-const toggle_btn = document.querySelectorAll(".toggle");
-const main = document.querySelector("main");
-const bullets = document.querySelectorAll(".bullets span");
-const images = document.querySelectorAll(".image");
+export default{
+  name: 'HeroView',
+  data() {
+    return {
+      signUpMode: false,
+      activeIndex: 1,
+    };
+  },
+  methods: {
+    moveSlider(index) {
+      this.activeIndex = index;
+    },
+    getImageSrc(index) {
+      if(index===1) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel1_voyb0f.jpg'
+      if(index===2) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel2_aiydov.jpg'
+      if(index===3) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel3_nkqy2n.jpg'
+    },
+    toggleSignUpMode() {
+      this.signUpMode = !this.signUpMode;
+    },
+  },
 
-inputs.forEach((inp) => {
-  inp.addEventListener("focus", () => {
-    inp.classList.add("active");
-  });
-  inp.addEventListener("blur", () => {
-    if (inp.value != "") return;
-    inp.classList.remove("active");
-  });
-});
-
-toggle_btn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    main.classList.toggle("sign-up-mode");
-  });
-});
-
-function moveSlider() {
-  let index = this.dataset.value;
-
-  let currentImage = document.querySelector(`.img-${index}`);
-  images.forEach((img) => img.classList.remove("show"));
-  currentImage.classList.add("show");
-
-  const textSlider = document.querySelector(".text-group");
-  textSlider.style.transform = `translateY(${-(index - 1) * 2.2}rem)`;
-
-  bullets.forEach((bull) => bull.classList.remove("active"));
-  this.classList.add("active");
 }
 
-bullets.forEach((bullet) => {
-  bullet.addEventListener("click", moveSlider);
-});
 </script>
 <template lang="pug">
-main
+main(class="{ 'sign-up-mode': signUpMode }")
   .box
     .inner-box
       .forms-wrap
-        form.sign-in-form(action='index.html' autocomplete='off')
+        form.sign-in-form(action='index.html' autocomplete='off' @submit.prevent='signIn')
           .logo
-            img(src='./img/logo.png' alt='easyclass')
-            h4 easyclass
+            h4 White Dwarfs Messenger
           .heading
             h2 Welcome Back
             h6 Not registred yet?
-            a.toggle(href='#') Sign up
+            a.toggle(href='#' @click='toggleSignUpMode') Sign up
           .actual-form
             .input-wrap
               input.input-field(type='text' minlength='4' autocomplete='off' required='')
@@ -64,14 +48,14 @@ main
               | Forgotten your password or you login datails?
               a(href='#') Get help
               |  signing in
-        form.sign-up-form(action='index.html' autocomplete='off')
+        form.sign-up-form(action='index.html' autocomplete='off' @submit.prevent='signUp')
           .logo
-            img(src='./img/logo.png' alt='easyclass')
-            h4 easyclass
+            //- img(src='./src/assets/img/logo.png' alt='easyclass')
+            h4 White Dwarfs Messenger
           .heading
             h2 Get Started
             h6 Already have an account?
-            a.toggle(href='#') Sign in
+            a.toggle(href='#' @click='toggleSignUpMode')
           .actual-form
             .input-wrap
               input.input-field(type='text' minlength='4' autocomplete='off' required='')
@@ -90,26 +74,22 @@ main
               a(href='#') Privacy Policy
       .carousel
         .images-wrapper
-          img.image.img-1.show(src='./img/image1.png' alt='')
-          img.image.img-2(src='./img/image2.png' alt='')
-          img.image.img-3(src='./img/image3.png' alt='')
-        .text-slider
-          .text-wrap
-            .text-group
-              h2 Create your own courses
-              h2 Customize as you like
-              h2 Invite students to your class
-          .bullets
-            span.active(data-value='1')
-            span(data-value='2')
-            span(data-value='3')
+          img(v-for='imageIndex in [1, 2, 3]' :key='imageIndex' :class="['image', `img-${imageIndex}`, { show: imageIndex === activeIndex }]" :src='getImageSrc(imageIndex)' :alt="'Carousel Image ' + imageIndex")
+        .text-wrap
+          .text-group(:style='{ transform: `translateY(${-(activeIndex) * 2.2}rem)` }')
+            h2 Create your own courses
+            h2 Customize as you like
+            h2 Invite students to your class
+        .bullets
+          span(v-for='bulletIndex in [1, 2, 3]' :key='bulletIndex' :class='{ active: bulletIndex === activeIndex }' @click='moveSlider(bulletIndex)' :data-value='bulletIndex')
+
 </template>
 <style scoped>
 main {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background-color: #ff8c6b;
+  background-color: var(--page-background);
   padding: 2rem;
   display: flex;
   align-items: center;
