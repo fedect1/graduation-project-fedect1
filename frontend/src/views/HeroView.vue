@@ -4,7 +4,24 @@ export default{
   data() {
     return {
       signUpMode: false,
-      activeIndex: 1,
+      currentPage: 0,
+      pages: [
+        {
+          title: 'Connect Authentically',
+          subtitle: 'Explore White Dwarfs Messenger',
+          content: 'Discover an ephemeral space where you can express your thoughts and emotions authentically, free from judgment or long-term consequences. Your voice matters in the here and now.'
+        },
+        {
+          title: 'Find Meaningful Communities',
+          subtitle: 'Connect with Like-Minded People',
+          content: 'Join communities of minimalist and spiritually inclined individuals. With White Dwarfs Messenger, you can engage in meaningful conversations, share experiences, and build authentic connections in a positive, toxicity-free environment.'
+        },
+        {
+          title: 'Cultivate Mental Well-being',
+          subtitle: 'Unleash Your Thoughts',
+          content: 'Use this platform to unleash your thoughts and clear your mind. Our focus on ephemeral content allows you to stay in the present and nurture your emotional well-being. Start expressing yourself today.'
+        }
+      ]
     };
   },
   methods: {
@@ -12,13 +29,17 @@ export default{
       this.activeIndex = index;
     },
     getImageSrc(index) {
-      if(index===1) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel1_voyb0f.jpg'
-      if(index===2) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel2_aiydov.jpg'
-      if(index===3) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel3_nkqy2n.jpg'
+      if(index===0) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel1_voyb0f.jpg'
+      if(index===1) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel2_aiydov.jpg'
+      if(index===2) return 'https://res.cloudinary.com/do9shwcmh/image/upload/v1693578270/img-carrousel3_nkqy2n.jpg'
+    },
+    changePage(index) {
+      this.currentPage = index;
     },
     toggleSignUpMode() {
       this.signUpMode = !this.signUpMode;
     },
+
   },
 
 }
@@ -35,22 +56,16 @@ main(class="{ 'sign-up-mode': signUpMode }")
           .heading
             h2 Welcome Back
             h6 Not registred yet?
-            a.toggle(href='#' @click='toggleSignUpMode') Sign up
+            a.toggle(href='#' @click='toggleSignUpMode') Sign Up
           .actual-form
             .input-wrap
-              input.input-field(type='text' minlength='4' autocomplete='off' required='')
-              label Name
+              input.input-field(type='text' minlength='4' autocomplete='off' required='' placeholder="Enter your email")
             .input-wrap
-              input.input-field(type='password' minlength='4' autocomplete='off' required='')
-              label Password
+              input.input-field(type='password' minlength='4' autocomplete='off' required='' placeholder="Enter your password")
             input.sign-btn(type='submit' value='Sign In')
-            p.text
-              | Forgotten your password or you login datails?
-              a(href='#') Get help
-              |  signing in
+
         form.sign-up-form(action='index.html' autocomplete='off' @submit.prevent='signUp')
           .logo
-            //- img(src='./src/assets/img/logo.png' alt='easyclass')
             h4 White Dwarfs Messenger
           .heading
             h2 Get Started
@@ -74,15 +89,14 @@ main(class="{ 'sign-up-mode': signUpMode }")
               a(href='#') Privacy Policy
       .carousel
         .images-wrapper
-          img(v-for='imageIndex in [1, 2, 3]' :key='imageIndex' :class="['image', `img-${imageIndex}`, { show: imageIndex === activeIndex }]" :src='getImageSrc(imageIndex)' :alt="'Carousel Image ' + imageIndex")
-        .text-wrap
-          .text-group(:style='{ transform: `translateY(${-(activeIndex) * 2.2}rem)` }')
-            h2 Create your own courses
-            h2 Customize as you like
-            h2 Invite students to your class
+          img.image(v-for="(page, index) in pages" :key="index" :src="getImageSrc(index)" :class="{ show: currentPage === index }")
+          .carouser-content
+            .carouser-page(v-for="(page, index) in pages" :key="index" :class="{ active: currentPage === index }")
+              h1 {{ page.title }}
+              h2 {{ page.subtitle }}
+              p {{ page.content }}
         .bullets
-          span(v-for='bulletIndex in [1, 2, 3]' :key='bulletIndex' :class='{ active: bulletIndex === activeIndex }' @click='moveSlider(bulletIndex)' :data-value='bulletIndex')
-
+          span(v-for="(page, index) in pages" :key="index" :class="{ active: currentPage === index }" @click="changePage(index)")
 </template>
 <style scoped>
 main {
@@ -281,97 +295,114 @@ main.sign-up-mode .carousel {
   position: absolute;
   height: 100%;
   width: 55%;
-  left: 45%;
   top: 0;
-  background-color: #ffe0d2;
-  border-radius: 2rem;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  padding-bottom: 2rem;
-  overflow: hidden;
+  left: 45%;
+  padding: 3rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: 0.8s ease-in-out;
 }
-
-.images-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-}
-
-.image {
+.carousel .images-wrapper {
+  position: relative;
+  height: 100%;
   width: 100%;
-  grid-column: 1/2;
-  grid-row: 1/2;
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.img-1 {
-  transform: translate(0, -50px);
-}
-
-.img-2 {
-  transform: scale(0.4, 0.5);
-}
-
-.img-3 {
-  transform: scale(0.3) rotate(-20deg);
-}
-
-.image.show {
+.carousel .images-wrapper .image {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   opacity: 1;
-  transform: none;
+  transition: 0.8s ease-in-out;
+  filter: brightness(0.2);
+  border-radius: 10px;
 }
 
-.text-slider {
+.carousel .images-wrapper .image.show {
+  opacity: 1;
+}
+
+.carousel .carouser-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  padding: 0 2rem;
 }
 
-.text-wrap {
-  max-height: 2.2rem;
-  overflow: hidden;
-  margin-bottom: 2.5rem;
-}
-
-.text-group {
+.carousel .carouser-content .carouser-page {
+  position: absolute;
+  height: 90%;
+  width: 80%;
+  opacity: 0;
+  transition: 0.8s ease-in-out;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  transform: translateY(0);
-  transition: 0.5s;
 }
 
-.text-group h2 {
-  line-height: 2.2rem;
+.carousel .carouser-content .carouser-page.active {
+  opacity: 1;
+}
+
+.carousel .carouser-content .carouser-page h1 {
+  font-size: 2.5rem;
   font-weight: 600;
-  font-size: 1.6rem;
+  color: var(--text-color);
 }
 
-.bullets {
+.carousel .carouser-content .carouser-page h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0.5rem 0 1rem;
+}
+
+.carousel .carouser-content .carouser-page p {
+  font-size: 0.9rem;
+  width: 80%;
+  font-weight: 400;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+
+
+.carousel .bullets {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.bullets span {
-  display: block;
-  width: 0.5rem;
+.carousel .bullets span {
   height: 0.5rem;
-  background-color: #aaa;
-  margin: 0 0.25rem;
+  width: 0.5rem;
   border-radius: 50%;
+  background-color: #bbb;
+  margin: 0 0.2rem;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.bullets span.active {
-  width: 1.1rem;
+.carousel .bullets span.active {
   background-color: #151111;
-  border-radius: 1rem;
 }
+
+
 
 @media (max-width: 850px) {
   .box {
