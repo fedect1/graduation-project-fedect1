@@ -1,10 +1,15 @@
+
 <script>
+import { mapActions } from 'pinia'
+import { useAccountStore } from '../stores/account'
 export default{
   name: 'HeroView',
   data() {
     return {
       signUpMode: false,
       currentPage: 0,
+      email: '',
+      password: '',
       pages: [
         {
           title: 'Connect Authentically',
@@ -25,6 +30,7 @@ export default{
     };
   },
   methods: {
+    ...mapActions(useAccountStore, ['login']),
     moveSlider(index) {
       this.activeIndex = index;
     },
@@ -40,6 +46,11 @@ export default{
       this.signUpMode = !this.signUpMode;
       console.log(this.signUpMode);
     },
+    async signIn() {
+      await this.login(this.email, this.password)
+      this.$router.push('/feed')
+    },
+
 
   },
 
@@ -60,9 +71,9 @@ main(:class="{ 'sign-up-mode': signUpMode }")
             a.toggle(href='#' @click='toggleSignUpMode') Sign Up
           .actual-form
             .input-wrap
-              input.input-field(type='text' minlength='4' autocomplete='off' required='' placeholder="Enter your email")
+              input.input-field(v-model="email" type='text' minlength='4' autocomplete='off' required placeholder="Enter your email")
             .input-wrap
-              input.input-field(type='password' minlength='4' autocomplete='off' required='' placeholder="Enter your password")
+              input.input-field(v-model="password" type='password' minlength='4' autocomplete='off' required='' placeholder="Enter your password")
             input.sign-btn(type='submit' value='Sign In')
 
         form.sign-up-form(action='index.html' autocomplete='off' @submit.prevent='signUp')
