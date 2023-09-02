@@ -38,6 +38,7 @@ export default{
     },
     toggleSignUpMode() {
       this.signUpMode = !this.signUpMode;
+      console.log(this.signUpMode);
     },
 
   },
@@ -46,7 +47,7 @@ export default{
 
 </script>
 <template lang="pug">
-main(class="{ 'sign-up-mode': signUpMode }")
+main(:class="{ 'sign-up-mode': signUpMode }")
   .box
     .inner-box
       .forms-wrap
@@ -70,7 +71,7 @@ main(class="{ 'sign-up-mode': signUpMode }")
           .heading
             h2 Get Started
             h6 Already have an account?
-            a.toggle(href='#' @click='toggleSignUpMode')
+            a.toggle(href='#' @click='toggleSignUpMode') Sign In
           .actual-form
             .input-wrap
               input.input-field(type='text' minlength='4' autocomplete='off' required='')
@@ -109,6 +110,7 @@ main {
   align-items: center;
   justify-content: center;
 }
+
 
 .box {
   position: relative;
@@ -292,7 +294,8 @@ main.sign-up-mode .carousel {
 }
 
 .carousel {
-  position: absolute;
+  position: relative;
+  left: 0%;
   height: 100%;
   width: 55%;
   top: 0;
@@ -301,7 +304,10 @@ main.sign-up-mode .carousel {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.8s ease-in-out;
+  transition: left 0.8s ease-in-out;
+}
+main.sign-up-mode .carousel {
+  left: 0%;
 }
 .carousel .images-wrapper {
   position: relative;
