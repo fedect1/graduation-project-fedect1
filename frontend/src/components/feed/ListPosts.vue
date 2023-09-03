@@ -57,7 +57,7 @@ export default {
 <style scoped>
 .post-container {
   padding: 30px 40px;
-  width: 100%;
+  width: 100vh;
   background: transparent;
   border: 2px solid var(--card-background-light);
   color: var(--text-color);
