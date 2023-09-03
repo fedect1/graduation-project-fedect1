@@ -2,6 +2,7 @@
 <script>
 import { mapActions } from 'pinia'
 import { useAccountStore } from '../stores/account'
+import { useUserStore } from '../stores/user'
 export default{
   name: 'HeroView',
   data() {
@@ -10,6 +11,12 @@ export default{
       currentPage: 0,
       email: '',
       password: '',
+      regName: '',
+      regEmail: '',
+      regPassword1: '',
+      regPassword2: '',
+      passwordsMatch: false,
+      emptyFields: true,
       pages: [
         {
           title: 'Connect Authentically',
@@ -29,8 +36,17 @@ export default{
       ]
     };
   },
+  watch: {
+    regPassword2 () {
+      this.passwordsMatch = this.regPassword1 === this.regPassword2
+    },
+    emptyFields () {
+      this.emptyFields = this.regName === '' || this.regEmail === '' || this.regPassword1 === '' || this.regPassword2 === ''
+    }
+  },
   methods: {
     ...mapActions(useAccountStore, ['login']),
+    ...mapActions(useUserStore, ['createUser']),
     moveSlider(index) {
       this.activeIndex = index;
     },
@@ -44,12 +60,17 @@ export default{
     },
     toggleSignUpMode() {
       this.signUpMode = !this.signUpMode;
-      console.log(this.signUpMode);
     },
     async signIn() {
       await this.login(this.email, this.password)
       this.$router.push('/feed')
     },
+    async signUp() {
+      console.log(this.regName, this.regEmail, this.regPassword1)
+      await this.createUser(this.regName, this.regEmail, this.regPassword1)
+      this.signUpMode = false;
+    }
+
 
 
   },
@@ -85,15 +106,14 @@ main(:class="{ 'sign-up-mode': signUpMode }")
             a.toggle(href='#' @click='toggleSignUpMode') Sign In
           .actual-form
             .input-wrap
-              input.input-field(type='text' minlength='4' autocomplete='off' required='')
-              label Name
+              input.input-field(v-model="regName" type='text' minlength='4' autocomplete='off' required='' placeholder="Enter your name")
             .input-wrap
-              input.input-field(type='email' autocomplete='off' required='')
-              label Email
+              input.input-field(v-model="regEmail" type='email' autocomplete='off' required='' placeholder="Enter your email")
             .input-wrap
-              input.input-field(type='password' minlength='4' autocomplete='off' required='')
-              label Password
-            input.sign-btn(type='submit' value='Sign Up')
+              input.input-field(v-model="regPassword1" type='password' minlength='4' autocomplete='off' required='' placeholder="Enter your password")
+            .input-wrap
+              input.input-field(v-model= "regPassword2" type='password' minlength='4' autocomplete='off' required='' placeholder="Enter your password again")
+            input.sign-btn(type='submit' value='Sign Up' :disabled="!passwordsMatch || !emptyFields")
             p.text
               | By signing up, I agree to the
               a(href='#') Terms of Services

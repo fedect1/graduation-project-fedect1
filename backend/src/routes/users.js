@@ -24,8 +24,9 @@ router.get('/:userId', async function (req, res, next) {
 /* POST signup */
 router.post('/', async function (req, res, next) {
   try {
-    const { email, password } = req.body
-    const user = await User.register({ email }, password)
+    console.log("create user")
+    const {name ,email, password } = req.body
+    const user = await User.register({ name, email }, password)
     res.status(201).send(user)
   } catch (error) {
     next(error)
