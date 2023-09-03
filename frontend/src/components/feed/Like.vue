@@ -37,7 +37,7 @@ export default {
   computed: {
     likeText() {
       if (this.likeCount === 0) {
-        return ''
+        return 'Like'
       } else if (this.likeCount === 1) {
         return '1 like'
       } else {
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <template>
-  <button class="like-button" @click="toggleLike">
+  <button class="like-button" @click="toggleLike" :class="{'liked': liked}">
     <i class="bx bx-like"></i>
     <span class="like-count">{{ likeText }}</span>
   </button>
@@ -62,22 +62,41 @@ export default {
 
 <style scoped>
 .like-button {
+  border: 2px solid var(--primary-color);
   background: transparent;
-  border: none;
-  outline: none;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
+  text-align: center;
+  display: inline-block;
   color: var(--text-color);
   font-size: 1rem;
+}
+
+.span {
+  margin-left: 0.5rem;
 }
 .like-button .like-count {
   margin-left: 5px;
 }
 .like-button .fas {
   color: var(--primary-color);
+  transition: all 0.3s ease-in-out;
 }
 .like-button .fas:hover {
   color: var(--primary-color-hover);
+}
+.like-button .bx {
+  color: var(--primary-color);
+  transition: all 0.3s ease-in-out;
+}
+.like-button .bx:hover {
+  color: var(--primary-color-hover);
+}
+
+.like-button.liked{
+  background-color: var(--tertiary-color);
+  color: var(--text-color);
 }
 </style>

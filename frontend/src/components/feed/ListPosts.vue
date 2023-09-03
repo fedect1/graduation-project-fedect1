@@ -39,7 +39,7 @@ export default {
         <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
       </div>
       <div class="user-info">
-        <h3>{{ post.user.email }}</h3>
+        <h3>{{ post.user.name }}</h3>
         <FollowUser :postUser="post.user"/>
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>

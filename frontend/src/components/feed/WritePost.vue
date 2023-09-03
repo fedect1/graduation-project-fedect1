@@ -38,7 +38,7 @@ export default {
       id="post"
       cols="20"
       class="write-post-container"
-      placeholder="What's on your mind?"
+      placeholder="What's on your mind? Share your thoughts (max 250 words)"
       :style="{'border-color': wordsQuantity > 250 ? 'red' : 'var(--primary-color, rgba(0, 0, 0, 0.2)'}"
       ref="textarea"
     ></textarea>
@@ -92,6 +92,19 @@ export default {
   width: auto;
   background-color: red;
   color: white;
+}
+
+@media (max-width: 980px) {
+  .post-container {
+    width: 80%;
+  }
+  .write-post-container {
+    width: 100%;
+  }
+  .btn {
+    width: 100%;
+  }
+
 }
 
 </style>
