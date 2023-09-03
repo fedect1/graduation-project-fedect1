@@ -49,10 +49,10 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
-    <div class="like-comment-container">
+    <div class="comment-container">
       <WriteComment :post-id="post._id" />
+      <ListComments :postComments="post.comments" />
     </div>
-    <ListComments :postComments="post.comments" />
   </div>
 </template>
 
@@ -69,11 +69,11 @@ export default {
 .post-container .post-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align items at the top */
+  align-items: flex-end;
   margin-bottom: var(--xs-margin);
 }
 .user-image {
-  margin-right: 20px; /* Add space to the right of the image */
+  margin-right: 20px;
 }
 .user-image img {
   width: 50px;
@@ -108,9 +108,10 @@ export default {
   color: var(--text-color);
 }
 
-.like-comment-container {
+.comment-container {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin-top: var(--xs-margin);
 }

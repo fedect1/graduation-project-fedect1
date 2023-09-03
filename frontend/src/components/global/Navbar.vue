@@ -32,7 +32,7 @@ export default {
       White Dwarfs Messenger
     </a>
     <span class="user-greeting">
-      Hi {{ user.email }}
+      Hi {{ user.name }}
     </span>
     <nav class="navbar">
       <a v-if="!isProfileRoute" href="/profile">Profile</a>

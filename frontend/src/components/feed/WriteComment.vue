@@ -41,15 +41,17 @@ export default {
 
 <style scoped>
 .comment-container {
+  width: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
+  align-items: flex-end;
   margin: 20px 0;
 }
 .write-comment-container {
+  width: 90%;
   padding: var(--m-padding);
-  width: 70vh;
   background: transparent;
   border: 2px solid var(--primary-color, rgba(0, 0, 0, 0.2));
   color: var(--text-color);

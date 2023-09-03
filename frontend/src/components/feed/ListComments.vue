@@ -16,13 +16,13 @@ export default {
 .comment-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   margin: 20px 0;
 }
 .comment-list {
   padding: var(--m-padding);
-  width: 90vh;
+  width: 90%;
   background: transparent;
   border: 2px solid var(--primary-color, rgba(0, 0, 0, 0.2));
   color: var(--text-color);
