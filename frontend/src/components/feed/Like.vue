@@ -62,6 +62,7 @@ export default {
 
 <style scoped>
 .like-button {
+  line-height: 0.5;
   border: 2px solid var(--primary-color);
   background: transparent;
   text-decoration: none;

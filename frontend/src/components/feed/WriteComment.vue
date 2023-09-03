@@ -30,7 +30,7 @@ export default {
       v-model="text"
       name="comment"
       id="comment"
-      cols="30"
+      cols="20"
       rows="1"
       class="write-comment-container"
       placeholder="Write a comment..."
@@ -49,7 +49,7 @@ export default {
 }
 .write-comment-container {
   padding: var(--m-padding);
-  width: 90vh;
+  width: 70vh;
   background: transparent;
   border: 2px solid var(--primary-color, rgba(0, 0, 0, 0.2));
   color: var(--text-color);

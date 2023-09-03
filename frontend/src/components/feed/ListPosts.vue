@@ -44,13 +44,15 @@ export default {
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
       <DeletePost :post-id="post._id" />
+      <Like :post-id="post._id" :postLikes="post.likes"/>
     </div>
     <p class="post-body">
       {{ post.body }}
     </p>
-    <Like :post-id="post._id" :postLikes="post.likes"/>
+    <div class="like-comment-container">
+      <WriteComment :post-id="post._id" />
+    </div>
     <ListComments :postComments="post.comments" />
-    <WriteComment :post-id="post._id" />
   </div>
 </template>
 
@@ -104,5 +106,12 @@ export default {
 .formatDate {
   font-size: 0.8rem;
   color: var(--text-color);
+}
+
+.like-comment-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--xs-margin);
 }
 </style>
