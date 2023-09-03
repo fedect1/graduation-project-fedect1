@@ -6,7 +6,7 @@ const User = require('../models/user')
 /* Get all users. */
 router.get('/', async function (req, res, next) {
   const users = await User.find()
-  res.send(users.map(user => user))
+  res.send(users)
 })
 
 /* Get user by id. */
@@ -24,8 +24,9 @@ router.get('/:userId', async function (req, res, next) {
 /* POST signup */
 router.post('/', async function (req, res, next) {
   try {
-    const { email, password } = req.body
-    const user = await User.register({ email }, password)
+    console.log("create user")
+    const {name ,email, password } = req.body
+    const user = await User.register({ name, email }, password)
     res.status(201).send(user)
   } catch (error) {
     next(error)
@@ -34,30 +35,63 @@ router.post('/', async function (req, res, next) {
 
 /* POST a new follow to a user */
 
-router.post('/:userId/following', async function (req, res, next) {
+router.put('/profile/:userId/follow', async function (req, res, next) {
+
   try {
+
     const user = await User.findById(req.params.userId)
-    const userToFollow = await User.findById(req.body.user)
-    const resultFollow = await user.follow(userToFollow)
-    res.send(resultFollow)
+    const ToFollow = await User.findById(req.body.userToFollow)
+    const resultFollow = await user.follow(ToFollow)
+    res.status(201).send(resultFollow)
   } catch (error) {
     res.status(404).send(error.message)
   }
 })
 
+
 /* DELETE a follow. */
-router.delete('/:userId/unfollowing/:userIdUnfollow', async function (req, res, next) {
+router.delete('/profile/:userId/unfollowing/:unfollowId', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId)
     if (!user) {
       return res.status(404).send({ message: 'User not found' })
     }
-    const userToUnfollow = await User.findById(req.params.userIdUnfollow)
-    if (!userToUnfollow) {
+    console.log('userToUnfollow', req.params.unfollowId)
+    const toUnfollow = await User.findById(req.params.unfollowId)
+    if (!toUnfollow) {
       return res.status(404).send({ message: 'User to unfollow not found' })
     }
-    await user.unfollow(userToUnfollow)
-    res.send({ message: 'Unfollow user successfully' })
+    await user.unfollow(toUnfollow)
+    res.sendStatus(204)
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
+
+
+/* GET followers of a user. */
+router.get('/profile/:userId/followers', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    const followers = await user.following
+    res.status(200).send({ followers })
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
+
+/* GET followings of a user. */
+router.get('/profile/:userId/followings', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId)
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    const followings = user.following
+    res.status(200).send({ followings })
   } catch (error) {
     res.status(404).send(error.message)
   }

@@ -1,5 +1,5 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import { Suspense } from 'vue'
 import { useAccountStore } from './stores/account'
 import { mapActions } from 'pinia'
@@ -8,12 +8,12 @@ import Navbar from './components/global/Navbar.vue'
 export default {
   name: 'App',
   components: {
-    RouterLink,
-    RouterView
+    RouterView,
+    Navbar
   },
-  async mounted() {
-    await this.fetchUser()
-  },
+  // async mounted() {
+  //   await this.fetchUser()
+  // },
   methods: {
     ...mapActions(useAccountStore, ['fetchUser', 'logout']),
     async handleLogout() {
@@ -29,7 +29,7 @@ export default {
 
 <template>
   <header>
-    <!-- <Navbar /> -->
+    <Navbar v-if="user" :user="user" />
     <nav>
       <a v-if="user" @click="handleLogout">Log out</a>
     </nav>

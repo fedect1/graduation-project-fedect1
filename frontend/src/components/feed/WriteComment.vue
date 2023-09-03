@@ -14,9 +14,9 @@ export default {
   methods: {
     ...mapActions(usePostHandler, ['createComment']),
     async handleSubmitComment() {
-      const user = useAccountStore().user._id
+      const userId = useAccountStore().user._id
       if (this.text.trim() !== '') {
-        await this.createComment(this.postId, this.text, user)
+        await this.createComment(this.postId, this.text, userId)
         this.text = ''
       }
     }

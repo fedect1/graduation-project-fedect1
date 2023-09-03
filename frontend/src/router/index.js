@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useAccountStore } from '../stores/account'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -28,25 +27,15 @@ const router = createRouter({
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
       meta: { requiresAuth: true }
-    }
+    },
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const isAuthenticated = !!useAccountStore().user
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (!isAuthenticated) {
-//       next({ name: 'home' })
-//     } else {
-//       if (to.name !== 'feed' && to.name !== 'profile') {
-//         next({ name: 'feed' })
-//       } else {
-//         next()
-//       }
-//     }
-//   } else {
-//     next() // If the route does not require authentication, proceed
-//   }
-// })
+
+router.beforeEach(async (to) => {
+  const store = useAccountStore()
+  if (to.meta.requiresAuth && !store.user) return '/'
+  if (!to.meta.requiresAuth && store.user) return '/feed'
+})
 
 export default router

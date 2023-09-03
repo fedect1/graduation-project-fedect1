@@ -10,8 +10,11 @@ import { useAccountStore } from './stores/account'
 const app = createApp(App)
 
 app.use(createPinia())
+
+const accountStore = useAccountStore()
+await accountStore.fetchUser()
+
 app.use(router)
 
-app.mount('#app')
 
-console.log("Checking if Slack is working...")
+app.mount('#app')

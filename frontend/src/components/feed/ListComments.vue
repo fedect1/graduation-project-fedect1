@@ -1,28 +1,12 @@
 <script>
-import { defineComponent } from 'vue'
-import { mapActions } from 'pinia'
-import { mapState } from 'pinia'
-import { usePostHandler } from '../../stores/postHandler'
 export default {
   name: 'ListComments',
-  props: ['post-id'],
-  computed: {
-    ...mapState(usePostHandler, ['comments'])
-  },
-  methods: {
-    ...mapActions(usePostHandler, ['fetchComments']),
-    async fetchCommentsForPost(postId) {
-      await this.fetchComments(postId)
-    }
-  },
-  async mounted() {
-    await this.fetchCommentsForPost(this.postId)
-  }
+  props: ['postComments'],
 }
 </script>
 <template>
   <div class="comment-container">
-    <div class="comment-list" v-for="(comment, index) in comments" :key="index">
+    <div class="comment-list" v-for="(comment, index) in postComments" :key="index">
       <p class="comment-text">{{ comment.text }}</p>
     </div>
   </div>

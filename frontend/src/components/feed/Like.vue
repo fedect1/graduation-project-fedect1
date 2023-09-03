@@ -4,7 +4,7 @@ import { usePostHandler } from '../../stores/postHandler'
 import { useAccountStore } from '../../stores/account'
 export default {
   name: 'Like',
-  props: ['post-id'],
+  props: ['postLikes', 'postId'],
   data() {
     return {
       liked: false,
@@ -26,10 +26,8 @@ export default {
       }
     },
     async checkIfLiked() {
-      const user = useAccountStore().user._id
-      await this.fetchPostById(this.postId)
-      const post = this.post.likes
-      if (post.includes(user)) {
+      const userId = useAccountStore().user._id
+      if (this.postLikes.includes(userId)) {
         this.liked = true
       } else {
         this.liked = false
@@ -37,7 +35,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(usePostHandler, ['post']),
     likeText() {
       if (this.likeCount === 0) {
         return ''
@@ -50,9 +47,10 @@ export default {
   },
   async mounted() {
     await this.checkIfLiked()
-    this.likeCount = this.post.likes.length
+    this.likeCount = this.postLikes.length
   }
 }
+
 </script>
 
 <template>

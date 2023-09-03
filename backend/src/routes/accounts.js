@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-/* GET home page. */
+/* GET a session */
 router.get('/session', async function (req, res, next) {
   res.send(req.user)
 })

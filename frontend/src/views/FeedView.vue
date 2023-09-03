@@ -7,29 +7,38 @@ import WritePost from '@/components/feed/WritePost.vue'
 import ListPosts from '@/components/feed/ListPosts.vue'
 export default defineComponent({
   name: 'FeedView',
+  data() {
+    return {
+      validPosts: []
+    }
+  },
+
   components: {
     WritePost,
     ListPosts
   },
   async mounted() {
-    await this.fetchPosts()
+    //await this.fetchPosts()
+    this.validPosts = await this.fetchValidPosts()
   },
 
   methods: {
-    ...mapActions(usePostHandler, ['createPost', 'fetchPosts']),
+    ...mapActions(usePostHandler, ['createPost', 'fetchPosts', 'fetchValidPosts']),
     async submitPost(bodyPost) {
       await this.createPost(bodyPost)
+      this.validPosts = await this.fetchValidPosts()
+
     }
   },
-  computed: {
-    ...mapState(usePostHandler, ['posts'])
-  }
+  // computed: {
+  //   ...mapState(usePostHandler, ['posts'])
+  // }
 })
 </script>
 <template>
   <div class="feed-container">
     <WritePost :submitPost="submitPost" />
-    <ListPosts :posts="posts" />
+    <ListPosts :posts="validPosts" />
   </div>
 </template>
 <style scoped>

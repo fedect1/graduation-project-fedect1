@@ -9,9 +9,20 @@ export const useUserStore = defineStore('User', {
     user: null
   }),
   actions: {
-    async createUser(email, password) {
+    // async createUser(name, email, password) {
+    //   console.log('name', name, 'email', email, 'password', password);
+    //   this.user = (
+    //     await axios.post('/users', {
+    //       name: name,
+    //       email: email,
+    //       password: password
+    //     })
+    //   ).data
+    // }
+    async createUser(name, email, password) {
       this.user = (
         await axios.post('/users', {
+          name: name,
           email: email,
           password: password
         })
