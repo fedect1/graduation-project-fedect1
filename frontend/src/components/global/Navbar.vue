@@ -49,7 +49,7 @@ export default {
     left: 0;
     width: 100%;
     padding: var(--m-padding);
-    background: transparent;
+    background: var(--page-background);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -57,13 +57,13 @@ export default {
   }
   .logo {
     font-size: var(--h4-size);
-    color: var(--primary-color);
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 700;
   }
   .navbar a {
     position: relative;
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: var(--h4-size);
     text-decoration: none;
     font-weight: 500;
