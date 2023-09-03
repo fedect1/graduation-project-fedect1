@@ -28,12 +28,6 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue'),
       meta: { requiresAuth: true }
     },
-    {
-      path: '/hero',
-      name: 'hero',
-      component: () => import('../views/HeroView.vue'),
-      meta: { requiresAuth: false }
-    },
   ]
 })
 
