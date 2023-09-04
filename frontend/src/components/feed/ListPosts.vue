@@ -49,8 +49,10 @@ export default {
     <p class="post-body">
       {{ post.body }}
     </p>
+    <div class="line"></div>
     <div class="comment-container">
       <WriteComment :post-id="post._id" />
+      <span class="comment-count">{{ post.comments.length }} comments</span>
       <ListComments :postComments="post.comments" />
     </div>
   </div>
@@ -61,16 +63,17 @@ export default {
   padding: 30px 40px;
   width: 100vh;
   background: transparent;
-  border: 2px solid var(--card-background-light);
+  border: 2px solid var(--card-background-light, 0.2);
   color: var(--text-color);
-  border-radius: 3px;
+  border-radius: 14px;
   margin-bottom: var(--xs-margin);
+
 }
 .post-container .post-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: var(--xs-margin);
+  margin-bottom: var(--m-margin);
 }
 .user-image {
   margin-right: 20px;
@@ -93,10 +96,9 @@ export default {
   font-size: 1rem;
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: #292929;
   border: none;
   outline: none;
-  border: 2px solid var(--card-background-light, 0.2);
   border-radius: 5px;
   font-size: 1rem;
   color: var(--text-color);
@@ -114,5 +116,19 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   margin-top: var(--xs-margin);
+}
+
+.comment-count {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  margin: var(--m-margin) 0;
+}
+
+.line {
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background-color: var(--card-background-light);
+  margin: var(--m-margin) 0;
 }
 </style>
