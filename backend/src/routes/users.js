@@ -33,6 +33,17 @@ router.post('/', async function (req, res, next) {
   }
 })
 
+/* USER POSTS */
+router.get('/:userId/posts', async function (req, res, next) {
+  try {
+    const user = await User.findById(req.params.userId).populate('posts')
+    const posts = user.posts
+    res.status(200).send( posts )
+  } catch (error) {
+    res.status(404).send(error.message)
+  }
+})
+
 /* POST a new follow to a user */
 
 router.put('/profile/:userId/follow', async function (req, res, next) {

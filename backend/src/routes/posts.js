@@ -14,8 +14,10 @@ router.get('/', async function (req, res, next) {
 
 router.get('/valid', async function (req, res, next) {
   const validPosts = await Post.find({status: true })
+    .populate({ path: 'user', select: 'name', populate: { path: 'name' } })
   res.send(validPosts)
 })
+
 
 /* GET Post by id. */
 router.get('/:postId', async function (req, res, next) {

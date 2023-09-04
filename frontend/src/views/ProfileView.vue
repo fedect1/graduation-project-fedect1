@@ -2,14 +2,21 @@
 import { mapActions, mapState } from 'pinia'
 import { useProfileHandler } from '../stores/profileHandler'
 import { useAccountStore } from '../stores/account'
+import axios from 'axios'
+axios.defaults.withCredentials = true
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 export default {
   name: 'ProfileView',
   data() {
     return {
       newUsername: '',
       newDescription: '',
-      newAvatar: ''
+      newAvatar: '',
+      posts: []
     }
+  },
+  async mounted() {
+    this.posts = await this.fetchPosts()
   },
 
   computed: {
@@ -35,6 +42,9 @@ export default {
       await this.updateAvatar(this.user, newAvatar)
       this.newAvatar = ''
       await this.fetchUser()
+    },
+    async fetchPosts() {
+      return (await axios.get(`/users/${this.user._id}/posts`)).data
     }
   }
 }
@@ -64,7 +74,14 @@ export default {
       />
       <button @click="handleDescriptionChange">Save</button>
     </div>
+    <div class="list-post">
+      <p>Posts</p>
+      <div v-for="post in posts" :key="post._id">
+        <p>{{ post.body }}</p>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <style scoped>
@@ -107,5 +124,14 @@ export default {
   background: var(--card-background);
   color: var(--text-color);
 }
+.list-post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+  padding-bottom: 10px;
+  color: white;
+}
+
 </style>
-```

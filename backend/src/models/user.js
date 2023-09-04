@@ -4,14 +4,24 @@ const autopopulate = require('mongoose-autopopulate')
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
+  //posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
   followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
   name: { type: String, default: '' },
   description: { type: String, default: '' },
   avatar: { type: String, default: '' },
-})
+  },
+  {
+    toJSON : { virtuals: true },
+    toObject: { virtuals: true }
+  }
+)
 
+userSchema.virtual('posts', {
+  ref: 'Post',
+  localField: '_id',
+  foreignField: 'user'
+});
 userSchema.plugin(autopopulate)
 class User {
   // Create post
