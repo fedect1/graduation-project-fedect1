@@ -1,44 +1,95 @@
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-7f7980b617ed060a017424585567c406b6ee15c891e84e1186181d67ecf80aa0.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=11440988)
-# Coyotiv School of Software Engineering
+# White Dwarfs Messenger (WD Messenger)
 
-## Node & PlantUML Starter Template
+WD Messenger is a unique social networking platform that focuses on the present moment, offering users a space to express their thoughts and feelings as a way of catharsis. Unlike traditional social media platforms, each user's written expression is limited to a concise 250 words and remains valid for only 6 hours before disappearing. This ephemeral nature of content allows users to freely express themselves without concerns about long-term consequences or judgment. The name of the app refers to stars that are no longer visible, but their light takes a long time to reach Earth. It serves as a metaphor for capturing the essence of the moment in each message.
+
+# Getting Started
+
+These instructions will help you set up and run WD Messenger locally on your system. Ensure you follow the steps correctly.
+
+### Prerequisites
+
+Before you begin, make sure you have the following prerequisites installed on your system:
+
+- Node.js and npm
+
+- Docker and Docker Compose
+
+### Cloning the Repository
+
+If you haven't already, clone the GitHub repository to your local machine:
+
+```bash
+  git clone https://github.com/fedect1/graduation-project-fedect1
+```
+
+### Backend Configuration
+
+1. Navigate to the backend directory:
+
+```bash
+  cd graduation-project-fedect1/backend
+```
+
+2. Create an .env file in the backend directory and configure the MongoDB connection string:
+
+```bash
+  MONGODB_CONNECTION_STRING=<Your MongoDB Connection String>
+  SESSION_SECRET=<Your Session Secret>
+```
+
+Replace `<Your MongoDB Connection String>` with your MongoDB connection details and `<Your Session Secret>` with a secret key for session management.
+
+3. Install backend dependencies:
+
+```bash
+  npm install
+```
+
+### Frontend Configuration
+
+1. Navigate to the frontend directory:
+
+```bash
+  cd graduation-project-fedect1/frontend
+```
+
+2. Create an .env file in the frontend directory and configure the API base URL:
+
+```bash
+  VITE_API_BASE_URL=<Your Backend API URL>
+```
+
+Replace `<Your Backend API URL>` with the URL of your backend server.
+
+3. Install frontend dependencies:
+
+```bash
+  npm install
+```
+
+### Running the Application
+
+Return to the root directory of your project and use Docker Compose to build and run the containers:
+
+```bash
+  docker-compose up --build
+```
+
+Once the containers are up and running, you can access the frontend of WD Messenger at `http://localhost:5173` in your web browser.
+
+### Stopping the Application
+
+To stop the containers and clean up the resources, run the following command in the root directory of your project:
+
+```bash
+  docker-compose down
+```
+
+These updated instructions ensure that users install the necessary dependencies for both the backend and frontend before running the application.
 
 ---
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-Now you can directly work in your browser!
-
-## Getting started
-
-### Node / JS
-
-> **Note:**
->
-> - _There is an **index.js** file located under the \*\*\_src_\*\* folder\_
-> - _The **index.js** file, it's already linked with the debugger in your **launch.json**_
-
-To run the **index.js** file:
-
-- with **_node_**, copy and enter one of the following commands on your terminal:
-
-  ```sh
-  npm start
-  ```
-
-  or:
-
-  ```sh
-  node src/index.js
-  ```
-
-- in development mode that restarts every time you save a file:
-
-  ```sh
-  npm run dev
-  ```
-
-### PlantUML
+## PlantUML
 
 > **Note:**
 >
@@ -55,10 +106,6 @@ If you what to visualize a preview of the **class.puml** file or another **_\*.p
 
 - _Linux/Windows_: **Alt + D**
   The above commands will automatically open your a window and will show you live any updates that you make on the file.
-
----
-
-_Now that we are ready, let's have some coding fun!_
 
 ---
 
