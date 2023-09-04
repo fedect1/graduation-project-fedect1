@@ -5,8 +5,8 @@ const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
-  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
   name: { type: String, default: '' },
   description: { type: String, default: '' },
   avatar: { type: String, default: '' },

@@ -41,25 +41,6 @@ export default {
 </script>
 
 <template>
-  <div v-if="user" class="profile-container">
-    <h2>Profile</h2>
-    <div class="profile-info">
-      <div class="profile-info-username">
-        <p>Username</p>
-        <p>{{ user.name }}</p>
-      </div>
-      <div class="profile-info-description">
-        <p>Description</p>
-        <p>{{ user.description }}</p>
-      </div>
-      <div class="profile-info-avatar">
-        <p>Avatar</p>
-        <p>{{ this.user.avatar }}</p>
-        <img alt="avatar" />
-      </div>
-    </div>
-  </div>
-
   <div class="profile-edit-container">
     <div class="username">
       <p>Username</p>
@@ -83,69 +64,48 @@ export default {
       />
       <button @click="handleDescriptionChange">Save</button>
     </div>
-    <div class="avatar">
-      <p>Avatar</p>
-      <input type="file" name="avatar" id="avatar" />
-      <button>Save</button>
-    </div>
   </div>
 </template>
 
 <style scoped>
-.profile-container {
-  padding: 30px 40px;
-  width: 100%;
-  background: transparent;
-  border: 2px solid var(--tertiary-color, 0.2);
-  color: var(--text-color);
-  border-radius: 10px;
-}
-.profile-container h2 {
-  font-size: 1.2rem;
-}
 .profile-edit-container {
-  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+  padding-bottom: 10px;
+}
+.username,
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+  padding-bottom: 10px;
+}
+
+.username input,
+.description input {
   width: 100%;
-  background: transparent;
-  border: 2px solid var(--tertiary-color, 0.2);
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--primary-color, rgba(0, 0, 0, 0.2));
+  border-radius: 5px;
+  background: var(--card-background);
   color: var(--text-color);
-  border-radius: 10px;
 }
-.profile-edit-container .username {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.profile-edit-container .username p {
-  font-size: 1.2rem;
-}
-.profile-edit-container .username input {
-  font-size: 0.8rem;
-}
-.profile-edit-container .description {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.profile-edit-container .description p {
-  font-size: 1.2rem;
-}
-.profile-edit-container .description input {
-  font-size: 0.8rem;
-}
-.profile-edit-container .avatar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.profile-edit-container .avatar p {
-  font-size: 1.2rem;
-}
-.profile-edit-container .avatar input {
-  font-size: 0.8rem;
+
+.username button,
+.description button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--primary-color, rgba(0, 0, 0, 0.2));
+  border-radius: 5px;
+  background: var(--card-background);
+  color: var(--text-color);
 }
 </style>
 ```

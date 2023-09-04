@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
     },
   },
   status: { type: Boolean, default: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 }},
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 })
 class Post {
   async createComment(author, text) {
