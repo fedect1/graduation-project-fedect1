@@ -4,14 +4,15 @@ import { usePostHandler } from '../../stores/postHandler'
 import { useAccountStore } from '../../stores/account'
 export default {
   name: 'DeletePost',
-  props: ['post-id'],
+  props: ['postUser', 'postId'],
   computed: {
     ...mapState(usePostHandler, ['posts']),
     ...mapState(useAccountStore, ['user']),
     isCurrentUserPostOwner() {
       const currentUser = this.user
-      const post = this.posts.find((post) => post._id === this.postId)
-      return post && post.user === currentUser._id
+
+      if (currentUser) return this.postUser._id === currentUser._id
+
     }
   },
   methods: {

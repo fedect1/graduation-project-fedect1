@@ -33,14 +33,7 @@ class User {
   }
 
   //Delete post //Update post
-  async deletePost(postId) {
-    const postIndex = this.posts.findIndex(post => post._id.toString() === postId)
-    if (postIndex === -1) {
-      return res.status(404).send({ message: 'Post not found in user' })
-    }
-    this.posts.splice(postIndex, 1)
-    await this.save()
-  }
+
 
   //Follow
   async follow(user) {

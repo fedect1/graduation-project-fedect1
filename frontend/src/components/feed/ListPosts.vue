@@ -43,7 +43,7 @@ export default {
         <FollowUser :postUser="post.user"/>
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
-      <DeletePost :post-id="post._id" />
+      <DeletePost :postUser="post.user" :postId="post._id" />
       <Like :post-id="post._id" :postLikes="post.likes"/>
     </div>
     <p class="post-body">
