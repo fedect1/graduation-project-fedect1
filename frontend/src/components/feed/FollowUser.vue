@@ -19,19 +19,25 @@ export default {
       const currentUser = this.user
       if (currentUser) return this.postUser._id === currentUser._id
     }
+
   },
   methods: {
-    ...mapActions(useProfileHandler, ['followUser', 'unfollowUser', 'getFollowings']),
-    async handleFollowUser() {
-      await this.followUser(useAccountStore().user, this.postUser._id)
+    ...mapActions(useProfileHandler, ['followUser', 'unfollowUser']),
+    async toggleFollow() {
+      const user = useAccountStore().user
+      if (this.following) {
+        await this.unfollowUser(user, this.postUser._id)
+        this.following = false
+      } else {
+        await this.followUser(user, this.postUser._id)
+        this.following = true
+      }
     },
-    async handleUnfollowUser() {
-      await this.unfollowUser(useAccountStore().user, this.postUser._id)
-    },
+
     checkIfFollowing() {
       const user = useAccountStore().user
       const followings = user.following
-      const followingCheck = followings.some((following) => following._id === this.postUser._id)
+      const followingCheck = followings.some((following) => following === this.postUser._id)
       if (followingCheck) {
         this.following = true
       } else {
@@ -43,8 +49,11 @@ export default {
 </script>
 
 <template>
-  <button v-if="!isCurrentUserPostOwner && !following" @click="handleFollowUser" class="follow-button">Follow</button>
-  <button v-if="!isCurrentUserPostOwner && following" @click="handleUnfollowUser" class="unfollow-button">Unfollow</button>
+  <button v-if="!isCurrentUserPostOwner" class="follow-button" @click="toggleFollow" :class="{'following': following, 'followed': !following}" >
+    <i class="bx bx-user-plus"></i>
+    <span v-if="!following"> Follow</span>
+    <span v-else> Followed</span>
+  </button>
 </template>
 
 <style scoped>
@@ -75,4 +84,16 @@ export default {
 .unfollow-button:hover {
   background-color: #2680c2;
 }
+
+.follow-button .followed {
+  background-color: var(--tertiary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 </style>
