@@ -34,7 +34,7 @@ router.post('/', async function (req, res, next) {
 })
 
 /* USER POSTS */
-router.get('/:userId/posts', async function (req, res, next) {
+router.get('/profile/:userId/posts', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId).populate('posts')
     const posts = user.posts

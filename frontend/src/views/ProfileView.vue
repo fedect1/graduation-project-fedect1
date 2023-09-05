@@ -16,7 +16,8 @@ export default {
     }
   },
   async mounted() {
-    this.posts = await this.fetchPosts()
+    this.posts = await this.fetchUserPosts(this.user)
+    console.log(this.posts)
   },
 
   computed: {
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     ...mapActions(useAccountStore, ['fetchUser']),
-    ...mapActions(useProfileHandler, ['updateName', 'updateDescription', 'updateAvatar']),
+    ...mapActions(useProfileHandler, ['updateName', 'updateDescription', 'updateAvatar', 'fetchUserPosts']),
     async handleNameChange() {
       const newName = this.newUsername
       await this.updateName(this.user, newName)
@@ -43,9 +44,6 @@ export default {
       this.newAvatar = ''
       await this.fetchUser()
     },
-    async fetchPosts() {
-      return (await axios.get(`/users/${this.user._id}/posts`)).data
-    }
   }
 }
 </script>
