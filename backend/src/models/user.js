@@ -22,17 +22,17 @@ userSchema.virtual('posts', {
   localField: '_id',
   foreignField: 'user'
 });
+
 userSchema.plugin(autopopulate)
 class User {
   // Create post
   async createPost(bodyPost) {
     const newPost = await Post.create({ body: bodyPost, user: this._id })
-    this.posts.push(newPost)
     await this.save()
     return newPost
   }
 
-  //Delete post
+  //Delete post //Update post
   async deletePost(postId) {
     const postIndex = this.posts.findIndex(post => post._id.toString() === postId)
     if (postIndex === -1) {

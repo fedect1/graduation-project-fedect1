@@ -24,7 +24,6 @@ export default {
     ...mapState(useAccountStore, ['user'])
   },
   methods: {
-    ...mapActions(useAccountStore, ['fetchUser']),
     ...mapActions(useProfileHandler, ['updateName', 'updateDescription', 'updateAvatar', 'fetchUserPosts']),
     async handleNameChange() {
       const newName = this.newUsername
@@ -73,7 +72,8 @@ export default {
         return `${Math.floor(dayPassed / 365)} years ago`
       }
     },
-  }
+  },
+
 }
 </script>
 
@@ -108,17 +108,17 @@ export default {
   </div>
   <div class="card following-card">
     <div class="card-content">
-      <span>Following</span>
+      <span>Following : {{ user.following.length }}</span>
       <ul>
         <li v-for="following in user.following" :key="following._id">
-          <p>{{ following }}</p>
+          <p>{{ following }} </p>
         </li>
       </ul>
     </div>
   </div>
   <div class="card followers-card">
     <div class="card-content">
-      <span>Followers</span>
+      <span>Followers: {{ user.followedBy.length }}</span>
       <ul>
         <li v-for="follower in user.followedBy" :key="follower._id">
           <p>{{ follower }}</p>
@@ -144,10 +144,12 @@ export default {
 
 <style scoped>
 .profile-edit-container {
+  max-width: 1100px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80vh;
+  height: 50vh;
   background-color: transparent;
   padding: 0 20px;
 }
