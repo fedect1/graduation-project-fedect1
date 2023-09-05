@@ -79,45 +79,65 @@ export default {
 
 <template>
 
-  <div class="profile-edit-container">
-    <div class="card">
-      <div class="card-content">
-        <div class="username">
-          <p>Username</p>
-          <input
-            v-model="newUsername"
-            type="text"
-            name="username"
-            id="username"
-            :placeholder="newUsername"
-          />
-          <button @click="handleNameChange">Save</button>
-        </div>
-        <div class="description">
-          <p>Description</p>
-          <input
-            v-model="newDescription"
-            type="text"
-            name="description"
-            id="description"
-            :placeholder="newDescription"
-          />
-          <button @click="handleDescriptionChange">Save</button>
-        </div>
+<div class="profile-edit-container">
+  <div class="card">
+    <div class="card-content">
+      <div class="username">
+        <p>Username</p>
+        <input
+          v-model="newUsername"
+          type="text"
+          name="username"
+          id="username"
+          :placeholder="newUsername"
+        />
+        <button @click="handleNameChange">Save</button>
+      </div>
+      <div class="description">
+        <p>Description</p>
+        <input
+          v-model="newDescription"
+          type="text"
+          name="description"
+          id="description"
+          :placeholder="newDescription"
+        />
+        <button @click="handleDescriptionChange">Save</button>
       </div>
     </div>
   </div>
-    <div class="list-post">
-      <p>Posts</p>
-      <div v-for="post in posts" :key="post._id">
-        <p>{{ post.body }}</p>
-        <p>{{ formatDay(post.createdAt) }}</p>
-        <div v-for="comment in post.comments">
-          <p>{{ comment.author }}</p>
-          <p>{{ comment.text }}</p>
-        </div>
-      </div>
+  <div class="card following-card">
+    <div class="card-content">
+      <span>Following</span>
+      <ul>
+        <li v-for="following in user.following" :key="following._id">
+          <p>{{ following }}</p>
+        </li>
+      </ul>
     </div>
+  </div>
+  <div class="card followers-card">
+    <div class="card-content">
+      <span>Followers</span>
+      <ul>
+        <li v-for="follower in user.followedBy" :key="follower._id">
+          <p>{{ follower }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="list-post">
+  <p>Posts</p>
+  <div v-for="post in posts" :key="post._id">
+    <p>{{ post.body }}</p>
+    <p>{{ formatDay(post.createdAt) }}</p>
+    <div v-for="comment in post.comments">
+      <p>{{ comment.author }}</p>
+      <p>{{ comment.text }}</p>
+    </div>
+  </div>
+</div>
 
 
 </template>
@@ -125,51 +145,100 @@ export default {
 <style scoped>
 .profile-edit-container {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  margin: 10px 0;
-  padding-bottom: 10px;
+  height: 80vh;
+  background-color: transparent;
+  padding: 0 20px;
 }
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 300px;
+}
+
+.card-content {
+  padding: 20px;
+}
+
 .username,
 .description {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 10px 0;
-  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.username p,
+.description p {
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .username input,
 .description input {
-  width: 100%;
   padding: 10px;
-  margin: 10px 0;
-  border: 1px solid var(--primary-color, rgba(0, 0, 0, 0.2));
+  border: 1px solid #ddd;
   border-radius: 5px;
-  background: var(--card-background);
-  color: var(--text-color);
+  margin-bottom: 10px;
 }
 
 .username button,
 .description button {
-  width: 100%;
   padding: 10px;
-  margin: 10px 0;
-  border: 1px solid var(--primary-color, rgba(0, 0, 0, 0.2));
+  border: none;
   border-radius: 5px;
-  background: var(--card-background);
-  color: var(--text-color);
+  background: #007BFF;
+  color: white;
+  font-weight: bold;
 }
+
+.username button:hover,
+.description button:hover {
+  background: #0056b3;
+}
+
+.following-card,
+.followers-card {
+  width: 200px;
+}
+
+.following-card span,
+.followers-card span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.following-card p,
+.followers-card p {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.following-card ul,
+.followers-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.following-card li,
+.followers-card li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.following-card li:last-child,
+.followers-card li:last-child {
+  border-bottom: none;
+}
+
 .list-post {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin: 10px 0;
-  padding-bottom: 10px;
-  color: white;
 }
 
 </style>
