@@ -4,7 +4,9 @@ export default {
   props: ['submitPost'],
   data() {
     return {
-      bodyPost: ''
+      bodyPost: '',
+      wordsQuantity: 0,
+      textareaHeight: 200
     }
   },
   methods: {
@@ -12,6 +14,17 @@ export default {
       if (this.bodyPost.trim() !== '') {
         await this.submitPost(this.bodyPost)
         this.bodyPost = ''
+      }
+    }
+  },
+  watch: {
+    bodyPost() {
+
+      this.wordsQuantity = this.bodyPost.trim().split(/\s+/).length
+      const textarea = this.$refs.textarea
+      if (textarea) {
+        textarea.style.height = 'auto'
+        textarea.style.height = textarea.scrollHeight + 5 + 'px'
       }
     }
   }
@@ -23,12 +36,13 @@ export default {
       v-model="bodyPost"
       name="post"
       id="post"
-      cols="30"
-      rows="10"
+      cols="20"
       class="write-post-container"
-      placeholder="What's on your mind?"
+      placeholder="What's on your mind? Share your thoughts (max 250 words)"
+      :style="{'border-color': wordsQuantity > 250 ? 'red' : 'var(--primary-color, rgba(0, 0, 0, 0.2)'}"
+      ref="textarea"
     ></textarea>
-    <button @click="handleSubmit" type="submit" class="btn">Send</button>
+    <button @click="handleSubmit" type="submit" class="btn" :class="{'btn-alert':wordsQuantity>250}" :disabled="wordsQuantity === 0 || wordsQuantity > 250">{{ wordsQuantity > 250 ? `Delete ${wordsQuantity - 250} words to send` : 'Send' }}</button>
   </div>
 </template>
 
@@ -38,27 +52,28 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin: 10px 0;
+  padding-bottom: 10px;
 }
 .write-post-container {
   padding: 30px 40px;
   width: 100vh;
-  background: transparent;
-  border: 2px solid var(--tertiary-color, rgba(0, 0, 0, 0.2));
+  background: var(--card-background);
+  border: 2px solid var(--primary-color, rgba(0, 0, 0, 0.2));
   color: var(--text-color);
   border-radius: 10px;
   transition: border-color 0.3s;
   outline: none;
 }
 .write-post-container:focus {
-  border-color: var(--primary-color);
+  border-color: var(--tertiary-color);
 }
 
 .btn {
   align-self: flex-end;
-  margin-top: 20px;
-  width: 15%;
-  height: 50px;
+  margin-top: 10px;
+  width: 10%;
+  height: auto;
   background-color: var(--tertiary-color);
   border: none;
   outline: none;
@@ -73,4 +88,23 @@ export default {
 .btn:hover {
   background-color: var(--page-background);
 }
+.btn-alert {
+  width: auto;
+  background-color: red;
+  color: white;
+}
+
+@media (max-width: 980px) {
+  .post-container {
+    width: 80%;
+  }
+  .write-post-container {
+    width: 100%;
+  }
+  .btn {
+    width: 100%;
+  }
+
+}
+
 </style>

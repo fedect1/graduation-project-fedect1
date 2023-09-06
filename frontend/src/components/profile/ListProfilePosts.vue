@@ -1,24 +1,12 @@
 <script>
-import WriteComment from '@/components/feed/WriteComment.vue'
 import ListComments from '@/components/feed/ListComments.vue'
-import Like from '@/components/feed/Like.vue'
-import DeletePost from '@/components/feed/DeletePost.vue'
-import FollowUser from '@/components/feed/FollowUser.vue'
-
-import { mapActions } from 'pinia'
-import { useFormatDay } from '../../stores/formatDay'
 
 export default {
   name: 'ListPosts',
   props: ['posts'],
-  emits: ['postDeleted'],
 
   components: {
-    WriteComment,
-    ListComments,
-    Like,
-    DeletePost,
-    FollowUser
+    ListComments
   },
   computed: {
     sortedPosts() {
@@ -28,11 +16,38 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useFormatDay, ['formatDay', 'expirationTime']),
-    updateComments(newComment, postId) {
-      const postToUpdate = this.posts.find((post) => post._id === postId)
-      if (postToUpdate) {
-        postToUpdate.comments.push(newComment)
+    formatDay(dateStr) {
+      const date = new Date(dateStr)
+      if (isNaN(date.getTime())) {
+        return 'Invalid Date'
+      }
+      const dayPassed = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
+      if (dayPassed === 0) {
+        const hourPassed = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60))
+        if (hourPassed === 0) {
+          const minutePassed = Math.floor((Date.now() - date.getTime()) / (1000 * 60))
+          if (minutePassed === 0) {
+            return 'Just now'
+          } else if (minutePassed === 1) {
+            return '1 minute ago'
+          } else {
+            return `${minutePassed} minutes ago`
+          }
+        } else if (hourPassed === 1) {
+          return '1 hour ago'
+        } else {
+          return `${hourPassed} hours ago`
+        }
+      } else if (dayPassed === 1) {
+        return 'Yesterday'
+      } else if (dayPassed < 7) {
+        return `${dayPassed} days ago`
+      } else if (dayPassed < 30) {
+        return `${Math.floor(dayPassed / 7)} weeks ago`
+      } else if (dayPassed < 365) {
+        return `${Math.floor(dayPassed / 30)} months ago`
+      } else {
+        return `${Math.floor(dayPassed / 365)} years ago`
       }
     }
   }
@@ -40,24 +55,17 @@ export default {
 </script>
 <template>
   <div class="post-container" v-for="post in sortedPosts" :key="post.id">
-    <div class="post-header">
-      <div class="user-image">
-        <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
-      </div>
-      <div class="user-info">
-        <h3>{{ post.user.name }}</h3>
-        <FollowUser :postUser="post.user" />
-        <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
-      </div>
-      <DeletePost :postUser="post.user" :postId="post._id" @postDeleted="$emit('postDeleted')" />
-      <Like :post-id="post._id" :postLikes="post.likes" />
+    <div class="formatDate">
+      {{ formatDay(post.createdAt) }}
+    </div>
+    <div class="expired">
+      <span v-if="post.status === false" class="expired-text">Expired</span>
     </div>
     <p class="post-body">
       {{ post.body }}
     </p>
     <div class="line"></div>
     <div class="comment-container">
-      <WriteComment :post-id="post._id" @commentAdded="updateComments" />
       <span class="comment-count">{{ post.comments.length }} comments</span>
       <ListComments :postComments="post.comments" />
     </div>
@@ -90,6 +98,14 @@ export default {
 }
 .user-info {
   flex-grow: 1; /* Allow user info to grow and take remaining space */
+}
+
+.expired {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: var(--m-margin);
+  color: blueviolet;
 }
 .post-container .post-header h3 {
   font-size: 1.2rem;

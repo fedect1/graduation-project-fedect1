@@ -14,8 +14,10 @@ router.get('/', async function (req, res, next) {
 
 router.get('/valid', async function (req, res, next) {
   const validPosts = await Post.find({status: true })
+    .populate({ path: 'user', select: 'name', populate: { path: 'name' } })
   res.send(validPosts)
 })
+
 
 /* GET Post by id. */
 router.get('/:postId', async function (req, res, next) {
@@ -57,22 +59,15 @@ router.post('/:postId/comments', async function (req, res, next) {
 //DELETE
 /* Delete a post */
 router.delete('/:postId/:userId', async function (req, res, next) {
-  try {
-    // Find the user
-    const user = await User.findById(req.params.userId)
-    if (!user) {
-      return res.status(404).send({ message: 'User not found' })
+  try{
+    const post = await Post.findById(req.params.postId)
+    if (!post) {
+      return res.status(404).send({ message: 'Post not found' })
     }
-
-    // Find the post index in the user's posts array
-    await user.deletePost(req.params.postId)
-
-    // Delete the post from the posts collection
-    const deletedPost = await Post.findByIdAndDelete(req.params.postId)
-    if (!deletedPost) {
-      return res.status(404).send({ message: 'Post not found in collection' })
+    if (!post.user.equals(req.params.userId)) {
+      return res.status(401).send({ message: 'You can not delete this post' })
     }
-
+    await Post.deleteOne({ _id: req.params.postId });
     // Send the response
     res.send({ message: 'Post deleted successfully' })
   } catch (error) {

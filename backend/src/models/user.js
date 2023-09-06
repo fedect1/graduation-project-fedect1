@@ -4,33 +4,36 @@ const autopopulate = require('mongoose-autopopulate')
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new mongoose.Schema({
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
-  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 } }],
+  //posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
+  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
   name: { type: String, default: '' },
   description: { type: String, default: '' },
   avatar: { type: String, default: '' },
-})
+  },
+  {
+    toJSON : { virtuals: true },
+    toObject: { virtuals: true }
+  }
+)
+
+userSchema.virtual('posts', {
+  ref: 'Post',
+  localField: '_id',
+  foreignField: 'user'
+});
 
 userSchema.plugin(autopopulate)
 class User {
   // Create post
   async createPost(bodyPost) {
     const newPost = await Post.create({ body: bodyPost, user: this._id })
-    this.posts.push(newPost)
     await this.save()
     return newPost
   }
 
-  //Delete post
-  async deletePost(postId) {
-    const postIndex = this.posts.findIndex(post => post._id.toString() === postId)
-    if (postIndex === -1) {
-      return res.status(404).send({ message: 'Post not found in user' })
-    }
-    this.posts.splice(postIndex, 1)
-    await this.save()
-  }
+  //Delete post //Update post
+
 
   //Follow
   async follow(user) {

@@ -1,6 +1,5 @@
 <script>
 import { mapActions } from 'pinia'
-import { mapState } from 'pinia'
 import { usePostHandler } from '../stores/postHandler'
 import { defineComponent } from 'vue'
 import WritePost from '@/components/feed/WritePost.vue'
@@ -27,9 +26,11 @@ export default defineComponent({
     async submitPost(bodyPost) {
       await this.createPost(bodyPost)
       this.validPosts = await this.fetchValidPosts()
-
+    },
+    async refreshPosts() {
+      this.validPosts = await this.fetchValidPosts()
     }
-  },
+  }
   // computed: {
   //   ...mapState(usePostHandler, ['posts'])
   // }
@@ -38,7 +39,7 @@ export default defineComponent({
 <template>
   <div class="feed-container">
     <WritePost :submitPost="submitPost" />
-    <ListPosts :posts="validPosts" />
+    <ListPosts :posts="validPosts" @postDeleted="refreshPosts" />
   </div>
 </template>
 <style scoped>

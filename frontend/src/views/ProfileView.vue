@@ -2,150 +2,207 @@
 import { mapActions, mapState } from 'pinia'
 import { useProfileHandler } from '../stores/profileHandler'
 import { useAccountStore } from '../stores/account'
+import ListProfilePosts from '@/components/profile/ListProfilePosts.vue'
+import Swal from 'sweetalert2'
+import axios from 'axios'
+axios.defaults.withCredentials = true
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 export default {
   name: 'ProfileView',
   data() {
     return {
       newUsername: '',
       newDescription: '',
-      newAvatar: ''
+      posts: [],
+      followedByQuantity: 0,
+      followingQuantity: 0
     }
+  },
+  components: {
+    ListProfilePosts
+  },
+
+  async mounted() {
+    this.posts = await this.fetchUserPosts(this.user)
+    this.newUsername = this.user.name
+    this.newDescription = this.user.description
+    this.followedByQuantity = this.user.followedBy.length
+    this.followingQuantity = this.user.following.length
   },
 
   computed: {
     ...mapState(useAccountStore, ['user'])
   },
   methods: {
-    ...mapActions(useAccountStore, ['fetchUser']),
-    ...mapActions(useProfileHandler, ['updateName', 'updateDescription', 'updateAvatar']),
+    ...mapActions(useProfileHandler, [
+      'updateName',
+      'updateDescription',
+      'updateAvatar',
+      'fetchUserPosts'
+    ]),
     async handleNameChange() {
       const newName = this.newUsername
       await this.updateName(this.user, newName)
-      this.newUsername = ''
-      await this.fetchUser()
+      Swal.fire('Success!', 'Your name has been updated.', 'success')
     },
     async handleDescriptionChange() {
       const newDescription = this.newDescription
       await this.updateDescription(this.user, newDescription)
-      this.newDescription = ''
-      await this.fetchUser()
-    },
-    async handleAvatarChange() {
-      const newAvatar = this.newAvatar
-      await this.updateAvatar(this.user, newAvatar)
-      this.newAvatar = ''
-      await this.fetchUser()
+      Swal.fire('Success!', 'Your description has been updated.', 'success')
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="user" class="profile-container">
-    <h2>Profile</h2>
-    <div class="profile-info">
-      <div class="profile-info-username">
-        <p>Username</p>
-        <p>{{ user.name }}</p>
+  <div class="profile-edit-container">
+    <div class="card">
+      <div class="card-content">
+        <div class="username">
+          <p>Username: {{ newUsername }}</p>
+          <input
+            v-model="newUsername"
+            type="text"
+            name="username"
+            id="username"
+            :placeholder="newUsername"
+          />
+          <button @click="handleNameChange">Save</button>
+        </div>
+        <div class="description">
+          <p>Description: {{ newDescription }}</p>
+          <input
+            v-model="newDescription"
+            type="text"
+            name="description"
+            id="description"
+            :placeholder="newDescription"
+          />
+          <button @click="handleDescriptionChange">Save</button>
+        </div>
       </div>
-      <div class="profile-info-description">
-        <p>Description</p>
-        <p>{{ user.description }}</p>
+    </div>
+    <div class="card following-card">
+      <div class="card-content">
+        <span>Following: {{ followingQuantity }}</span>
       </div>
-      <div class="profile-info-avatar">
-        <p>Avatar</p>
-        <p>{{ this.user.avatar }}</p>
-        <img alt="avatar" />
+    </div>
+    <div class="card followers-card">
+      <div class="card-content">
+        <span>Followers: {{ followedByQuantity }}</span>
       </div>
     </div>
   </div>
-
-  <div class="profile-edit-container">
-    <div class="username">
-      <p>Username</p>
-      <input
-        v-model="newUsername"
-        type="text"
-        name="username"
-        id="username"
-        placeholder="Username"
-      />
-      <button @click="handleNameChange">Save</button>
-    </div>
-    <div class="description">
-      <p>Description</p>
-      <input
-        v-model="newDescription"
-        type="text"
-        name="description"
-        id="description"
-        placeholder="Description"
-      />
-      <button @click="handleDescriptionChange">Save</button>
-    </div>
-    <div class="avatar">
-      <p>Avatar</p>
-      <input type="file" name="avatar" id="avatar" />
-      <button>Save</button>
-    </div>
+  <p class="post-title">Posts</p>
+  <div class="post-profile-container">
+    <ListProfilePosts :posts="posts" />
   </div>
 </template>
 
 <style scoped>
-.profile-container {
-  padding: 30px 40px;
-  width: 100%;
-  background: transparent;
-  border: 2px solid var(--tertiary-color, 0.2);
-  color: var(--text-color);
-  border-radius: 10px;
-}
-.profile-container h2 {
-  font-size: 1.2rem;
-}
 .profile-edit-container {
-  padding: 30px 40px;
-  width: 100%;
-  background: transparent;
-  border: 2px solid var(--tertiary-color, 0.2);
-  color: var(--text-color);
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50vh;
+  background-color: transparent;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
   border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 300px;
 }
-.profile-edit-container .username {
+
+.card-content {
+  padding: 20px;
+}
+
+.username,
+.description {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: 20px;
 }
-.profile-edit-container .username p {
+
+.username p,
+.description p {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.username input,
+.description input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.username button,
+.description button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.username button:hover,
+.description button:hover {
+  background: #0056b3;
+}
+
+.following-card,
+.followers-card {
+  width: 200px;
+}
+
+.following-card span,
+.followers-card span {
   font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
-.profile-edit-container .username input {
-  font-size: 0.8rem;
+.following-card p,
+.followers-card p {
+  font-weight: bold;
+  margin-bottom: 10px;
 }
-.profile-edit-container .description {
+
+.following-card ul,
+.followers-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.following-card li,
+.followers-card li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.following-card li:last-child,
+.followers-card li:last-child {
+  border-bottom: none;
+}
+.post-profile-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 }
-.profile-edit-container .description p {
-  font-size: 1.2rem;
-}
-.profile-edit-container .description input {
-  font-size: 0.8rem;
-}
-.profile-edit-container .avatar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.profile-edit-container .avatar p {
-  font-size: 1.2rem;
-}
-.profile-edit-container .avatar input {
-  font-size: 0.8rem;
+
+.post-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  padding-left: 10rem;
+  color: var(--text-color);
 }
 </style>
-```

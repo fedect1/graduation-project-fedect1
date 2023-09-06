@@ -18,14 +18,16 @@ const postSchema = new mongoose.Schema({
     },
   },
   status: { type: Boolean, default: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: { maxDepth: 1 }},
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 })
 class Post {
+
   async createComment(author, text) {
+    const newComment = { author, text }
     this.comments.push({ author, text })
     this.expirationDate = new Date(this.expirationDate.getTime() + commentTimeExtension)
     await this.save()
-    return this
+    return newComment
   }
 
   async deleteComment(index) {
