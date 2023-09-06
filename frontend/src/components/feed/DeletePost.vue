@@ -2,6 +2,7 @@
 import { mapActions, mapState } from 'pinia'
 import { usePostHandler } from '../../stores/postHandler'
 import { useAccountStore } from '../../stores/account'
+import Swal from 'sweetalert2'
 export default {
   name: 'DeletePost',
   props: ['postUser', 'postId'],
@@ -12,24 +13,36 @@ export default {
       const currentUser = this.user
 
       if (currentUser) return this.postUser._id === currentUser._id
-
     }
   },
   methods: {
     ...mapActions(usePostHandler, ['deletePost']),
     async handleDeletePost() {
-      await this.deletePost(this.postId, useAccountStore().user._id)
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        background: '#0a0a0a'
+      })
+
+      if (result.isConfirmed) {
+        await this.deletePost(this.postId, this.user._id)
+        Swal.fire('Deleted!', 'Your post has been deleted.', 'success')
+      }
     }
   }
 }
 </script>
 
 <template>
-    <button v-if="isCurrentUserPostOwner" class="delete-button" @click="handleDeletePost">
-      <i class="bx bx-trash"></i>
-      <span class="btn-delete">Delete</span>
-    </button>
-
+  <button v-if="isCurrentUserPostOwner" class="delete-button" @click="handleDeletePost">
+    <i class="bx bx-trash"></i>
+    <span class="btn-delete">Delete</span>
+  </button>
 </template>
 
 <style scoped>
@@ -51,6 +64,4 @@ export default {
 .btn-delete {
   margin-left: 0.5rem;
 }
-
-
 </style>
