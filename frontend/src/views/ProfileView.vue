@@ -13,7 +13,9 @@ export default {
     return {
       newUsername: '',
       newDescription: '',
-      posts: []
+      posts: [],
+      followedByQuantity: 0,
+      followingQuantity: 0
     }
   },
   components: {
@@ -24,6 +26,8 @@ export default {
     this.posts = await this.fetchUserPosts(this.user)
     this.newUsername = this.user.name
     this.newDescription = this.user.description
+    this.followedByQuantity = this.user.followedBy.length
+    this.followingQuantity = this.user.following.length
   },
 
   computed: {
@@ -80,12 +84,12 @@ export default {
     </div>
     <div class="card following-card">
       <div class="card-content">
-        <span>Following: {{ user.following.length }}</span>
+        <span>Following: {{ followingQuantity }}</span>
       </div>
     </div>
     <div class="card followers-card">
       <div class="card-content">
-        <span>Followers: {{ user.followedBy.length }}</span>
+        <span>Followers: {{ followedByQuantity }}</span>
       </div>
     </div>
   </div>
