@@ -1,6 +1,5 @@
 <script>
 import { mapActions } from 'pinia'
-import { mapState } from 'pinia'
 import { usePostHandler } from '../stores/postHandler'
 import { defineComponent } from 'vue'
 import WritePost from '@/components/feed/WritePost.vue'
