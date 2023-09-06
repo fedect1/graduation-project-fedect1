@@ -25,7 +25,32 @@ export default {
 </script>
 
 <template>
-  <button v-if="isCurrentUserPostOwner" class="delete-button" @click="handleDeletePost">
-    <i class="bx bx-trash"></i>
-  </button>
+    <button v-if="isCurrentUserPostOwner" class="delete-button" @click="handleDeletePost">
+      <i class="bx bx-trash"></i>
+      <span class="btn-delete">Delete</span>
+    </button>
+
 </template>
+
+<style scoped>
+.delete-button {
+  line-height: 0.5;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+
+.btn-delete {
+  margin-left: 0.5rem;
+}
+
+
+</style>
