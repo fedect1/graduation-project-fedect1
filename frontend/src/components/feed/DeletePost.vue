@@ -32,6 +32,7 @@ export default {
       if (result.isConfirmed) {
         await this.deletePost(this.postId, this.user._id)
         Swal.fire('Deleted!', 'Your post has been deleted.', 'success')
+        this.$emit('postDeleted')
       }
     }
   }

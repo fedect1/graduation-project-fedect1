@@ -8,10 +8,10 @@ import FollowUser from '@/components/feed/FollowUser.vue'
 import { mapActions } from 'pinia'
 import { useFormatDay } from '../../stores/formatDay'
 
-
 export default {
   name: 'ListPosts',
   props: ['posts'],
+  emits: ['postDeleted'],
 
   components: {
     WriteComment,
@@ -21,36 +21,36 @@ export default {
     FollowUser
   },
   computed: {
-    sortedPosts () {
+    sortedPosts() {
       return this.posts.sort((a, b) => {
         return new Date(b.expirationDate) - new Date(a.expirationDate)
       })
-    },
+    }
   },
   methods: {
-    ...mapActions(useFormatDay, ['formatDay','expirationTime']),
+    ...mapActions(useFormatDay, ['formatDay', 'expirationTime']),
     updateComments(newComment, postId) {
-      const postToUpdate = this.posts.find(post => post._id === postId);
+      const postToUpdate = this.posts.find((post) => post._id === postId)
       if (postToUpdate) {
-        postToUpdate.comments.push(newComment);
+        postToUpdate.comments.push(newComment)
       }
     }
   }
 }
 </script>
 <template>
-  <div class="post-container" v-for="(post) in sortedPosts" :key="post.id">
+  <div class="post-container" v-for="post in sortedPosts" :key="post.id">
     <div class="post-header">
       <div class="user-image">
         <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
       </div>
       <div class="user-info">
         <h3>{{ post.user.name }}</h3>
-        <FollowUser :postUser="post.user"/>
+        <FollowUser :postUser="post.user" />
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
-      <DeletePost :postUser="post.user" :postId="post._id" />
-      <Like :post-id="post._id" :postLikes="post.likes"/>
+      <DeletePost :postUser="post.user" :postId="post._id" @postDeleted="$emit('postDeleted')" />
+      <Like :post-id="post._id" :postLikes="post.likes" />
     </div>
     <p class="post-body">
       {{ post.body }}
@@ -73,7 +73,6 @@ export default {
   color: var(--text-color);
   border-radius: 14px;
   margin-bottom: var(--xs-margin);
-
 }
 .post-container .post-header {
   display: flex;
