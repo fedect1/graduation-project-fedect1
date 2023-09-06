@@ -29,6 +29,12 @@ export default {
   },
   methods: {
     ...mapActions(useFormatDay, ['formatDay','expirationTime']),
+    updateComments(newComment, postId) {
+      const postToUpdate = this.posts.find(post => post._id === postId);
+      if (postToUpdate) {
+        postToUpdate.comments.push(newComment);
+      }
+    }
   }
 }
 </script>
@@ -51,7 +57,7 @@ export default {
     </p>
     <div class="line"></div>
     <div class="comment-container">
-      <WriteComment :post-id="post._id" />
+      <WriteComment :post-id="post._id" @commentAdded="updateComments" />
       <span class="comment-count">{{ post.comments.length }} comments</span>
       <ListComments :postComments="post.comments" />
     </div>

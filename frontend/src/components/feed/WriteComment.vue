@@ -18,7 +18,8 @@ export default {
     async handleSubmitComment() {
       const userName = useAccountStore().user.name
       if (this.text.trim() !== '') {
-        await this.createComment(this.postId, this.text, userName)
+        const newComment = await this.createComment(this.postId, this.text, userName)
+        this.$emit('commentAdded', newComment, this.postId);
         this.text = ''
       }
     }
