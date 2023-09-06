@@ -3,7 +3,7 @@ import { mapActions, mapState } from 'pinia'
 import { useProfileHandler } from '../stores/profileHandler'
 import { useAccountStore } from '../stores/account'
 import ListProfilePosts from '@/components/profile/ListProfilePosts.vue'
-
+import Swal from 'sweetalert2'
 import axios from 'axios'
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
@@ -39,14 +39,12 @@ export default {
     async handleNameChange() {
       const newName = this.newUsername
       await this.updateName(this.user, newName)
-      this.newUsername = ''
-      await this.fetchUser()
+      Swal.fire('Success!', 'Your name has been updated.', 'success')
     },
     async handleDescriptionChange() {
       const newDescription = this.newDescription
       await this.updateDescription(this.user, newDescription)
-      this.newDescription = ''
-      await this.fetchUser()
+      Swal.fire('Success!', 'Your description has been updated.', 'success')
     }
   }
 }
@@ -57,7 +55,7 @@ export default {
     <div class="card">
       <div class="card-content">
         <div class="username">
-          <p>Username</p>
+          <p>Username: {{ newUsername }}</p>
           <input
             v-model="newUsername"
             type="text"
@@ -68,7 +66,7 @@ export default {
           <button @click="handleNameChange">Save</button>
         </div>
         <div class="description">
-          <p>Description</p>
+          <p>Description: {{ newDescription }}</p>
           <input
             v-model="newDescription"
             type="text"
@@ -82,25 +80,16 @@ export default {
     </div>
     <div class="card following-card">
       <div class="card-content">
-        <span>Following : {{ user.following.length }}</span>
-        <ul>
-          <li v-for="following in user.following" :key="following._id">
-            <p>{{ following }}</p>
-          </li>
-        </ul>
+        <span>Following: {{ user.following.length }}</span>
       </div>
     </div>
     <div class="card followers-card">
       <div class="card-content">
         <span>Followers: {{ user.followedBy.length }}</span>
-        <ul>
-          <li v-for="follower in user.followedBy" :key="follower._id">
-            <p>{{ follower }}</p>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
+  <p class="post-title">Posts</p>
   <div class="post-profile-container">
     <ListProfilePosts :posts="posts" />
   </div>
@@ -203,5 +192,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  padding-left: 10rem;
+  color: var(--text-color);
 }
 </style>

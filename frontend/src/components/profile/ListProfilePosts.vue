@@ -58,6 +58,9 @@ export default {
     <div class="formatDate">
       {{ formatDay(post.createdAt) }}
     </div>
+    <div class="expired">
+      <span v-if="post.status === false" class="expired-text">Expired</span>
+    </div>
     <p class="post-body">
       {{ post.body }}
     </p>
@@ -95,6 +98,14 @@ export default {
 }
 .user-info {
   flex-grow: 1; /* Allow user info to grow and take remaining space */
+}
+
+.expired {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: var(--m-margin);
+  color: blueviolet;
 }
 .post-container .post-header h3 {
   font-size: 1.2rem;
