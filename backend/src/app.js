@@ -6,8 +6,9 @@ const logger = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-
+const helmet = require('helmet')
 const mongoose = require('mongoose')
+const mongoSanitize = require('express-mongo-sanitize')
 
 require('./database-connection')
 
@@ -29,6 +30,12 @@ passport.deserializeUser(User.deserializeUser())
 require('dotenv').config()
 
 const app = express()
+app.use(helmet())
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  })
+)
 
 app.use(
   cors({

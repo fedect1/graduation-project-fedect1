@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 const User = require('../models/user')
+const { celebrate, Joi, errors, Segments } = require('celebrate')
 
 //User Routes
 /* Get all users. */
@@ -15,30 +16,51 @@ router.get('/:userId', async function (req, res, next) {
   res.send(user)
 })
 
-// /* // Create a new user */
-// router.post('/', async function (req, res, next) {
-//   const user = await User.create({ email: req.body.email })
-//   res.status(201).send(user._id)
-// })
-
 /* POST signup */
-router.post('/', async function (req, res, next) {
-  try {
-    console.log("create user")
-    const {name ,email, password } = req.body
-    const user = await User.register({ name, email }, password)
-    res.status(201).send(user)
-  } catch (error) {
-    next(error)
+router.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      name: Joi.string(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    }),
+  }),
+  async function (req, res, next) {
+    try {
+      const { name, email, password } = req.body
+      const user = await User.register({ name, email }, password)
+      res.status(201).send(user)
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
+
+// app.post(
+//   '/signup',
+//   celebrate({
+//     [Segments.BODY]: Joi.object().keys({
+//       name: Joi.string().required(),
+//       age: Joi.number().integer(),
+//       role: Joi.string().default('admin'),
+//     }),
+//     [Segments.QUERY]: {
+//       token: Joi.string().token().required(),
+//     },
+//   }),
+//   (req, res) => {
+//     // At this point, req.body has been validated and
+//     // req.body.role is equal to req.body.role if provided in the POST or set to 'admin' by joi
+//   }
+// )
 
 /* USER POSTS */
 router.get('/profile/:userId/posts', async function (req, res, next) {
   try {
     const user = await User.findById(req.params.userId).populate('posts')
     const posts = user.posts
-    res.status(200).send( posts )
+    res.status(200).send(posts)
   } catch (error) {
     res.status(404).send(error.message)
   }
@@ -47,9 +69,7 @@ router.get('/profile/:userId/posts', async function (req, res, next) {
 /* POST a new follow to a user */
 
 router.put('/profile/:userId/follow', async function (req, res, next) {
-
   try {
-
     const user = await User.findById(req.params.userId)
     const ToFollow = await User.findById(req.body.userToFollow)
     const resultFollow = await user.follow(ToFollow)
@@ -58,7 +78,6 @@ router.put('/profile/:userId/follow', async function (req, res, next) {
     res.status(404).send(error.message)
   }
 })
-
 
 /* DELETE a follow. */
 router.delete('/profile/:userId/unfollowing/:unfollowId', async function (req, res, next) {
@@ -78,7 +97,6 @@ router.delete('/profile/:userId/unfollowing/:unfollowId', async function (req, r
     res.status(404).send(error.message)
   }
 })
-
 
 /* GET followers of a user. */
 router.get('/profile/:userId/followers', async function (req, res, next) {
@@ -142,21 +160,6 @@ router.put('/profile/:userId/description', async function (req, res, next) {
       return res.status(404).send({ message: 'User not found' })
     }
     user.description = req.body.description
-    await user.save()
-    res.status(204).send(user)
-  } catch (error) {
-    res.status(404).send(error.message)
-  }
-})
-
-/* Update avatar of a user */
-router.put('/profile/:userId/avatar', async function (req, res, next) {
-  try {
-    const user = await User.findById(req.params.userId)
-    if (!user) {
-      return res.status(404).send({ message: 'User not found' })
-    }
-    user.avatar = req.body.avatar
     await user.save()
     res.status(204).send(user)
   } catch (error) {
