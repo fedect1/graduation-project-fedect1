@@ -11,12 +11,6 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: () => import('../views/SignupView.vue'),
-      meta: { requiresAuth: false }
-    },
-    {
       path: '/feed',
       name: 'feed',
       component: () => import('../views/FeedView.vue'),
@@ -27,10 +21,9 @@ const router = createRouter({
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
       meta: { requiresAuth: true }
-    },
+    }
   ]
 })
-
 
 router.beforeEach(async (to) => {
   const store = useAccountStore()
