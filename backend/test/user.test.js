@@ -8,7 +8,7 @@ describe('Create user test', () => {
     await User.deleteMany()
     await Post.deleteMany()
   })
-  // Test 1 Signup
+
   it('should signup a new user', async () => {
     const userData = {
       name: 'Fede',
@@ -90,9 +90,6 @@ describe('Profile routes', () => {
 
   it('should update name of user', async () => {
     const newName = 'Federico'
-    const expectedOutput = {
-      name: 'Federico',
-    }
     const response = await request(app).put(`/users/profile/${testUser._id}/name`).send({ name: newName })
     expect(response.status).toEqual(204)
     expect(response.body).toEqual({})
@@ -100,9 +97,6 @@ describe('Profile routes', () => {
 
   it('should update description of user', async () => {
     const newDescription = 'This is a description'
-    const expectedOutput = {
-      description: 'This is a description',
-    }
     const response = await request(app)
       .put(`/users/profile/${testUser._id}/description`)
       .send({ description: newDescription })

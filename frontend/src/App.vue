@@ -11,9 +11,6 @@ export default {
     RouterView,
     Navbar
   },
-  // async mounted() {
-  //   await this.fetchUser()
-  // },
   methods: {
     ...mapActions(useAccountStore, ['fetchUser', 'logout']),
     async handleLogout() {
@@ -27,20 +24,12 @@ export default {
 }
 </script>
 
-<template>
-  <header>
-    <Navbar v-if="user" :user="user" />
-    <nav>
-      <a v-if="user" @click="handleLogout">Log out</a>
-    </nav>
-  </header>
-
-  <h1>DW for {{ user?.email }}</h1>
-  <main class="containter">
-    <Suspense>
-      <RouterView />
-    </Suspense>
-  </main>
+<template lang="pug">
+header
+  navbar(v-if='user' :user='user')
+main.containter
+  Suspense
+    RouterView
 </template>
 
 <style scoped></style>
