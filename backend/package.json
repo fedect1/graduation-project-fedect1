@@ -9,9 +9,9 @@
     "dev": "nodemon ./bin/www",
     "eslint:check": "npx eslint .",
     "eslint:fix": "npx eslint --fix .",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --watch --detectOpenHandles"
+    "test": "DOTENV_CONFIG_PATH=./.env.local.test jest --detectOpenHandles --forceExit",
+    "test:watch": "DOTENV_CONFIG_PATH=./.env.local.test jest --watch --detectOpenHandles --forceExit",
+    "test:coverage": "DOTENV_CONFIG_PATH=./.env.local.test jest --coverage --watch --detectOpenHandles --forceExit"
   },
   "devDependencies": {
     "eslint": "^8.19.0",

@@ -29,6 +29,12 @@ router.post(
   async function (req, res, next) {
     try {
       const { name, email, password } = req.body
+      // Check if email already exists
+      const existingUser = await User.findOne({ email: email })
+      if (existingUser) {
+        return res.status(400).send({ message: 'Email already exists' })
+      }
+
       const user = await User.register({ name, email }, password)
       res.status(201).send(user)
     } catch (error) {
@@ -36,24 +42,6 @@ router.post(
     }
   }
 )
-
-// app.post(
-//   '/signup',
-//   celebrate({
-//     [Segments.BODY]: Joi.object().keys({
-//       name: Joi.string().required(),
-//       age: Joi.number().integer(),
-//       role: Joi.string().default('admin'),
-//     }),
-//     [Segments.QUERY]: {
-//       token: Joi.string().token().required(),
-//     },
-//   }),
-//   (req, res) => {
-//     // At this point, req.body has been validated and
-//     // req.body.role is equal to req.body.role if provided in the POST or set to 'admin' by joi
-//   }
-// )
 
 /* USER POSTS */
 router.get('/profile/:userId/posts', async function (req, res, next) {

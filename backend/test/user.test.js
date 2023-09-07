@@ -3,59 +3,65 @@ const app = require('../src/app')
 const User = require('../src/models/user')
 const Post = require('../src/models/post')
 
-describe('User test', () => {
+describe('Create user test', () => {
   beforeEach(async () => {
     await User.deleteMany()
     await Post.deleteMany()
   })
-
-  it('should create a new user', async () => {
-    const email = 'Fede'
+  // Test 1 Signup
+  it('should signup a new user', async () => {
+    const userData = {
+      name: 'Fede',
+      email: 'fede@gmail.com',
+      password: '123456',
+    }
     const expectedOutput = {
-      email: email,
-      name: '',
-      posts: [],
+      name: 'Fede',
+      email: 'fede@gmail.com',
       description: '',
       avatar: '',
     }
-    const actualOutput = await request(app).post('/users').send({ email: email })
-    expect(actualOutput.body.email).toEqual(expectedOutput.email)
-    expect(actualOutput.body).toMatchObject(expectedOutput)
-    expect(actualOutput.body._id).toBeDefined()
-  })
-  it('should create a post', async () => {
-    // Create user
-    const email = 'Fede'
-    const user = await request(app).post('/users').send({ email: email })
-    // Create post with this user
-    const bodyPost = 'This is a test post'
-    const expectedOutput = {
-      bodyPost: bodyPost,
-      comments: [],
-      likes: [],
-      status: true,
-      user: user.body._id,
-    }
-    const actualOutput = await request(app).post('/posts').send({ bodyPost: bodyPost, user: user.body._id })
 
-    // Creat a test expected output
-    expect(actualOutput.body.bodyPost).toEqual(expectedOutput.bodyPost)
-    expect(actualOutput.body).toMatchObject(expectedOutput)
-    expect(actualOutput.body.createdAt).toBeDefined()
-    expect(actualOutput.body.expirationDate).toBeDefined()
-  }),
-    it('should delete a post', async () => {
-      //create user
-      const email = 'Fede'
-      const user = await request(app).post('/users').send({ email: email })
-      //create post with this user
-      const bodyPost = 'This is a test post'
-      const post = await request(app).post('/posts').send({ bodyPost: bodyPost, user: user.body._id })
-      //delete post
-      const expectedOutput = { message: 'Post deleted successfully' }
-      const actualOutput = await request(app).delete(`/posts/${user.body._id}/${post.body._id}`)
-      //create expected output
-      expect(actualOutput.body).toMatchObject(expectedOutput)
-      expect(actualOutput.body.message).toEqual(expectedOutput.message)
-    })
+    const response = await request(app).post('/users').send(userData)
+    expect(response.body.name).toEqual(expectedOutput.name)
+    expect(response.body.email).toEqual(expectedOutput.email)
+    expect(response.body.description).toEqual(expectedOutput.description)
+    expect(response.body.avatar).toEqual(expectedOutput.avatar)
+    expect(response.body._id).toBeDefined()
+  })
+
+  it('should not signup a new user with an existing email', async () => {
+    // Create a user
+    const initialUser = {
+      name: 'Fede',
+      email: 'fede@gmail.com',
+      password: '123456',
+    }
+    await request(app).post('/users').send(initialUser)
+
+    // Try to create a user with the same email
+    const userData = {
+      name: 'Federico',
+      email: 'fede@gmail.com',
+      password: '123456',
+    }
+    const expectedOutput = {
+      message: 'Email already exists',
+    }
+    const response = await request(app).post('/users').send(userData)
+    expect(response.body.message).toEqual(expectedOutput.message)
+  })
+
+  it('should not create a user without a password', async () => {
+    const userData = {
+      name: 'Fede',
+      email: 'fede@gmail.com',
+      password: '',
+    }
+    const expectedOutput = {
+      message: '"password" is not allowed to be empty',
+    }
+    const response = await request(app).post('/users').send(userData)
+    expect(response.body.validation.body.message).toEqual(expectedOutput.message)
+  })
 })
