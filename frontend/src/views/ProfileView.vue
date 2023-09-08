@@ -54,55 +54,33 @@ export default {
 }
 </script>
 
-<template>
-  <div class="profile-edit-container">
-    <div class="card">
-      <div class="card-content">
-        <div class="username">
-          <p>Username: {{ newUsername }}</p>
-          <input
-            v-model="newUsername"
-            type="text"
-            name="username"
-            id="username"
-            :placeholder="newUsername"
-          />
-          <button @click="handleNameChange">Save</button>
-        </div>
-        <div class="description">
-          <p>Description: {{ newDescription }}</p>
-          <input
-            v-model="newDescription"
-            type="text"
-            name="description"
-            id="description"
-            :placeholder="newDescription"
-          />
-          <button @click="handleDescriptionChange">Save</button>
-        </div>
-      </div>
-    </div>
-    <div class="card following-card">
-      <div class="card-content">
-        <span>Following: {{ followingQuantity }}</span>
-      </div>
-    </div>
-    <div class="card followers-card">
-      <div class="card-content">
-        <span>Followers: {{ followedByQuantity }}</span>
-      </div>
-    </div>
-  </div>
-  <p class="post-title">Posts</p>
-  <div class="post-profile-container">
-    <ListProfilePosts :posts="posts" />
-  </div>
+<template lang="pug">
+.profile-edit-container
+  .card
+    .card-content
+      .username
+        p Username: {{ newUsername }}
+        input#username(v-model='newUsername' type='text' name='username' :placeholder='newUsername')
+        button(@click='handleNameChange') Save
+      .description
+        p Description: {{ newDescription }}
+        input#description(v-model='newDescription' type='text' name='description' :placeholder='newDescription')
+        button(@click='handleDescriptionChange') Save
+  .card.following-card
+    .card-content
+      span Following: {{ followingQuantity }}
+  .card.followers-card
+    .card-content
+      span Followers: {{ followedByQuantity }}
+p.post-title Posts
+.post-profile-container
+  ListProfilePosts(:posts='posts')
 </template>
 
 <style scoped>
 .profile-edit-container {
   max-width: 1100px;
-  margin: 0 auto;
+  margin: 5rem auto;
   display: flex;
   justify-content: space-between;
   align-items: center;

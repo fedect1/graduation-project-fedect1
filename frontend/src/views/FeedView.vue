@@ -17,7 +17,6 @@ export default defineComponent({
     ListPosts
   },
   async mounted() {
-    //await this.fetchPosts()
     this.validPosts = await this.fetchValidPosts()
   },
 
@@ -31,19 +30,16 @@ export default defineComponent({
       this.validPosts = await this.fetchValidPosts()
     }
   }
-  // computed: {
-  //   ...mapState(usePostHandler, ['posts'])
-  // }
 })
 </script>
-<template>
-  <div class="feed-container">
-    <WritePost :submitPost="submitPost" />
-    <ListPosts :posts="validPosts" @postDeleted="refreshPosts" />
-  </div>
+<template lang="pug">
+.feed-container
+  WritePost(:submitPost='submitPost')
+  ListPosts(:posts='validPosts' @postDeleted='refreshPosts')
 </template>
 <style scoped>
 .feed-container {
+  margin-top: 8rem;
   display: flex;
   flex-direction: column;
   align-items: center;

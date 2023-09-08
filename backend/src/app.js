@@ -6,8 +6,10 @@ const logger = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-
+const helmet = require('helmet')
 const mongoose = require('mongoose')
+const mongoSanitize = require('express-mongo-sanitize')
+const { errors } = require('celebrate')
 
 require('./database-connection')
 
@@ -29,6 +31,12 @@ passport.deserializeUser(User.deserializeUser())
 require('dotenv').config()
 
 const app = express()
+app.use(helmet())
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  })
+)
 
 app.use(
   cors({
@@ -93,7 +101,19 @@ app.use(function (req, res, next) {
 })
 
 // error handler
+app.use(errors())
 app.use(function (err, req, res, next) {
+  // middleware error for celebrate
+  if (err.isJoi) {
+    return res.status(400).send({
+      message: err.details[0].message,
+    })
+  }
+  if (err && err.validation && err.validation.body) {
+    return res.status(400).send({
+      message: err.validation.body.message,
+    })
+  }
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -102,4 +122,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
+
 module.exports = app

@@ -3,25 +3,27 @@ const mongoose = require('mongoose')
 const autopopulate = require('mongoose-autopopulate')
 const passportLocalMongoose = require('passport-local-mongoose')
 
-const userSchema = new mongoose.Schema({
-  //posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
-  followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] ,
-  name: { type: String, default: '' },
-  description: { type: String, default: '' },
-  avatar: { type: String, default: '' },
+const userSchema = new mongoose.Schema(
+  {
+    //posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: { maxDepth: 1 }}],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    followedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    name: { type: String, default: '' },
+    description: { type: String, default: '' },
+    avatar: { type: String, default: '' },
+    email: { type: String, required: true, lowercase: true, unique: true },
   },
   {
-    toJSON : { virtuals: true },
-    toObject: { virtuals: true }
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 
 userSchema.virtual('posts', {
   ref: 'Post',
   localField: '_id',
-  foreignField: 'user'
-});
+  foreignField: 'user',
+})
 
 userSchema.plugin(autopopulate)
 class User {
@@ -33,7 +35,6 @@ class User {
   }
 
   //Delete post //Update post
-
 
   //Follow
   async follow(user) {
@@ -51,7 +52,6 @@ class User {
     await user.save()
     return this
   }
-
 }
 
 userSchema.plugin(autopopulate)
