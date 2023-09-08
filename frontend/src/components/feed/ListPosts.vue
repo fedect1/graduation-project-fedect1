@@ -42,10 +42,10 @@ export default {
   <div class="post-container" v-for="post in sortedPosts" :key="post.id">
     <div class="post-header">
       <div class="user-image">
-        <img src="https://picsum.photos/200" alt="user" class="user-avatar" />
+        <!-- <img src="https://picsum.photos/200" alt="user" class="user-avatar" /> -->
       </div>
       <div class="user-info">
-        <h3>{{ post.user.name }}</h3>
+        <h3 class="user-name">{{ post.user.name }}</h3>
         <FollowUser :postUser="post.user" />
         <p class="formatDate">{{ expirationTime(post.expirationDate) }}</p>
       </div>
@@ -87,6 +87,10 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+.user-name {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
 }
 .user-info {
   flex-grow: 1; /* Allow user info to grow and take remaining space */
